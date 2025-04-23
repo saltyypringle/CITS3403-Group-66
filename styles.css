@@ -11,6 +11,11 @@ body {
     color:var(--text-color);
 }
 header {
+    position: sticky;
+    top: 0; /* Sticks the header to the top of the viewport */
+    z-index: 1000; /* Ensures the header stays above other elements */
+    background-color: white; /* Optional: Set a background color to prevent transparency issues */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for better visibility */
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -21,6 +26,7 @@ header {
 header img {
     height: 50px;
 }
+
 nav ul {
     list-style: none;
     margin: 0;
@@ -187,20 +193,64 @@ main img {
 }
 
 div.top-characters {
+    display: flex;
+    gap: 15px; /* Adds spacing between characters */
+    overflow-x: auto; /* Allows horizontal scrolling if needed */
+    padding: 10px;
     background-color: var(--accent-color);
     overflow: auto;
     white-space: nowrap;
-    padding: 10px;
-  }
-  
-  div.top-characters img {
+}
+
+.character {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    transition: transform 0.3s ease; /* Smooth zoom effect */
+}
+
+.character img {
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px; /* Optional: Rounded corners */
+    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth hover effects */
+}
+
+.character span {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.3s ease; /* Smooth fade-in effect */
+    pointer-events: none; /* Prevents interaction with the text */
+}
+
+.character:hover {
+    transform: scale(1.1); /* Zooms in the character container */
+}
+
+.character:hover img {
+    filter: brightness(0.8); /* Darkens the image slightly */
+}
+
+.character:hover span {
+    opacity: 1; /* Makes the name visible */
+}
+
+div.top-characters img {
     padding: 20px;
     width: 200px; 
     height: 200px; 
     object-fit: cover; 
-  }
+}
 
-  .form-page {
+.form-page {
     background-image: url(./images/background3.png);
     background-size: cover;
     background-position: right;
