@@ -12,10 +12,10 @@ body {
 }
 header {
     position: sticky;
-    top: 0; /* Sticks the header to the top of the viewport */
-    z-index: 1000; /* Ensures the header stays above other elements */
-    background-color: white; /* Optional: Set a background color to prevent transparency issues */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Adds a subtle shadow for better visibility */
+    top: 0; 
+    z-index: 1000; 
+    background-color: white; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -133,7 +133,7 @@ main img {
 }
 
 .modal {
-    display: none; /* Hidden by default */
+    display: none; 
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -194,8 +194,8 @@ main img {
 
 div.top-characters {
     display: flex;
-    gap: 15px; /* Adds spacing between characters */
-    overflow-x: auto; /* Allows horizontal scrolling if needed */
+    gap: 15px; 
+    overflow-x: auto; 
     padding: 10px;
     background-color: var(--accent-color);
     overflow: auto;
@@ -206,14 +206,14 @@ div.top-characters {
     position: relative;
     display: inline-block;
     text-align: center;
-    transition: transform 0.3s ease; /* Smooth zoom effect */
+    transition: transform 0.3s ease; 
 }
 
 .character img {
     height: 200px;
     object-fit: cover;
-    border-radius: 10px; /* Optional: Rounded corners */
-    transition: transform 0.3s ease, filter 0.3s ease; /* Smooth hover effects */
+    border-radius: 10px; 
+    transition: transform 0.3s ease, filter 0.3s ease; 
 }
 
 .character span {
@@ -221,26 +221,26 @@ div.top-characters {
     bottom: 10px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent background */
+    background-color: rgba(0, 0, 0, 0.7); 
     color: white;
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 14px;
-    opacity: 0; /* Hidden by default */
-    transition: opacity 0.3s ease; /* Smooth fade-in effect */
-    pointer-events: none; /* Prevents interaction with the text */
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+    pointer-events: none; 
 }
 
 .character:hover {
-    transform: scale(1.1); /* Zooms in the character container */
+    transform: scale(1.1); 
 }
 
 .character:hover img {
-    filter: brightness(0.8); /* Darkens the image slightly */
+    filter: brightness(0.8); 
 }
 
 .character:hover span {
-    opacity: 1; /* Makes the name visible */
+    opacity: 1; 
 }
 
 div.top-characters img {
@@ -265,20 +265,20 @@ div.top-characters img {
   }
 
 .hero-section {
-    position: relative; /* Required for the pseudo-element */
+    position: relative; 
     background-image: url('./images/background2.png');
     background-size: cover; 
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    height: 300px; /* Adjust the height of the section */
-    display: flex; /* Centers the content */
-    justify-content: center; /* Centers the content horizontally */
-    align-items: center; /* Centers the content vertically */
-    color: white; /* Ensures the text is readable */
+    background-position: center; 
+    background-repeat: no-repeat; 
+    height: 300px; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    color: white; 
     text-align: center; 
     font-size: 24px; 
     font-weight: bold; 
-    z-index: 1; /* Ensures the content stays above the overlay */
+    z-index: 1; 
 }
 
 .hero-section::before {
@@ -288,6 +288,6 @@ div.top-characters img {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Black overlay with 50% transparency */
-    z-index: -1; /* Places the overlay behind the content */
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: -1; 
 }
