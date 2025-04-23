@@ -1,16 +1,22 @@
+:root {
+    --text-color: #A4133C;
+    --accent-color: #FFCCD5;
+    --background-color: #FFF0F3;
+}
 body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #FFF0F3; 
+    background-color: var(--background-color); 
+    color:var(--text-color);
 }
 header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;
-    background-color: #FFCCD5; 
-    color: white;
+    background-color: var(--accent-color); 
+    color: var(--text-color);
 }
 header img {
     height: 50px;
@@ -28,7 +34,7 @@ nav ul li {
     align-items: center; 
 }
 nav ul li a {
-    color: #A4133C;
+    color: var(--text-color);
     text-decoration: none;
     padding: 5px 10px;
 }
@@ -44,18 +50,18 @@ nav ul li form {
 nav ul li form input[type="text"] {
     padding: 5px;
     border-radius: 5px;
-    border: 1px solid #A4133C;
+    border: 1px solid var(--text-color);
 }
 nav ul li form button {
     padding: 5px 10px;
     border: none;
-    background-color: #A4133C;
-    color: #FFF0F3;
+    background-color: var(--text-color);
+    color: var(--background-color);
     border-radius: 5px;
     cursor: pointer;
 }
 nav ul li form button:hover {
-    background-color: #FFCCD5;
+    background-color: var(--accent-color);
 }
 nav ul li:last-child {
     margin-left: 20px;
@@ -63,7 +69,7 @@ nav ul li:last-child {
 main {
     padding: 20px;
     text-align: center;
-    color: #A4133C;
+    color: var(--text-color);
 }
 main img {
     max-width: 100%; 
@@ -73,16 +79,16 @@ main img {
 }
 .main-text {
     padding: 20px;
-    background-color: #FFF0F3; 
-    color: #A4133C;
+    background-color: var(--background-color); 
+    color: var(--text-color);
     text-align: left; 
 }
 
 .cta-section {
     text-align: center;
     padding: 20px;
-    background-color: #FFF0F3; 
-    color: #A4133C; 
+    background-color: var(--background-color); 
+    color: var(--text-color); 
 }
 
 .cta-buttons {
@@ -102,22 +108,22 @@ main img {
 }
 
 .cta-buttons .login-btn {
-    background-color: #A4133C;
-    color: #FFF0F3;
+    background-color: var(--text-color);
+    color: var(--background-color);
 }
 
 .cta-buttons .login-btn:hover {
-    background-color: #FFCCD5;
+    background-color: var(--accent-color);
 }
 
 .cta-buttons .signup-btn {
-    background-color: #FFCCD5;
-    color: #A4133C;
+    background-color: var(--accent-color);
+    color: var(--text-color);
 }
 
 .cta-buttons .signup-btn:hover {
-    background-color: #A4133C;
-    color: #FFF0F3;
+    background-color: var(--text-color);
+    color: var(--background-color);
 }
 
 .modal {
@@ -129,11 +135,11 @@ main img {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5); 
+    background-color: var(--background-color)
 }
 
 .modal-content {
-    background-color: white;
+    background-color: var(--background-color);
     margin: 10% auto;
     padding: 20px;
     border-radius: 10px;
@@ -154,21 +160,21 @@ main img {
 
 .modal-content input {
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--accent-color);
     border-radius: 5px;
 }
 
 .modal-content button {
     padding: 10px;
-    background-color: #A4133C;
-    color: white;
+    background-color: var(--text-color);
+    color: var(--background-color);
     border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 
 .modal-content button:hover {
-    background-color: #FFCCD5;
+    background-color: var(--accent-color);
 }
 
 .close {
@@ -181,7 +187,7 @@ main img {
 }
 
 div.top-characters {
-    background-color: #FFCCD5;
+    background-color: var(--accent-color);
     overflow: auto;
     white-space: nowrap;
     padding: 10px;
