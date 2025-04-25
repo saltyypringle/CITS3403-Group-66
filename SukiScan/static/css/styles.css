@@ -277,3 +277,28 @@ div.top-characters img {
     background-color: rgba(0, 0, 0, 0.5); 
     z-index: -1; 
 }
+
+.user-profile {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.user-profile h1 {
+    font-size: 36px;
+    margin-bottom: 20px; 
+    color: var(--text-color); 
+}
+
+.user-profile .avatar {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.user-profile .avatar img {
+    width: 200px; 
+    height: 200px; 
+    border-radius: 50%;
+    border: 5px solid #A4133C; 
+    object-fit: cover; 
+}
