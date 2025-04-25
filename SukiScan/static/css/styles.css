@@ -291,14 +291,120 @@ div.top-characters img {
 
 .user-profile .avatar {
     display: flex;
-    justify-content: center;
+    justify-content: center; 
     margin-top: 10px;
 }
 
 .user-profile .avatar img {
-    width: 200px; 
-    height: 200px; 
-    border-radius: 50%;
-    border: 5px solid #A4133C; 
+    width: 120px; 
+    height: 120px;
+    border-radius: 50%; 
+    border: 3px solid #A4133C;
+    object-fit: cover;
+}
+
+
+.trait-summary {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.trait-summary h2 {
+    font-size: 24px;
+    margin-bottom: 20px; 
+    color: var(--text-color); 
+}
+
+.traits {
+    display: flex;
+    justify-content: center; 
+    gap: 15px; 
+    flex-wrap: wrap; 
+    margin-top: 10px;
+}
+
+.trait {
+    background-color: #F8F9FA; 
+    padding: 10px 15px;
+    border-radius: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    font-size: 14px;
+    color: #333; 
+    text-align: center;
+    min-width: 120px; 
+}
+
+
+.suggested-character {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.suggested-character h2 {
+    font-size: 24px;
+    margin-bottom: 20px; 
+    color: var(--text-color); 
+}
+
+.suggested-character .character-card {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.suggested-character .character-card img {
+    width: 150px; 
+    height: 150px; 
+    border-radius: 10px; 
     object-fit: cover; 
+    margin-bottom: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.suggested-character .character-card button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--text-color); 
+    color: var(--background-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.suggested-character .character-card button:hover {
+    background-color: var(--accent-color); 
+    color: var(--text-color); 
+}
+
+.favorites-buttons {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.favorites-buttons h2 {
+    font-size: 24px; /* Larger font for the heading */
+    margin-bottom: 20px; /* Adds spacing below the heading */
+    color: var(--text-color); /* Matches the theme */
+}
+
+.favorites-buttons .buttons-container {
+    display: flex;
+    justify-content: center; /* Centers the buttons horizontally */
+    gap: 20px; /* Adds spacing between buttons */
+}
+
+.favorites-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--text-color); 
+    color: var(--background-color); 
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.favorites-buttons button:hover {
+    background-color: var(--accent-color);
+    color: var(--text-color);
 }
