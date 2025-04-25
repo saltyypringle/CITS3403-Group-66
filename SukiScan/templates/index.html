@@ -10,7 +10,7 @@
 <body>
     <header>
         <a href="{{ url_for('index') }}">
-            <img src="images/sukiscan-logo.png" alt="Logo" id="logo">
+            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         </a>
         <nav>
             <ul>
@@ -27,7 +27,7 @@
         </nav>
     </header>
     <main>
-        <img src="images/SukiScan.png" alt="SukiScan">
+        <img src="{{ url_for('static', filename='images/SukiScan.png') }}" alt="SukiScan">
     </main>
     <section class="main-text">
         <h1>Find Your Type!</h1>

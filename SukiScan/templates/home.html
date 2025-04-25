@@ -9,8 +9,8 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('home') }}">
-            <img src="images/sukiscan-logo.png" alt="Logo" id="logo">
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         </a>
         <nav>
             <ul>
@@ -27,7 +27,7 @@
         </nav>
     </header>
 
-    <section class="hero-section">
+    <section class="hero-section" style="background-image: url('{{ url_for('static', filename='images/background2.png') }}');">
         <h1>Discover Your Favorite Characters</h1>
     </section>
 
@@ -39,61 +39,61 @@
         <div class="top-characters">
             <div class="character">
                 <a href="./zero-two.html">
-                    <img src="./images/1-zero-two.webp" alt="Zero Two">
+                    <img src="{{ url_for('static', filename='images/1-zero-two.webp') }}" alt="Zero Two">
                 </a>
                 <span>Zero Two</span>
             </div>
             <div class="character">
                 <a href="./hatsune-miku.html">
-                    <img src="./images/2-hatsune-miku.jpg" alt="Hatsune Miku">
+                    <img src="{{ url_for('static', filename='images/2-hatsune-miku.jpg') }}" alt="Hatsune Miku">
                 </a>
                 <span>Hatsune Miku</span>
             </div>
             <div class="character">
                 <a href="./rem.html">
-                    <img src="./images/3-rem.jpg" alt="Rem">
+                    <img src="{{ url_for('static', filename='images/3-rem.jpg') }}" alt="Rem">
                 </a>
                 <span>Rem</span>
             </div>
             <div class="character">
                 <a href="./megumin.html">
-                    <img src="./images/4-megumin.jpg" alt="Megumin">
+                    <img src="{{ url_for('static', filename='images/4-megumin.jpg') }}" alt="Megumin">
                 </a>
                 <span>Megumin</span>
             </div>
             <div class="character">
                 <a href="./rias-gremory.html">
-                    <img src="./images/5-rias-gremory.jpg" alt="Rias Gremory">
+                    <img src="{{ url_for('static', filename='images/5-rias-gremory.jpg') }}" alt="Rias Gremory">
                 </a>
                 <span>Rias Gremory</span>
             </div>
             <div class="character">
                 <a href="./mai-sakurajima.html">
-                    <img src="./images/6-mai-sakurajima.webp" alt="Mai Sakurajima">
+                    <img src="{{ url_for('static', filename='images/6-mai-sakurajima.webp') }}" alt="Mai Sakurajima">
                 </a>
                 <span>Mai Sakurajima</span>
             </div>
             <div class="character">
                 <a href="./satoru-gojo.html">
-                    <img src="./images/7-satoru-gojo.jpg" alt="Satoru Gojo">
+                    <img src="{{ url_for('static', filename='images/7-satoru-gojo.jpg') }}" alt="Satoru Gojo">
                 </a>
                 <span>Satoru Gojo</span>
             </div>
             <div class="character">
                 <a href="./power.html">
-                    <img src="./images/8-power.jpg" alt="Power">
+                    <img src="{{ url_for('static', filename='images/8-power.jpg') }}" alt="Power">
                 </a>
                 <span>Power</span>
             </div>
             <div class="character">
                 <a href="./nami.html">
-                    <img src="./images/9-nami.png" alt="Nami">
+                    <img src="{{ url_for('static', filename='images/9-nami.png') }}" alt="Nami">
                 </a>
                 <span>Nami</span>
             </div>
             <div class="character">
                 <a href="./saber.html">
-                    <img src="./images/10-saber.jpg" alt="Saber">
+                    <img src="{{ url_for('static', filename='images/10-saber.jpg') }}" alt="Saber">
                 </a>
                 <span>Saber</span>
             </div>
