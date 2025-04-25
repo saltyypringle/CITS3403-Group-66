@@ -250,20 +250,6 @@ div.top-characters img {
     object-fit: cover; 
 }
 
-.form-page {
-    background-image: url(./images/background3.png);
-    background-size: cover;
-    background-position: right;
-    overflow: hidden;
-  }
-
-  .wrapper {
-    background-color: var(--background-color);
-    height: 100vh;
-    width: max(40%,600px);
-    padding: 10px;
-  }
-
 .hero-section {
     position: relative; 
     background-image: url('./images/background2.png');
