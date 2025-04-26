@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SukiScan</title>
+    <title>SukiScan Chatroom</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </head>
@@ -27,70 +27,43 @@
         </nav>
     </header>
 
-    <div class="make-post">
-        <a href="#" onclick="openModal('comment-modal'); return false;">Comment</a>
-    </div>
-
-    <div class="social-thread">
-        <div class="comment">
-            <div class="name-date">
-                <span class="name">Johnathon</span>
-                <span class="date">25th January 2025</span>
-            </div>
-            <p>I Love Gojo SO FREAKING MUCH!!!!</p>
+    <main class="chatroom">
+        <div class="chat-header">
+            <h2>Welcome to the SukiScan Chatroom!</h2>
         </div>
 
-        <div class="replies">
-            <div class="reply">
+        <div class="chat-messages">
+            <div class="message">
+                <div class="name-date">
+                    <span class="name">Johnathon</span>
+                    <span class="date">25th January 2025</span>
+                </div>
+                <p>I Love Gojo SO FREAKING MUCH!!!!</p>
+            </div>
+
+            <div class="message">
                 <div class="name-date">
                     <span class="name">Horace</span>
                     <span class="date">29th January 2025</span>
                 </div>
-                <p><span class="mention">@Johnathan </span>FRFRFR</p>
+                <p><span class="mention">@Johnathon </span>FRFRFR</p>
             </div>
-            <div class="reply">
+
+            <div class="message user-message">
                 <div class="name-date">
-                    <span class="name">Alison</span>
-                    <span class="date">1st February 2025</span>
+                    <span class="name">You</span>
+                    <span class="date">3rd February 2025</span>
                 </div>
-                <p><span class="mention">@Horace </span>Sexy Man</p>
+                <p>Gojo is the best character ever!</p>
             </div>
         </div>
-    </div>
 
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('login-modal')">&times;</span>
-            <h2>Log In</h2>
+        <div class="chat-input">
             <form>
-                <label for="login-email-or-username">Email or Username:</label>
-                <input type="email-username" id="login-email-or-username" name="email-or-username" required>
-                <label for="login-password">Password:</label>
-                <input type="password" id="login-password" name="password" required>
-                <button type="submit">Log In</button>
+                <input type="text" placeholder="Type your message..." required>
+                <button type="submit">Send</button>
             </form>
-            <p>Don't have an account yet? <a href="#" onclick="openModal('signup-modal'); return false;">Sign Up</a></p>
         </div>
-    </div>
-
-    <div id="signup-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('signup-modal')">&times;</span>
-            <h2>Sign Up</h2>
-            <form>
-                <label for="signup-email">Email:</label>
-                <input type="email" id="signup-email" name="email" required>
-                <label for="signup-username">Username:</label>
-                <input type="username" id="signup-username" name="username" required>
-                <label for="signup-password">Password:</label>
-                <input type="password" id="signup-password" name="password" required>
-                <button type="submit">Sign Up</button>
-            </form>
-            <p>Already have an account? <a href="#" onclick="openModal('login-modal'); return false;">Login</a></p>
-        </div>
-    </div>
-
-    <div id="comment-modal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('comment-modal')">&times;</span>
+    </main>
 </body>
+</html>
