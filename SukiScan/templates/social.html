@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SukiScan</title>
+    <title>SukiScan Chatroom</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </head>
-<body>
+<body class="social-page">
     <header>
         <a href="{{ url_for('index') }}">
             <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
@@ -15,7 +15,7 @@
         <nav>
             <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}l">Social</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
                 <li><a href="#" onclick="openModal('login-modal'); return false;">Login</a></li>
                 <li>
                     <form action="/search" method="GET" style="display: inline;">
@@ -26,13 +26,52 @@
             </ul>
         </nav>
     </header>
+
+    <main class="chatroom">
+        <div class="chat-header">
+            <h2>Welcome to the SukiScan Chatroom!</h2>
+        </div>
+
+        <div class="chat-messages">
+            <div class="message">
+                <div class="name-date">
+                    <span class="name">Johnathon</span>
+                    <span class="date">25th January 2025</span>
+                </div>
+                <p>I Love Gojo SO FREAKING MUCH!!!!</p>
+            </div>
+
+            <div class="message">
+                <div class="name-date">
+                    <span class="name">Horace</span>
+                    <span class="date">29th January 2025</span>
+                </div>
+                <p><span class="mention">@Johnathon </span>FRFRFR</p>
+            </div>
+
+            <div class="message user-message">
+                <div class="name-date">
+                    <span class="name">You</span>
+                    <span class="date">3rd February 2025</span>
+                </div>
+                <p>Gojo is the best character ever!</p>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <form>
+                <input type="text" placeholder="Type your message..." required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </main>
     <div id="login-modal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('login-modal')">&times;</span>
             <h2>Log In</h2>
             <form>
-                <label for="login-email">Email:</label>
-                <input type="email" id="login-email" name="email" required>
+                <label for="login-email-or-username">Email or Username:</label>
+                <input type="email-username" id="login-email-or-username" name="email-or-username" required>
                 <label for="login-password">Password:</label>
                 <input type="password" id="login-password" name="password" required>
                 <button type="submit">Log In</button>
@@ -48,6 +87,8 @@
             <form>
                 <label for="signup-email">Email:</label>
                 <input type="email" id="signup-email" name="email" required>
+                <label for="signup-username">Username:</label>
+                <input type="username" id="signup-username" name="username" required>
                 <label for="signup-password">Password:</label>
                 <input type="password" id="signup-password" name="password" required>
                 <button type="submit">Sign Up</button>
@@ -56,3 +97,4 @@
         </div>
     </div>
 </body>
+</html>
