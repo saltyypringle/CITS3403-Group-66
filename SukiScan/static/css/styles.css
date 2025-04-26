@@ -440,3 +440,11 @@ div.top-characters img {
 .chat-input button:hover {
     background-color: #800F2F;
 }
+
+.social-page {
+    background-image: url(../images/background3.png); 
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat;
+    background-color: var(--background-color); 
+}
