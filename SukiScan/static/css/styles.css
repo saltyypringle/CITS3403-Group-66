@@ -382,15 +382,15 @@ div.top-characters img {
 }
 
 .favorites-buttons h2 {
-    font-size: 24px; /* Larger font for the heading */
-    margin-bottom: 20px; /* Adds spacing below the heading */
-    color: var(--text-color); /* Matches the theme */
+    font-size: 24px;
+    margin-bottom: 20px; 
+    color: var(--text-color); 
 }
 
 .favorites-buttons .buttons-container {
     display: flex;
-    justify-content: center; /* Centers the buttons horizontally */
-    gap: 20px; /* Adds spacing between buttons */
+    justify-content: center;
+    gap: 20px;
 }
 
 .favorites-buttons button {
@@ -407,6 +407,8 @@ div.top-characters img {
 .favorites-buttons button:hover {
     background-color: var(--accent-color);
     color: var(--text-color);
+}
+
 .social-thread {
     margin: 20px;
     padding: 10px;
