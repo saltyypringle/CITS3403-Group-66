@@ -25,9 +25,84 @@
             </ul>
         </nav>
     </header>
-    <main>
-        <h1>{{ title }}</h1>
-        <p>{{ message }}</p>
-    </main>
+    <main class="waifu-list-page">
+
+        <!-- Top Trends Message -->
+        <section class="top-trends">
+            <h2>💖 Your Top Trends</h2>
+            <p>You tend to love tall, kind-hearted women with pink hair! 🎀</p>
+        </section>
+    
+        <!-- Pie Charts Section -->
+        <section class="waifu-charts">
+            <div class="chart-container">
+                <h3>Hair Color</h3>
+                <canvas id="hairChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Height</h3>
+                <canvas id="heightChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Personality (MBTI)</h3>
+                <canvas id="mbtiChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Profession</h3>
+                <canvas id="professionChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <h3>Body Type</h3>
+                <canvas id="bodyTypeChart"></canvas>
+            </div>
+        </section>
+    
+        <!-- Waifu Table -->
+        <section class="waifu-table">
+            <h2>🌸 Your Waifu List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Name</th>
+                        <th>Hair Color</th>
+                        <th>Height</th>
+                        <th>Personality (MBTI)</th>
+                        <th>Profession</th>
+                        <th>Body Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="../static/images/1-zero-two.webp" alt="Waifu 1" class="waifu-avatar"></td>
+                        <td>Zero Two</td>
+                        <td>Pink</td>
+                        <td>165cm</td>
+                        <td>INFP</td>
+                        <td>Healer</td>
+                        <td>Hourglass</td>
+                    </tr>
+                    <tr>
+                        <td><img src="../static/images/2-hatsune-miku.jpg" alt="Waifu 2" class="waifu-avatar"></td>
+                        <td>Hatsune Miku</td>
+                        <td>Aqua</td>
+                        <td>170cm</td>
+                        <td>INFJ</td>
+                        <td>Warrior</td>
+                        <td>Triangle</td>
+                    </tr>
+                    <tr>
+                        <td><img src="../static/images/5-rias-gremory.jpg" alt="Waifu 3" class="waifu-avatar"></td>
+                        <td>Rias Gremory</td>
+                        <td>Red</td>
+                        <td>160cm</td>
+                        <td>ENTP</td>
+                        <td>Student</td>
+                        <td>Slim</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>    
 </body>
 </html>
