@@ -634,3 +634,19 @@ div.top-characters img {
     border-radius: 50%;
     object-fit: cover;
 }
+
+.pie {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #FFB6B9 30%,  
+      #FAE3D9 30% 50%, 
+      #BBDED6 50% 75%, 
+      #8AC6D1 75% 90%, 
+      #CDB4DB 90% 100% 
+    );
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+  
