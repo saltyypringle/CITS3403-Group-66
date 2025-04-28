@@ -26,6 +26,5 @@ def myhome():
 def mysocial():
     return render_template("mysocial.html")
 
-
 if __name__ == "__main__":
     app.run(debug=True)
