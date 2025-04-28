@@ -36,6 +36,8 @@ def mypage():
     id = session['id']
     email = session['email']
     username = session['username']
+    
+    #Pass variables into render so they can be used in webpage
     return render_template("mypage.html", id=id, username=username, email=email)
 
 @app.route("/myhome")
@@ -56,30 +58,45 @@ def add_details():
     conn = connect_db()
     cursor = conn.cursor()
     
+    #Grab entered details from signup
     email = request.form['email']
     username = request.form['username']
     password = request.form['password']
     
+    #Query to get information for email and username
     query = "SELECT * FROM User WHERE email = ? OR username = ?"
     cursor.execute(query, (email, username))
     details = cursor.fetchone()
     
-    if details[1] == email:
-        flash("Email already in use. Choose another")
-        conn.close()
-        return redirect(url_for('signup'))
+    #Check if email or username is being used
+    if details is not None:
+        if details[1] == email:
+            flash("Email already in use. Choose another")
+            conn.close()
+            return redirect(url_for('signup'))
+        
+        elif details[2] == username:
+            flash("Username already in use. Choose another")
+            conn.close()
+            return redirect(request.referrer)
     
-    elif details[2] == username:
-        flash("Username already in use. Choose another")
-        conn.close()
-        return redirect(request.referrer)
-    
+    #Add the new details to database
     query = "INSERT INTO User (email, username, password) VALUES (?, ?, ?);"
     cursor.execute(query, (email, username, password))
-    
     conn.commit()
-    conn.close()
     
+    #
+    query = "SELECT * FROM User WHERE email = ? OR username = ?"
+    cursor.execute(query, (email, username))
+    details = cursor.fetchone()
+    
+    #Flask session allows us to pass variables through to different url calls, helps store for log in pages
+    session['id'] = details[0]
+    session['email'] = details[1]
+    session['username'] = details[2]
+    
+    #Redirect to mypage after logging in
+    conn.close()
     return redirect(url_for('mypage'))
 
 @app.route("/logging-in", methods=['POST'])
