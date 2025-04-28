@@ -46,9 +46,9 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('login-modal')">&times;</span>
             <h2>Log In</h2>
-            <form>
+            <form action="/logging-in" method="POST">
                 <label for="login-email-or-username">Email or Username:</label>
-                <input type="email-username" id="login-email-or-username" name="email-or-username" required>
+                <input type="text" id="login-email-or-username" name="email-username" required>
                 <label for="login-password">Password:</label>
                 <input type="password" id="login-password" name="password" required>
                 <button type="submit">Log In</button>
