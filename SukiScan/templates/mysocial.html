@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SukiScan Chatroom</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</head>
+<body class="social-page">
+    <header>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('mysocial') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li>
+                    <form action="/search" method="GET" style="display: inline;">
+                        <input type="text" name="query" placeholder="Search characters..." style="padding: 5px; border-radius: 5px; border: 1px solid #A4133C;">
+                        <button type="submit" style="padding: 5px 10px; border: none; background-color: #A4133C; color: white; border-radius: 5px; cursor: pointer;">Go</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="chatroom">
+        <div class="chat-header">
+            <h2>Welcome to the SukiScan Chatroom!</h2>
+        </div>
+
+        <div class="chat-messages">
+            <div class="message">
+                <div class="name-date">
+                    <span class="name">Johnathon</span>
+                    <span class="date">25th January 2025</span>
+                </div>
+                <p>I Love Gojo SO FREAKING MUCH!!!!</p>
+            </div>
+
+            <div class="message">
+                <div class="name-date">
+                    <span class="name">Horace</span>
+                    <span class="date">29th January 2025</span>
+                </div>
+                <p><span class="mention">@Johnathon </span>FRFRFR</p>
+            </div>
+
+            <div class="message user-message">
+                <div class="name-date">
+                    <span class="name">You</span>
+                    <span class="date">3rd February 2025</span>
+                </div>
+                <p>Gojo is the best character ever!</p>
+            </div>
+        </div>
+
+        <div class="chat-input">
+            <form>
+                <input type="text" placeholder="Type your message..." required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

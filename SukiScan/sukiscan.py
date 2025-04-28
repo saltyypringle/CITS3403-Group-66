@@ -14,5 +14,18 @@ def home():
 def social():
     return render_template("social.html")
 
+@app.route("/mypage")
+def mypage():
+    return render_template("mypage.html")
+
+@app.route("/myhome")
+def myhome():
+    return render_template("myhome.html")
+
+@app.route("/mysocial")
+def mysocial():
+    return render_template("mysocial.html")
+
+
 if __name__ == "__main__":
     app.run(debug=True)
