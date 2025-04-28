@@ -30,6 +30,10 @@ def myhome():
 def mysocial():
     return render_template("mysocial.html")
 
+@app.route("/placeholder")
+def placeholder():
+    return render_template("placeholder.html")
+
 @app.route("/add-details", methods=['POST'])
 def add_details():
     conn = connect_db()
