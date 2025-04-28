@@ -132,7 +132,7 @@ main img {
     color: var(--background-color);
 }
 
-.modal {
+.account {
     display: none; 
     position: fixed;
     z-index: 1000;
@@ -144,7 +144,7 @@ main img {
     background-color: var(--background-color)
 }
 
-.modal-content {
+.account-content {
     background-color: var(--background-color);
     margin: 10% auto;
     padding: 20px;
@@ -154,23 +154,23 @@ main img {
     text-align: center;
 }
 
-.modal-content h2 {
+.account-content h2 {
     margin-top: 0;
 }
 
-.modal-content form {
+.account-content form {
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.modal-content input {
+.account-content input {
     padding: 10px;
     border: 1px solid var(--accent-color);
     border-radius: 5px;
 }
 
-.modal-content button {
+.account-content button {
     padding: 10px;
     background-color: var(--text-color);
     color: var(--background-color);
@@ -179,7 +179,7 @@ main img {
     cursor: pointer;
 }
 
-.modal-content button:hover {
+.account-content button:hover {
     background-color: var(--accent-color);
 }
 
