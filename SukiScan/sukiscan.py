@@ -21,6 +21,14 @@ def home():
 def social():
     return render_template("social.html")
 
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/signup")
+def signup():
+    return render_template("signup.html")
+
 @app.route("/mypage")
 def mypage():
     return render_template("mypage.html")
