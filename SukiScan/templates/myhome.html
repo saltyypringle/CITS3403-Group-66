@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SukiScan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('mysocial') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li>
+                    <form action="/search" method="GET" style="display: inline;">
+                        <input type="text" name="query" placeholder="Search characters..." style="padding: 5px; border-radius: 5px; border: 1px solid #A4133C;">
+                        <button type="submit" style="padding: 5px 10px; border: none; background-color: #A4133C; color: white; border-radius: 5px; cursor: pointer;">Go</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero-section" style="background-image: url('{{ url_for('static', filename='images/background2.png') }}')">
+        <h1>Discover Your Favorite Characters</h1>
+    </section>
+
+    <section class="main-text">
+        <h1>Welcome to SukiScans!</h1>
+        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        </p>
+        <h1>Top Characters</h1>
+        <div class="top-characters">
+            <div class="character">
+                <a href="./zero-two.html">
+                    <img src="{{ url_for('static', filename='images/1-zero-two.webp') }}" alt="Zero Two">
+                </a>
+                <span>Zero Two</span>
+            </div>
+            <div class="character">
+                <a href="./hatsune-miku.html">
+                    <img src="{{ url_for('static', filename='images/2-hatsune-miku.jpg') }}" alt="Hatsune Miku">
+                </a>
+                <span>Hatsune Miku</span>
+            </div>
+            <div class="character">
+                <a href="./rem.html">
+                    <img src="{{ url_for('static', filename='images/3-rem.jpg') }}" alt="Rem">
+                </a>
+                <span>Rem</span>
+            </div>
+            <div class="character">
+                <a href="./megumin.html">
+                    <img src="{{ url_for('static', filename='images/4-megumin.jpg') }}" alt="Megumin">
+                </a>
+                <span>Megumin</span>
+            </div>
+            <div class="character">
+                <a href="./rias-gremory.html">
+                    <img src="{{ url_for('static', filename='images/5-rias-gremory.jpg') }}" alt="Rias Gremory">
+                </a>
+                <span>Rias Gremory</span>
+            </div>
+            <div class="character">
+                <a href="./mai-sakurajima.html">
+                    <img src="{{ url_for('static', filename='images/6-mai-sakurajima.webp') }}" alt="Mai Sakurajima">
+                </a>
+                <span>Mai Sakurajima</span>
+            </div>
+            <div class="character">
+                <a href="./satoru-gojo.html">
+                    <img src="{{ url_for('static', filename='images/7-satoru-gojo.jpg') }}" alt="Satoru Gojo">
+                </a>
+                <span>Satoru Gojo</span>
+            </div>
+            <div class="character">
+                <a href="./power.html">
+                    <img src="{{ url_for('static', filename='images/8-power.jpg') }}" alt="Power">
+                </a>
+                <span>Power</span>
+            </div>
+            <div class="character">
+                <a href="./nami.html">
+                    <img src="{{ url_for('static', filename='images/9-nami.png') }}" alt="Nami">
+                </a>
+                <span>Nami</span>
+            </div>
+            <div class="character">
+                <a href="./saber.html">
+                    <img src="{{ url_for('static', filename='images/10-saber.jpg') }}" alt="Saber">
+                </a>
+                <span>Saber</span>
+            </div>
+        </div>
+        <h1>Recent Discussions</h1>
+        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        </p>
+        <h1>Featured Articles</h1>
+        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        </p> 
+    </section>    
+</body>
+</html>

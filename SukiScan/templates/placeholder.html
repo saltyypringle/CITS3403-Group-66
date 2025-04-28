@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li>
+                    <form action="/search" method="GET" style="display: inline;">
+                        <input type="text" name="query" placeholder="Search characters..." style="padding: 5px; border-radius: 5px; border: 1px solid #A4133C;">
+                        <button type="submit" style="padding: 5px 10px; border: none; background-color: #A4133C; color: white; border-radius: 5px; cursor: pointer;">Go</button>
+                    </form>
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <main class="waifu-list-page">
+
+        <!-- Top Trends Message -->
+        <section class="top-trends">
+            <h2>💖 Your Top Trends</h2>
+            <p>You tend to love tall, kind-hearted women with pink hair! 🎀</p>
+        </section>
+    
+        <!-- Pie Charts Section -->
+        <section class="waifu-charts">
+            <div class="chart-container">
+                <h3>Hair Color</h3>
+                <div class="pie"></div>
+            </div>
+            <div class="chart-container">
+                <h3>Height</h3>
+                <div class="pie"></div>
+            </div>
+            <div class="chart-container">
+                <h3>Personality (MBTI)</h3>
+                <div class="pie"></div>
+            </div>
+            <div class="chart-container">
+                <h3>Profession</h3>
+                <div class="pie"></div>
+            </div>
+            <div class="chart-container">
+                <h3>Body Type</h3>
+                <div class="pie"></div>
+            </div>
+        </section>
+    
+        <section class="waifu-table">
+            <h2>🌸 Your Waifu List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Name</th>
+                        <th>Hair Color</th>
+                        <th>Height</th>
+                        <th>Personality (MBTI)</th>
+                        <th>Profession</th>
+                        <th>Body Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="../static/images/1-zero-two.webp" alt="Waifu 1" class="waifu-avatar"></td>
+                        <td>Zero Two</td>
+                        <td>Pink</td>
+                        <td>165cm</td>
+                        <td>INFP</td>
+                        <td>Healer</td>
+                        <td>Hourglass</td>
+                    </tr>
+                    <tr>
+                        <td><img src="../static/images/2-hatsune-miku.jpg" alt="Waifu 2" class="waifu-avatar"></td>
+                        <td>Hatsune Miku</td>
+                        <td>Aqua</td>
+                        <td>170cm</td>
+                        <td>INFJ</td>
+                        <td>Warrior</td>
+                        <td>Triangle</td>
+                    </tr>
+                    <tr>
+                        <td><img src="../static/images/5-rias-gremory.jpg" alt="Waifu 3" class="waifu-avatar"></td>
+                        <td>Rias Gremory</td>
+                        <td>Red</td>
+                        <td>160cm</td>
+                        <td>ENTP</td>
+                        <td>Student</td>
+                        <td>Slim</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main>    
+</body>
+</html>
