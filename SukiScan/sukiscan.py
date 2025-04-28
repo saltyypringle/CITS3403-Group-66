@@ -56,6 +56,20 @@ def add_details():
     username = request.form['username']
     password = request.form['password']
     
+    query = "SELECT * FROM User WHERE email = ? OR username = ?"
+    cursor.execute(query, (email, username))
+    details = cursor.fetchone()
+    
+    if details[1] == email:
+        flash("Email already in use. Choose another")
+        conn.close()
+        return redirect(url_for('signup'))
+    
+    elif details[2] == username:
+        flash("Username already in use. Choose another")
+        conn.close()
+        return redirect(request.referrer)
+    
     query = "INSERT INTO User (email, username, password) VALUES (?, ?, ?);"
     cursor.execute(query, (email, username, password))
     
