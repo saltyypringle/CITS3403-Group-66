@@ -45,6 +45,8 @@ def add_details():
     
     query = f"INSERT INTO User (email, username, password) VALUES (?, ?, ?);"
     cursor.execute(query, (email, username, password))
+    
+    conn.commit()
     conn.close()
     
     return redirect(url_for('mypage'))
