@@ -1,10 +1,12 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import sqlite3
+import os
 
 app = Flask(__name__)
 
 def connect_db():
-    return sqlite3.connect("sukiscan.db")
+    path_way_to_db = os.path.join(os.path.dirname(__file__), 'data', 'sukiscan.db')
+    return sqlite3.connect(path_way_to_db)
 
 @app.route("/")
 def index():
