@@ -448,3 +448,204 @@ div.top-characters img {
     background-repeat: no-repeat;
     background-color: var(--background-color); 
 }
+.waifu-list-page {
+    padding: 20px;
+    text-align: center;
+}
+
+.top-trends p {
+    font-size: 18px;
+    margin: 10px 0 30px;
+    color: var(--text-color);
+}
+
+.waifu-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 40px;
+    justify-items: center;
+}
+
+.chart-container {
+    background: var(--background-color);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 8px rgba(164, 19, 60, 0.2);
+}
+
+.waifu-table table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: var(--background-color);
+}
+
+.waifu-table th, .waifu-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--accent-color);
+}
+
+.waifu-table th {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+}
+
+.waifu-table td {
+    color: var(--text-color);
+}
+
+.waifu-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.pie {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: conic-gradient(
+      #FFB6B9 30%,  
+      #FAE3D9 30% 50%, 
+      #BBDED6 50% 75%, 
+      #8AC6D1 75% 90%, 
+      #CDB4DB 90% 100% 
+    );
+    margin: 20px auto;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+
+  .user-profile {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.user-profile h1 {
+    font-size: 36px;
+    margin-bottom: 20px; 
+    color: var(--text-color); 
+}
+
+.user-profile .avatar {
+    display: flex;
+    justify-content: center; 
+    margin-top: 10px;
+}
+
+.user-profile .avatar img {
+    width: 120px; 
+    height: 120px;
+    border-radius: 50%; 
+    border: 3px solid #A4133C;
+    object-fit: cover;
+}
+
+
+.trait-summary {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.trait-summary h2 {
+    font-size: 24px;
+    margin-bottom: 20px; 
+    color: var(--text-color); 
+}
+
+.traits {
+    display: flex;
+    justify-content: center; 
+    gap: 15px; 
+    flex-wrap: wrap; 
+    margin-top: 10px;
+}
+
+.trait {
+    background-color: #F8F9FA; 
+    padding: 10px 15px;
+    border-radius: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+    font-size: 14px;
+    color: #333; 
+    text-align: center;
+    min-width: 120px; 
+}
+
+
+.suggested-character {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.suggested-character h2 {
+    font-size: 24px;
+    margin-bottom: 20px; 
+    color: var(--text-color); 
+}
+
+.suggested-character .character-card {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.suggested-character .character-card img {
+    width: 150px; 
+    height: 150px; 
+    border-radius: 10px; 
+    object-fit: cover; 
+    margin-bottom: 10px; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.suggested-character .character-card button {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--text-color); 
+    color: var(--background-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.suggested-character .character-card button:hover {
+    background-color: var(--accent-color); 
+    color: var(--text-color); 
+}
+
+.favorites-buttons {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.favorites-buttons h2 {
+    font-size: 24px;
+    margin-bottom: 20px; 
+    color: var(--text-color); 
+}
+
+.favorites-buttons .buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.favorites-buttons button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--text-color); 
+    color: var(--background-color); 
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.favorites-buttons button:hover {
+    background-color: var(--accent-color);
+    color: var(--text-color);
+}
