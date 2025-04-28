@@ -3,6 +3,7 @@ import sqlite3
 import os
 
 app = Flask(__name__)
+app.secret_key = "SukiScan"
 
 #Function that opens the database
 def connect_db():
@@ -81,12 +82,14 @@ def logging_in():
     
     if details is None:
         conn.close()
+        flash("Username or Email not found")
         return redirect(request.referrer)
     
     stored_password = details[3]   
     
     if stored_password != password:
         conn.close()
+        flash("Password Incorrect")
         return redirect(request.referrer)
     
     conn.close()

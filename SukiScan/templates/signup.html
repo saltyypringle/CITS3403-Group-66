@@ -16,7 +16,7 @@
             <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="#" onclick="openModal('login-modal'); return false;">Login</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
                 <li>
                     <form action="/search" method="GET" style="display: inline;">
                         <input type="text" name="query" placeholder="Search characters..." style="padding: 5px; border-radius: 5px; border: 1px solid #A4133C;">
@@ -38,6 +38,15 @@
             <input type="password" id="signup-password" name="password" required><br>
             <button type="submit">Sign Up</button>
         </form>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="color:red;">
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
         <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
     </div>
 </body>
