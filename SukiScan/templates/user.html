@@ -15,8 +15,8 @@
         <nav>
             <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}l">Social</a></li>
-                <li><a href="#" onclick="openModal('login-modal'); return false;">Login</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('user') }}">My Page</a></li>
                 <li>
                     <form action="/search" method="GET" style="display: inline;">
                         <input type="text" name="query" placeholder="Search characters..." style="padding: 5px; border-radius: 5px; border: 1px solid #A4133C;">
@@ -26,4 +26,50 @@
             </ul>
         </nav>
     </header>
+
+    <main class="user-page">
+        <section class="user-profile">
+            <h1>Welcome, [USERNAME]!</h1>
+            <div class="avatar">
+                <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="User Avatar">
+            </div>
+        </section>
+
+        <div class="left-content">
+            <section class="favorites-buttons">
+                <h2>📁 Your Favorite Lists</h2>
+                <div class="buttons-container">
+                    <button onclick="location.href='{{ url_for('waifu_list') }}'">💗 Waifus</button>
+                    <button onclick="location.href='{{ url_for('husbando_list') }}'">💙 Husbandos</button>
+                    <button onclick="location.href='{{ url_for('other_list') }}'">🌟 Others</button>
+                </div>
+            </section>
+
+            <section class="trait-summary">
+                <h2>Your Type 💖</h2>
+                <div class="traits">
+                    <div class="trait">
+                        <span>💛 Blonde Hair</span>
+                    </div>
+                    <div class="trait">
+                        <span>📏 170cm+</span>
+                    </div>
+                    <div class="trait">
+                        <span>🌶️ Likes Spicy Food</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="suggested-character">
+                <h2>Your Perfect Match 💘</h2>
+                <div class="character-card">
+                    <img src="{{ url_for('static', filename='images/usui-takumi.webp') }}" alt="Suggested Character">
+                    <p><strong>Usui Takumi</strong></p>
+                    <p>Blonde | 178cm | Loves spicy ramen 🍜</p>
+                    <button>Learn More</button>
+                </div>
+            </section>
+        </div>
+    </main>
 </body>
+</html>
