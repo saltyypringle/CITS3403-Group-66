@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 import sqlite3
 import os
 
@@ -32,7 +32,11 @@ def signup():
 
 @app.route("/mypage")
 def mypage():
-    return render_template("mypage.html")
+    #Declare variables for session
+    id = session['id']
+    email = session['email']
+    username = session['username']
+    return render_template("mypage.html", id=id, username=username, email=email)
 
 @app.route("/myhome")
 def myhome():
@@ -80,32 +84,37 @@ def add_details():
 
 @app.route("/logging-in", methods=['POST'])
 def logging_in():
+    #Connect to database
     conn = connect_db()
     cursor = conn.cursor()
     
+    #Grab input from html form
     username_email = request.form['email-username']
     password = request.form['password']
     
-    print("Received:", username_email, password)
-    
+    #Query DB for information on user
     query = "SELECT * FROM User WHERE username = ? OR email = ?"
     cursor.execute(query, (username_email, username_email))
     details = cursor.fetchone()
-    
-    print(details)
-    
+
+    #Check user exists
     if details is None:
         conn.close()
         flash("Username or Email not found")
-        return redirect(request.referrer)
+        return redirect(request.referrer)  
     
-    stored_password = details[3]   
-    
-    if stored_password != password:
+    #Check if password is wrong
+    if details[3] != password:
         conn.close()
         flash("Password Incorrect")
         return redirect(request.referrer)
     
+    #Flask session allows us to pass variables through to different url calls, helps store for log in pages
+    session['id'] = details[0]
+    session['email'] = details[1]
+    session['username'] = details[2]
+    
+    #Redirect to mypage after logging in
     conn.close()
     return redirect(url_for('mypage'))
 
