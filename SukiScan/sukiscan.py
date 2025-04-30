@@ -11,6 +11,7 @@ def connect_db():
     path_way_to_db = os.path.join(os.path.dirname(__file__), 'data', 'sukiscan.db')
     return sqlite3.connect(path_way_to_db)
 
+#HTML Routes
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -53,6 +54,7 @@ def mysocial():
 def placeholder():
     return render_template("placeholder.html")
 
+#Forms Routes
 @app.route("/add-details", methods=['POST'])
 def add_details():
     #Connect to the Database
