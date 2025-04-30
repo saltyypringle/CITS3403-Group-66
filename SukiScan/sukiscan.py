@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
+from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import os
 
@@ -10,6 +11,7 @@ def connect_db():
     path_way_to_db = os.path.join(os.path.dirname(__file__), 'data', 'sukiscan.db')
     return sqlite3.connect(path_way_to_db)
 
+#HTML Routes
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -52,6 +54,7 @@ def mysocial():
 def placeholder():
     return render_template("placeholder.html")
 
+#Forms Routes
 @app.route("/add-details", methods=['POST'])
 def add_details():
     #Connect to the Database
@@ -73,19 +76,22 @@ def add_details():
         if details[1] == email:
             flash("Email already in use. Choose another")
             conn.close()
-            return redirect(url_for('signup'))
+            return redirect(request.referrer)
         
         elif details[2] == username:
             flash("Username already in use. Choose another")
             conn.close()
             return redirect(request.referrer)
     
+    #Hash the password
+    hashed_password = generate_password_hash(password)
+    
     #Add the new details to database
     query = "INSERT INTO User (email, username, password) VALUES (?, ?, ?);"
-    cursor.execute(query, (email, username, password))
+    cursor.execute(query, (email, username, hashed_password))
     conn.commit()
     
-    #
+    #Grab the details again to be used when automatically logging in post signup
     query = "SELECT * FROM User WHERE email = ? OR username = ?"
     cursor.execute(query, (email, username))
     details = cursor.fetchone()
@@ -120,8 +126,8 @@ def logging_in():
         flash("Username or Email not found")
         return redirect(request.referrer)  
     
-    #Check if password is wrong
-    if details[3] != password:
+    #Check if password is wrong by comparing hashes
+    if not check_password_hash(details[3], password):
         conn.close()
         flash("Password Incorrect")
         return redirect(request.referrer)
