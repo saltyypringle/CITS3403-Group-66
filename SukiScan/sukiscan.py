@@ -74,7 +74,7 @@ def add_details():
         if details[1] == email:
             flash("Email already in use. Choose another")
             conn.close()
-            return redirect(url_for('signup'))
+            return redirect(request.referrer)
         
         elif details[2] == username:
             flash("Username already in use. Choose another")
