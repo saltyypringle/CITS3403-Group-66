@@ -22,6 +22,14 @@ def login():
 def signup():
     return render_template("signup.html")
 
+@app.route("/addcharacter")
+def addcharacter():
+    return render_template("addcharacter.html")
+
+@app.route("/searchcharacter")
+def searchcharacter():
+    return render_template("searchcharacter.html")
+
 @app.route("/mypage")
 def mypage():
     #Declare variables for session
@@ -43,3 +51,11 @@ def mysocial():
 @app.route("/placeholder")
 def placeholder():
     return render_template("placeholder.html")
+
+@app.route("/myaddcharacter")
+def myaddcharacter():
+    return render_template("myaddcharacter.html")
+
+@app.route("/mysearchcharacter")
+def mysearchcharacter():
+    return render_template("mysearchcharacter.html")
