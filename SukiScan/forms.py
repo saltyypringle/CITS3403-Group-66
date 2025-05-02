@@ -1,58 +1,13 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
-from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import os
-
-app = Flask(__name__)
-app.secret_key = "SukiScan"
+from flask import request, redirect, url_for, flash, session
+from werkzeug.security import generate_password_hash, check_password_hash
+from SukiScan import app
 
 #Function that opens the database
 def connect_db():
     path_way_to_db = os.path.join(os.path.dirname(__file__), 'data', 'sukiscan.db')
     return sqlite3.connect(path_way_to_db)
-
-#HTML Routes
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-@app.route("/home")
-def home():
-    return render_template("home.html")
-
-@app.route("/social")
-def social():
-    return render_template("social.html")
-
-@app.route("/login")
-def login():
-    return render_template("login.html")
-
-@app.route("/signup")
-def signup():
-    return render_template("signup.html")
-
-@app.route("/mypage")
-def mypage():
-    #Declare variables for session
-    id = session['id']
-    email = session['email']
-    username = session['username']
-    
-    #Pass variables into render so they can be used in webpage
-    return render_template("mypage.html", id=id, username=username, email=email)
-
-@app.route("/myhome")
-def myhome():
-    return render_template("myhome.html")
-
-@app.route("/mysocial")
-def mysocial():
-    return render_template("mysocial.html")
-
-@app.route("/placeholder")
-def placeholder():
-    return render_template("placeholder.html")
 
 #Forms Routes
 @app.route("/add-details", methods=['POST'])
@@ -140,6 +95,3 @@ def logging_in():
     #Redirect to mypage after logging in
     conn.close()
     return redirect(url_for('mypage'))
-
-if __name__ == "__main__":
-    app.run(debug=True)
