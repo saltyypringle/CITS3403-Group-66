@@ -35,7 +35,7 @@ def signup():
 def mypage():
     #Declare variables for session
     #Pass variables into render so they can be used in webpage
-    return render_template("mypage.html", id=current_user.id, username=current_user.username, email=current_user.email)
+    return render_template("mypage.html", id=current_user.id, username=current_user.email, email=current_user.username)
 
 #Home Url
 @app.route("/myhome")

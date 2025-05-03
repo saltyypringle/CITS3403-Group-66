@@ -17,14 +17,14 @@ class AccountInfo(UserMixin):
     
     #Function for Account Information
     @staticmethod
-    def Get_Info(id):
+    def Get_Info(e_u):
         #Connect to the Database
         conn = connect_db()
         cursor = conn.cursor()
         
         #Query to get information for email and username
         query = "SELECT * FROM User WHERE email = ? OR username = ?"
-        cursor.execute(query, (id, id))
+        cursor.execute(query, (e_u, e_u))
         data = cursor.fetchone()
         conn.close()
         

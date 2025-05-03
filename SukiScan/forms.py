@@ -2,7 +2,7 @@ from flask import request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user
 from SukiScan import app
-from models import connect_db, AccountInfo
+from .models import connect_db, AccountInfo
 
 #Forms Routes
 #Signing up in function
@@ -40,24 +40,31 @@ def add_details():
     query = "INSERT INTO User (email, username, password) VALUES (?, ?, ?);"
     cursor.execute(query, (email, username, hashed_password))
     conn.commit()
+    conn.close()
     
     #Grab the details again to be used when automatically logging in post signup
-    info = AccountInfo.Get_Info(username)
-    login_user(info)
+    userinfo = AccountInfo.Get_Info(username)
+    login_user(userinfo)
     
     #Redirect to mypage after logging in
-    conn.close()
     return redirect(url_for('mypage'))
 
 #Logging In function
 @app.route("/logging-in", methods=['POST'])
 def logging_in():
+    #Connect to the Database
+    conn = connect_db()
+    cursor = conn.cursor()
+    
     #Grab input from html form
     username_email = request.form['email-username']
     password = request.form['password']
     
     #Grab the details
-    details = AccountInfo.Get_Info(username_email)
+    #Query to get information for email and username
+    query = "SELECT * FROM User WHERE email = ? OR username = ?"
+    cursor.execute(query, (username_email))
+    details = cursor.fetchone()
     
     #Check user exists
     if details is None:
@@ -70,7 +77,8 @@ def logging_in():
         return redirect(request.referrer)
     
     #Flask session allows us to pass variables through to different url calls, helps store for log in pages
-    login_user(details)
+    userinfo = AccountInfo.Get_Info(username_email)
+    login_user(userinfo)
     
     #Redirect to mypage after logging in
     return redirect(url_for('mypage'))
