@@ -1,15 +1,11 @@
-import sqlite3
-import os
-from flask import request, redirect, url_for, flash, session
+from flask import request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user
 from SukiScan import app
-
-#Function that opens the database
-def connect_db():
-    path_way_to_db = os.path.join(os.path.dirname(__file__), 'data', 'sukiscan.db')
-    return sqlite3.connect(path_way_to_db)
+from models import connect_db, AccountInfo
 
 #Forms Routes
+#Signing up in function
 @app.route("/add-details", methods=['POST'])
 def add_details():
     #Connect to the Database
@@ -27,16 +23,15 @@ def add_details():
     details = cursor.fetchone()
     
     #Check if email or username is being used
-    if details is not None:
+    if details:
         if details[1] == email:
             flash("Email already in use. Choose another")
-            conn.close()
-            return redirect(request.referrer)
         
         elif details[2] == username:
             flash("Username already in use. Choose another")
-            conn.close()
-            return redirect(request.referrer)
+        
+        conn.close()
+        return redirect(request.referrer)
     
     #Hash the password
     hashed_password = generate_password_hash(password)
@@ -47,51 +42,35 @@ def add_details():
     conn.commit()
     
     #Grab the details again to be used when automatically logging in post signup
-    query = "SELECT * FROM User WHERE email = ? OR username = ?"
-    cursor.execute(query, (email, username))
-    details = cursor.fetchone()
-    
-    #Flask session allows us to pass variables through to different url calls, helps store for log in pages
-    session['id'] = details[0]
-    session['email'] = details[1]
-    session['username'] = details[2]
+    info = AccountInfo.Get_Info(username)
+    login_user(info)
     
     #Redirect to mypage after logging in
     conn.close()
     return redirect(url_for('mypage'))
 
+#Logging In function
 @app.route("/logging-in", methods=['POST'])
 def logging_in():
-    #Connect to database
-    conn = connect_db()
-    cursor = conn.cursor()
-    
     #Grab input from html form
     username_email = request.form['email-username']
     password = request.form['password']
     
-    #Query DB for information on user
-    query = "SELECT * FROM User WHERE username = ? OR email = ?"
-    cursor.execute(query, (username_email, username_email))
-    details = cursor.fetchone()
-
+    #Grab the details
+    details = AccountInfo.Get_Info(username_email)
+    
     #Check user exists
     if details is None:
-        conn.close()
         flash("Username or Email not found")
         return redirect(request.referrer)  
     
     #Check if password is wrong by comparing hashes
-    if not check_password_hash(details[3], password):
-        conn.close()
+    if not check_password_hash(details.password, password):
         flash("Password Incorrect")
         return redirect(request.referrer)
     
     #Flask session allows us to pass variables through to different url calls, helps store for log in pages
-    session['id'] = details[0]
-    session['email'] = details[1]
-    session['username'] = details[2]
+    login_user(details)
     
     #Redirect to mypage after logging in
-    conn.close()
     return redirect(url_for('mypage'))
