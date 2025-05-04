@@ -3,7 +3,7 @@ import os
 from flask import request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
-from models import User
+from SukiScan.models import User
 
 #Function that opens the database
 @app.route("/add-details", methods=['POST'])
@@ -35,7 +35,7 @@ def add_details():
     db.session.commit()
     
     # Store user in session
-    session['id'] = new_user.id
+    session['id'] = new_user.user_id
     session['email'] = new_user.email
     session['username'] = new_user.username
     
@@ -61,7 +61,7 @@ def logging_in():
         return redirect(request.referrer)
     
     # Store user in session
-    session['id'] = user.id
+    session['id'] = user.user_id
     session['email'] = user.email
     session['username'] = user.username
     
