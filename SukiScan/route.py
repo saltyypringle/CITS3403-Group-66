@@ -13,10 +13,6 @@ def index():
 def home():
     return render_template("home.html")
 
-@app.route("/social")
-def social():
-    return render_template("social.html")
-
 @app.route("/login")
 def login():
     return render_template("login.html")
@@ -101,10 +97,10 @@ def mypage():
 def myhome():
     return render_template("myhome.html")
 
-@app.route("/mysocial")
+@app.route("/social")
 @login_required
-def mysocial():
-    return render_template("mysocial.html")
+def social():
+    return render_template("social.html")
 
 @app.route("/placeholder")
 @login_required
