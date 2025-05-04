@@ -1,11 +1,10 @@
-import sqlite3
+'''import sqlite3
 import os
 from flask import request, redirect, url_for, flash, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
 from SukiScan.models import User
 
-#Function that opens the database
 @app.route("/add-details", methods=['POST'])
 def add_details():
     # Grab entered details from signup
@@ -65,4 +64,4 @@ def logging_in():
     session['email'] = user.email
     session['username'] = user.username
     
-    return redirect(url_for('mypage'))
+    return redirect(url_for('mypage'))'''
