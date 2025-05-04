@@ -86,9 +86,10 @@
                     <option value="other">Other</option>
                 </select>
             </div>
-    
-            <button type="submit" style="margin-top: 20px; padding: 12px; background-color: #A4133C; color: white; border: none; border-radius: 10px; font-size: 1em; cursor: pointer;">
+            
+            <button type="button" onclick="window.location.href='{{ url_for('loginrequired') }}'" 
+                    style="margin-top: 20px; padding: 12px; background-color: #A4133C; color: white; border: none; border-radius: 10px; font-size: 1em; cursor: pointer;">
                 Add Character
-            </button>
+             </button>
         </form>
     </section>
