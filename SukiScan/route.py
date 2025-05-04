@@ -59,3 +59,7 @@ def myaddcharacter():
 @app.route("/mysearchcharacter")
 def mysearchcharacter():
     return render_template("mysearchcharacter.html")
+
+@app.route("/loginrequired")
+def loginrequired():
+    return render_template("loginrequired.html")
