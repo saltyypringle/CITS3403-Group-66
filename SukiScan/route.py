@@ -1,5 +1,6 @@
-from flask import render_template, session
+from flask import Flask, render_template, redirect, url_for, session, request
 from SukiScan import app
+from SukiScan.models import User  
 
 #HTML Routes
 @app.route("/")
@@ -63,3 +64,22 @@ def mysearchcharacter():
 @app.route("/loginrequired")
 def loginrequired():
     return render_template("loginrequired.html")
+
+@app.route('/logout')
+def logout():
+    session.clear()  # Clears the session
+    return redirect(url_for('login'))  # Redirects to the login page
+
+@app.route("/profile")
+def profile():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+        
+    username = session.get('username')
+    email = session.get('email')
+    
+    return render_template("profile.html", username=username, email=email)
+
+@app.route("/friends")
+def friends():
+    return render_template("friends.html")
