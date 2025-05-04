@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login Required</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div style="text-align: center; padding: 40px;">
+        <h2>Oh No! You need to be logged in to add characters!</h2>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul style="color: red;">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+
+        <p><a href="{{ url_for('login') }}" style="color: #A4133C;">Login</a> or 
+           <a href="{{ url_for('signup') }}" style="color: #A4133C;">Sign Up</a> to continue </p>
+    </div>
+</body>
+</html>
