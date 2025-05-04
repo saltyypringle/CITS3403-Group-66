@@ -33,7 +33,7 @@
         <img src="{{ url_for('static', filename='images/search.png') }}" alt="Filter Icon" style="width: 50px; height: 50px;">
         Filter Characters
     </h2>    
-    <form method="GET" action="{{ url_for('search') }}">
+    <form method="GET" action="{{ url_for('mysearchcharacter') }}">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name"
             style="width: 250px; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 10px;">
