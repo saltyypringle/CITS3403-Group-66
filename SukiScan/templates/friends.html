@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Friends List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('mysocial') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('myaddcharacter') }}">Add Character</a></li>
+                <li>
+                    <form action="{{ url_for('mysearchcharacter') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search characters...">
+                        <button type="submit">Go</button>
+                      </form>  
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
+            </ul>
+        </nav>
+    </header>
+                
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="friends-page">
+        <div class="left-section">
+            <h2>Your Friends</h2>
+            <ul>
+                {% for friend in friends %}
+                    <li>{{ friend.username }}</li>
+                {% else %}
+                    <li>You have no friends.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="right-section">
+            <h2>Add a New Friend</h2>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Search for users..." />
+                <button id="search-btn">Search</button>
+            </div>
+
+            <div class="search-results">
+                <ul>
+                    {% for user in search_results %}
+                        <li>
+                            <span>{{ user.username }}</span>
+                            <button class="add-btn" onclick="addFriend('{{ user.id }}')">Add Friend</button>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+    </script> 
+</body>
+</html>
