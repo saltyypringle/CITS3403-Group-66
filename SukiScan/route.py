@@ -131,6 +131,13 @@ def addcharacter():
 def searchcharacter():
     return render_template("searchcharacter.html")
 
+#HTML Route Post Logout
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return render_template("index.html")
+
 @app.route("/loginrequired")
 def loginrequired():
     return render_template("loginrequired.html")
