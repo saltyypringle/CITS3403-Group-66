@@ -7,32 +7,33 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body>
+
     <header>
-        <a href="{{ url_for('index') }}">
+        <a href="{{ url_for('logout') }}">
             <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         </a>
         <nav>
             <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
                 <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
                 <li>
                     <form action="{{ url_for('searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
                         <button type="submit">Go</button>
                       </form>                      
-                </li> 
+                </li>
             </ul>
         </nav>
     </header>
-    
+
 <div class="filters" style="flex: 1; max-width: 300px; padding: 20px; border: 2px solid white; border-radius: 10px; background-color: #f9f9f9;">
-    <h2 style="display: flex; align-items: center; gap: 8px;">
-        Filter Character
+    <h2 style="display: flex; align-items: center; gap: 10px;">
         <img src="{{ url_for('static', filename='images/search.png') }}" alt="Filter Icon" style="width: 50px; height: 50px;">
+        Filter Characters
     </h2>    
-    <form method="GET" action="{{ url_for('searchcharacter') }}">
+    <form method="GET" action="{{ url_for('mysearchcharacter') }}">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name"
             style="width: 250px; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 10px;">
