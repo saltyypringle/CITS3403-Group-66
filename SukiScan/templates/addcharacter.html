@@ -8,20 +8,20 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('index') }}">
+        <a href="{{ url_for('logout') }}">
             <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         </a>
         <nav>
             <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('mysocial') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
                 <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
                 <li>
-                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                    <form action="{{ url_for('mysearchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
                         <button type="submit">Go</button>
-                      </form> 
+                      </form>  
                 </li>
               </ul>
         </nav>
@@ -86,10 +86,9 @@
                     <option value="other">Other</option>
                 </select>
             </div>
-            
-            <button type="button" onclick="window.location.href='{{ url_for('loginrequired') }}'" 
-                    style="margin-top: 20px; padding: 12px; background-color: #A4133C; color: white; border: none; border-radius: 10px; font-size: 1em; cursor: pointer;">
+    
+            <button type="submit" style="margin-top: 20px; padding: 12px; background-color: #A4133C; color: white; border: none; border-radius: 10px; font-size: 1em; cursor: pointer;">
                 Add Character
-             </button>
+            </button>
         </form>
     </section>

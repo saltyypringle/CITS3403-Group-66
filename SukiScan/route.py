@@ -107,11 +107,6 @@ def social():
 def placeholder():
     return render_template("placeholder.html")
 
-@app.route("/myaddcharacter")
-@login_required
-def myaddcharacter():
-    return render_template("myaddcharacter.html")
-
 @app.route("/mysearchcharacter")
 @login_required
 def mysearchcharacter():
