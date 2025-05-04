@@ -24,9 +24,25 @@
                         <button type="submit">Go</button>
                       </form> 
                 </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                    alt="Avatar"
+                    id="avatar"
+                    onclick="toggleSidebar()">
+               
+                </li>
             </ul>
         </nav>
     </header>
+
+    <div id="sidebar">
+        <h2>My Account</h2>
+        <div class="sidebar-content">
+            <h3>Login Required</h3>
+            <p>You need to log in to access this section.</p>
+            <a href="{{ url_for('login') }}" class="login-link">Login</a>
+        </div>
+    </div>  
     <main>
         <img src="{{ url_for('static', filename='images/SukiScan.png') }}" alt="SukiScan">
     </main>
@@ -42,5 +58,11 @@
             <button class="signup-btn" onclick="window.location.href='{{ url_for('signup') }}'">Sign Up</button>
         </div>
     </section>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+    </script>
 </body>
 </html>
