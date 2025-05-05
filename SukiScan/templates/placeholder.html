@@ -8,15 +8,15 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('index') }}">
+        <a href="{{ url_for('logout') }}">
             <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         </a>
         <nav>
             <ul>
                 <li><a href="{{ url_for('myhome') }}">Home</a></li>
-                <li><a href="{{ url_for('mysocial') }}">Social</a></li>
-                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
-                <li><a href="{{ url_for('myaddcharacter') }}">Add Character</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('page') }}">My Page</a></li>
+                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
                 <li>
                     <form action="{{ url_for('searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">

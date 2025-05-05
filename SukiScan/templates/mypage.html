@@ -9,15 +9,17 @@
 </head>
 <body>
     <header>
-        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        <a href="{{ url_for('logout') }}">
+            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        </a>
         <nav>
             <ul>
                 <li><a href="{{ url_for('myhome') }}">Home</a></li>
-                <li><a href="{{ url_for('mysocial') }}">Social</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
                 <li><a href="{{ url_for('mypage') }}">My Page</a></li>
-                <li><a href="{{ url_for('myaddcharacter') }}">Add Character</a></li>
+                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
                 <li>
-                    <form action="{{ url_for('mysearchcharacter') }}" method="GET">
+                    <form action="{{ url_for('searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
                         <button type="submit">Go</button>
                       </form>  
@@ -28,7 +30,7 @@
 
     <main class="user-page">
         <section class="user-profile">
-            <h1>Welcome, {{ username }}!</h1>
+            <h1>Welcome, {{ current_user.username }}!</h1>
             <div class="avatar">
                 <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="User Avatar">
             </div>
