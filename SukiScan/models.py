@@ -14,7 +14,39 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return f"<User {self.username}"
 
+class Waifu(db.Model):
+    __tablename__ = 'Waifu'
+    w_char_id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50), nullable=True)
+    hair_colour = db.Column(db.String(50))  # Field name fixed
+    height = db.Column(db.Integer)
+    personality = db.Column(db.String(10))
+    profession = db.Column(db.String(100))
+    body_type = db.Column(db.String(50))
+    
+class Husbando(db.Model):
+    __tablename__ = 'Husbando'
+    h_char_id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50), nullable=True)
+    hair_colour = db.Column(db.String(50))  # Field name fixed
+    height = db.Column(db.Integer)
+    personality = db.Column(db.String(10))
+    profession = db.Column(db.String(100))
+    body_type = db.Column(db.String(50))
 
+class Other(db.Model):
+    __tablename__ = 'Other'
+    o_char_id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50), nullable=True)
+    hair_colour = db.Column(db.String(50))  # Field name fixed
+    height = db.Column(db.Integer)
+    personality = db.Column(db.String(10))
+    profession = db.Column(db.String(100))
+    body_type = db.Column(db.String(50))
+    
 class WaifuCheck(db.Model):
     __tablename__ = 'Waifu_check'
     wc_id = db.Column(db.Integer, primary_key=True)
