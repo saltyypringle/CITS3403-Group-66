@@ -85,13 +85,8 @@ def logging_in():
 #HTML Route Post Login
 @app.route("/mypage")
 def mypage():
-    #Declare variables for session
-    id = session.get('id')
-    email = session.get('email')
-    username = session.get('username')
-    
     #Pass variables into render so they can be used in webpage
-    return render_template("mypage.html", id=id, username=username, email=email)
+    return render_template("mypage.html", user=current_user)
 
 @app.route("/myhome")
 @login_required
@@ -191,16 +186,9 @@ def loginrequired():
     return render_template("loginrequired.html")
 
 @app.route("/profile")
+@login_required
 def profile():
-    # Check if user is logged in
-    if 'username' not in session:
-        return redirect(url_for('login'))  # Redirect to login if not logged in
-
-    # Get session values
-    username = session.get('username')
-    email = session.get('email')
-
-    return render_template("profile.html", username=username, email=email)
+    return render_template("profile.html", user=current_user)
 
 @app.route("/friends")
 def friends():
