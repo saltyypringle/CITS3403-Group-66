@@ -24,9 +24,26 @@
                         <button type="submit">Go</button>
                       </form>  
                 </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
             </ul>
         </nav>
     </header>
+                
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
 
     <section class="hero-section" style="background-image: url('{{ url_for('static', filename='images/background2.png') }}')">
         <h1>Discover Your Favorite Characters</h1>
@@ -105,6 +122,14 @@
         <h1>Featured Articles</h1>
         <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
         </p> 
-    </section>    
+    </section>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+    </script> 
 </body>
 </html>
