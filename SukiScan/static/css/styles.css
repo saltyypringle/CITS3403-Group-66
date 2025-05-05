@@ -906,3 +906,39 @@ div.top-characters img {
     background-color: #8b0e2c;
 }
 
+#flash-messages {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+  }
+  
+  .alert {
+    margin: 5px 0;
+    padding: 10px 20px;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    transition: opacity 0.5s ease;
+    display: inline-block;
+  }
+  
+  .alert-success {
+    background-color: green;
+  }
+  
+  .alert-warning {
+    background-color: orange;
+  }
+  
+  .alert-danger {
+    background-color: red;
+  }
+  
+  /* Add animation to fade out the flash message */
+  .fade-out {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
