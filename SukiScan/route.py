@@ -3,6 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
 from SukiScan.models import User
+from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck
 
 #HTML Routes Pre-Login
 @app.route("/")
@@ -107,9 +108,70 @@ def social():
 def placeholder():
     return render_template("placeholder.html")
 
-@app.route("/addcharacter")
+@app.route("/addcharacter", methods=["GET", "POST"])
 @login_required
 def addcharacter():
+    if request.method == "POST":
+        first_name = request.form.get("first_name").strip()
+        last_name = request.form.get("last_name").strip()
+        hair_colour = request.form.get("hair_colour")
+        height = request.form.get("height")
+        personality = request.form.get("personality")
+        profession = request.form.get("profession")
+        body_type = request.form.get("body_type")
+        character_type = request.form.get("character_type")
+
+        # Normalize the body type to match the allowed values
+        valid_body_types = ['Triangle', 'Inverted Triangle', 'Rectangle', 'Hourglass', 'Oval', 'Diamond']
+        body_type = body_type.title() if body_type else None  # Capitalize the first letter
+
+        if body_type not in valid_body_types:
+            flash(f"Invalid body type. Please choose from {', '.join(valid_body_types)}.", "error")
+            return redirect(url_for("addcharacter"))
+
+        # Set full_name based on first and last name comparison
+        full_name = f"{first_name} {last_name}".lower() if first_name.lower() != last_name.lower() else first_name.lower()
+
+        check_model_map = {
+            "waifu": WaifuCheck,
+            "husbando": HusbandCheck,
+            "other": OtherCheck
+        }
+
+        CheckModel = check_model_map.get(character_type)
+
+        if not CheckModel:
+            flash("Invalid character type selected.", "error")
+            return redirect(url_for("addcharacter"))
+
+        # Check for existing name (case-insensitive)
+        existing = CheckModel.query.filter(
+            db.func.lower(CheckModel.first_name) == first_name.lower(),
+            db.func.lower(CheckModel.last_name) == last_name.lower()
+        ).first()
+
+        if existing:
+            flash(f"{full_name.title()} already exists in review list for {character_type}.", "warning")
+        else:
+            # Create a new check record
+            new_check = CheckModel(
+                first_name=first_name,
+                last_name=last_name,
+                hair_colour=hair_colour,  # Now correctly linked
+                height=height,
+                personality=personality,
+                profession=profession,
+                body_type=body_type,
+                submitted_by=current_user.user_id,  # Refer to current_user.user_id
+                submission_date=db.func.current_timestamp(),
+                status="Pending"  # Default status
+            )
+            db.session.add(new_check)
+            db.session.commit()
+            flash(f"{full_name.title()} has been submitted for review as a {character_type}.", "success")
+
+        return redirect(url_for("addcharacter"))
+
     return render_template("addcharacter.html")
 
 @app.route("/searchcharacter")
