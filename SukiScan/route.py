@@ -127,3 +127,19 @@ def logout():
 @app.route("/loginrequired")
 def loginrequired():
     return render_template("loginrequired.html")
+
+@app.route("/profile")
+def profile():
+    # Check if user is logged in
+    if 'username' not in session:
+        return redirect(url_for('login'))  # Redirect to login if not logged in
+
+    # Get session values
+    username = session.get('username')
+    email = session.get('email')
+
+    return render_template("profile.html", username=username, email=email)
+
+@app.route("/friends")
+def friends():
+    return render_template("friends.html")
