@@ -23,9 +23,26 @@
                         <button type="submit">Go</button>
                       </form>  
                 </li>
-              </ul>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
+            </ul>
         </nav>
     </header>
+                
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
 
     <section class="add-character-section" style="max-width: 600px; margin: 40px auto; padding: 30px; background-color: #fff0f3; border-radius: 12px; border: 2px solid #A4133C; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
         <h1 style="text-align: center; color: #A4133C; font-size: 2em; margin-bottom: 20px;"> Add a New Character</h1>
@@ -92,3 +109,13 @@
             </button>
         </form>
     </section>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+    </script> 
+</body>
+</html>
