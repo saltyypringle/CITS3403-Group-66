@@ -19,7 +19,7 @@ class Waifu(db.Model):
     w_char_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50), nullable=True)
-    hair_colour = db.Column(db.String(50))  # Field name fixed
+    hair_colour = db.Column(db.String(50))
     height = db.Column(db.Integer)
     personality = db.Column(db.String(10))
     profession = db.Column(db.String(100))
@@ -30,7 +30,7 @@ class Husbando(db.Model):
     h_char_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50), nullable=True)
-    hair_colour = db.Column(db.String(50))  # Field name fixed
+    hair_colour = db.Column(db.String(50))
     height = db.Column(db.Integer)
     personality = db.Column(db.String(10))
     profession = db.Column(db.String(100))
@@ -41,7 +41,7 @@ class Other(db.Model):
     o_char_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50), nullable=True)
-    hair_colour = db.Column(db.String(50))  # Field name fixed
+    hair_colour = db.Column(db.String(50))
     height = db.Column(db.Integer)
     personality = db.Column(db.String(10))
     profession = db.Column(db.String(100))
