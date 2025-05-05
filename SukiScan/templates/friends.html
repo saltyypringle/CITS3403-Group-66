@@ -3,15 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SukiScan Chatroom</title>
+    <title>Your Friends List</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </head>
-<body class="social-page">
+<body>
     <header>
-        <a href="{{ url_for('logout') }}">
-            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
-        </a>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         <nav>
             <ul>
                 <li><a href="{{ url_for('myhome') }}">Home</a></li>
@@ -33,7 +30,7 @@
             </ul>
         </nav>
     </header>
-
+                
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
             <h2>MY ACCOUNT</h2>
@@ -44,45 +41,40 @@
             <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
         </ul>
     </div>
-
-    <main class="chatroom">
-        <div class="chat-header">
-            <h2>Welcome to the SukiScan Chatroom!</h2>
+    <div class="friends-page">
+        <div class="left-section">
+            <h2>Your Friends</h2>
+            <ul>
+                <!-- Loop through friends and display them -->
+                {% for friend in friends %}
+                    <li>{{ friend.username }}</li>
+                {% else %}
+                    <li>You have no friends.</li>
+                {% endfor %}
+            </ul>
         </div>
 
-        <div class="chat-messages">
-            <div class="message">
-                <div class="name-date">
-                    <span class="name">Johnathon</span>
-                    <span class="date">25th January 2025</span>
-                </div>
-                <p>I Love Gojo SO FREAKING MUCH!!!!</p>
+        <div class="right-section">
+            <h2>Add a New Friend</h2>
+            <div class="search-container">
+                <input type="text" id="search-bar" placeholder="Search for users..." />
+                <button id="search-btn">Search</button>
             </div>
 
-            <div class="message">
-                <div class="name-date">
-                    <span class="name">Horace</span>
-                    <span class="date">29th January 2025</span>
-                </div>
-                <p><span class="mention">@Johnathon </span>FRFRFR</p>
-            </div>
-
-            <div class="message user-message">
-                <div class="name-date">
-                    <span class="name">You</span>
-                    <span class="date">3rd February 2025</span>
-                </div>
-                <p>Gojo is the best character ever!</p>
+            <div class="search-results">
+                <!-- Here you will display search results based on the search query -->
+                <ul>
+                    <!-- Example result (Loop through search results) -->
+                    {% for user in search_results %}
+                        <li>
+                            <span>{{ user.username }}</span>
+                            <button class="add-btn" onclick="addFriend('{{ user.id }}')">Add Friend</button>
+                        </li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
-
-        <div class="chat-input">
-            <form>
-                <input type="text" placeholder="Type your message..." required>
-                <button type="submit">Send</button>
-            </form>
-        </div>
-    </main>
+    </div>
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
@@ -90,6 +82,6 @@
                 sidebar.classList.toggle('open');
             }
         }
-    </script>  
+    </script> 
 </body>
 </html>
