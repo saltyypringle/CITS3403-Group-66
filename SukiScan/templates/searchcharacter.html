@@ -9,9 +9,7 @@
 <body>
 
     <header>
-        <a href="{{ url_for('logout') }}">
-            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
-        </a>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         <nav>
             <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -84,6 +82,37 @@
             <button type="submit"
                 style="margin-top: 20px; padding: 10px 20px; background-color: #A4133C; color: white; border: none; border-radius: 8px; cursor: pointer;">Search</button>
         </form>
+        {% if characters %}
+            <h2 style="margin-top: 30px;">Results</h2>
+            <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                <thead style="background-color: #A4133C; color: white;">
+                    <tr>
+                        <th style="padding: 10px; border: 1px solid #ccc;">First Name</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Last Name</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Hair Colour</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Height</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">MBTI</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Profession</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Body Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for char in characters %}
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ccc;">{{ char.first_name }}</td>
+                        <td style="padding: 10px; border: 1px solid #ccc;">{{ char.last_name }}</td>
+                        <td style="padding: 10px; border: 1px solid #ccc;">{{ char.hair_colour }}</td>
+                        <td style="padding: 10px; border: 1px solid #ccc;">{{ char.height }}</td>
+                        <td style="padding: 10px; border: 1px solid #ccc;">{{ char.personality }}</td>
+                        <td style="padding: 10px; border: 1px solid #ccc;">{{ char.profession }}</td>
+                        <td style="padding: 10px; border: 1px solid #ccc;">{{ char.body_type }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="margin-top: 20px;">No match</p>
+        {% endif %}
     </div>
     <script>
         function toggleSidebar() {

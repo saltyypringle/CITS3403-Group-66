@@ -9,9 +9,7 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('logout') }}">
-            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
-        </a>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         <nav>
             <ul>
                 <li><a href="{{ url_for('myhome') }}">Home</a></li>
@@ -47,7 +45,7 @@
 
     <main class="user-page">
         <section class="user-profile">
-            <h1>Welcome, {{ current_user.username }}!</h1>
+            <h1>Welcome, {{ user.username }}!</h1>
             <div class="avatar">
                 <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="User Avatar">
             </div>

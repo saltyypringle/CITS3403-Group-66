@@ -3,7 +3,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
 from SukiScan.models import User
-from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck
+from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck, Waifu, Husbando, Other
 
 #HTML Routes Pre-Login
 @app.route("/")
@@ -85,13 +85,8 @@ def logging_in():
 #HTML Route Post Login
 @app.route("/mypage")
 def mypage():
-    #Declare variables for session
-    id = session.get('id')
-    email = session.get('email')
-    username = session.get('username')
-    
     #Pass variables into render so they can be used in webpage
-    return render_template("mypage.html", id=id, username=username, email=email)
+    return render_template("mypage.html", user=current_user)
 
 @app.route("/myhome")
 @login_required
@@ -112,7 +107,7 @@ def placeholder():
 @login_required
 def addcharacter():
     if request.method == "POST":
-        first_name = request.form.get("first_name").strip()
+        first_name = request.form.get("first_name", "").strip()
         last_name = request.form.get("last_name").strip()
         hair_colour = request.form.get("hair_colour")
         height = request.form.get("height")
@@ -179,6 +174,106 @@ def addcharacter():
 def searchcharacter():
     return render_template("searchcharacter.html")
 
+@app.route("/search", methods=['GET'])
+@login_required
+def search():
+    #Initialise all the variables to search
+    name = request.args.get('name').strip()
+    hair = request.args.get('hair_colour').strip()
+    height = request.args.get('height').strip()
+    mbti = request.args.get('mbti').strip()
+    body = request.args.getlist('body_type')
+    type = request.args.getlist('character_type')
+    
+    #Check if a first name and last name is searched
+    full_name = name.split()
+    if len(full_name) > 0:
+        f_name = full_name[0]
+    else:
+        f_name = ''
+    
+    if len(name) > 1:
+        l_name = full_name[1]
+    else:
+        l_name = ''
+    
+    
+    characters = []
+    
+    #Check is waifus is selected
+    if 'waifu' in type:
+        w_query = db.session.query(Waifu)
+        #Query for name
+        w_query = w_query.filter(
+            Waifu.first_name.ilike(f"%{f_name}%"),
+            Waifu.last_name.ilike(f"%{l_name}%")
+        )
+        #Query for hair colour
+        if hair:
+            w_query = w_query.filter(Waifu.hair_colour(f"%{hair}%"))
+        #Query for Height
+        if height:
+            w_query = w_query.filter(Waifu.height == int(height))
+        #Query for Personality
+        if mbti:
+            w_query = w_query.filter(Waifu.personality(f"%{mbti}%"))
+        #Query for Body Type
+        if body:
+            w_query = w_query.filter(Waifu.body_type.in_(type))
+        #Add Waifu characters to list
+        w_characters = w_query.all()
+        characters.extend(w_characters)
+    
+    #Check is husbandos is selected
+    if 'husbando' in type:
+        h_query = db.session.query(Husbando)
+        #Query for name
+        h_query = h_query.filter(
+            Husbando.first_name.ilike(f"%{f_name}%"),
+            Husbando.last_name.ilike(f"%{l_name}%")
+        )
+        #Query for hair colour
+        if hair:
+            h_query = h_query.filter(Husbando.hair_colour(f"%{hair}%"))
+        #Query for Height
+        if height:
+            h_query = h_query.filter(Husbando.height == int(height))
+        #Query for Personality
+        if mbti:
+            h_query = h_query.filter(Husbando.personality(f"%{mbti}%"))
+        #Query for Body Type
+        if body:
+            h_query = h_query.filter(Husbando.body_type.in_(type))
+        #Add Waifu characters to list
+        h_characters = h_query.all()
+        characters.extend(h_characters)
+    
+    #Check is others is selected
+    if 'other' in type:
+        o_query = db.session.query(Other)
+        #Query for name
+        o_query = o_query.filter(
+            Other.first_name.ilike(f"%{f_name}%"),
+            Other.last_name.ilike(f"%{l_name}%")
+        )
+        #Query for hair colour
+        if hair:
+            o_query = o_query.filter(Other.hair_colour(f"%{hair}%"))
+        #Query for Height
+        if height:
+            o_query = o_query.filter(Other.height == int(height))
+        #Query for Personality
+        if mbti:
+            o_query = o_query.filter(Other.personality(f"%{mbti}%"))
+        #Query for Body Type
+        if body:
+            o_query = o_query.filter(Other.body_type.in_(type))
+        #Add Waifu characters to list
+        o_characters = o_query.all()
+        characters.extend(o_characters) 
+        
+    return render_template('searchcharacter.html', characters=characters)
+
 #HTML Route Post Logout
 @app.route("/logout")
 @login_required
@@ -191,16 +286,9 @@ def loginrequired():
     return render_template("loginrequired.html")
 
 @app.route("/profile")
+@login_required
 def profile():
-    # Check if user is logged in
-    if 'username' not in session:
-        return redirect(url_for('login'))  # Redirect to login if not logged in
-
-    # Get session values
-    username = session.get('username')
-    email = session.get('email')
-
-    return render_template("profile.html", username=username, email=email)
+    return render_template("profile.html", user=current_user)
 
 @app.route("/friends")
 def friends():

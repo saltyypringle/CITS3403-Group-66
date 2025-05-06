@@ -45,18 +45,18 @@
 
     <section class="profile-section">
         <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Avatar">
-        <h1>Hello, {{ username }}!</h1>
+        <h1>Hello, {{ user.username }}!</h1>
     
         <div class="user-info">
             <div class="info-row">
                 <span class="label">Username:</span>
-                <span class="value">{{ username }}</span>
+                <span class="value">{{ user.username }}</span>
                 <button class="change-btn">Change</button>
             </div>
     
             <div class="info-row">
                 <span class="label">Email:</span>
-                <span class="value">{{ email }}</span>
+                <span class="value">{{ user.email }}</span>
                 <button class="change-btn">Change</button>
             </div>
     
