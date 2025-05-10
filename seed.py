@@ -1,5 +1,3 @@
-# seed.py
-
 from SukiScan import app, db
 from SukiScan.models import Waifu, Husbando, Other
 
@@ -9,10 +7,32 @@ with app.app_context():
     Husbando.query.delete()
     Other.query.delete()
 
-    # Add your entries (adjust fields as per your models)
     waifus = [
-        Waifu(w_char_id=1, first_name="Asuka", last_name="Langley", hair_colour="Red", height=157, personality="TSUN", profession="Pilot", body_type="Slim"),
-        Waifu(w_char_id=2, first_name="Rei", last_name="Ayanami", hair_colour="Blue", height=149, personality="SHY", profession="Pilot", body_type="Slim"),
+        Waifu(w_char_id=1, first_name="Rem", last_name="", hair_colour="Blue", height=154, personality="ISFJ", profession="Maid", body_type="Hourglass"),
+        Waifu(w_char_id=2, first_name="Tohru", last_name="", hair_colour="Blonde", height=176, personality="ESFP", profession="Maid", body_type="Inverted Triangle"),
+        Waifu(w_char_id=3, first_name="Hinata", last_name="Hyūga", hair_colour="Black", height=163, personality="ISFJ", profession="Ninja", body_type="Hourglass"),
+        Waifu(w_char_id=4, first_name="Erza", last_name="Scarlet", hair_colour="Red", height=175, personality="ESTJ", profession="Mage", body_type="Hourglass"),
+        Waifu(w_char_id=5, first_name="Zero Two", last_name="", hair_colour="Pink", height=170, personality="ESTP", profession="Parasite", body_type="Hourglass"),
+        Waifu(w_char_id=6, first_name="Power", last_name="", hair_colour="Blonde", height=170, personality="ESFP", profession="Public Safety Devil Hunter", body_type="Inverted Triangle"),
+        Waifu(w_char_id=7, first_name="Mikasa", last_name="Ackerman", hair_colour="Black", height=170, personality="ISTJ", profession="Soldier", body_type="Inverted Triangle"),
+        Waifu(w_char_id=8, first_name="Yoruichi", last_name="Shihouin", hair_colour="Purple", height=156, personality="ESTP", profession="Shinigami", body_type="Hourglass"),
+        Waifu(w_char_id=9, first_name="Miyo", last_name="Saimori", hair_colour="Black", height=160, personality="INFP", profession="House Wife", body_type="Hourglass"),
+        Waifu(w_char_id=10, first_name="Mitsuri", last_name="Kanroji", hair_colour="Pink", height=164, personality="ESFJ", profession="Demon Slayer", body_type="Hourglass"),
+        Waifu(w_char_id=11, first_name="Makima", last_name="", hair_colour="Auburn", height=168, personality="ENFJ", profession="Public Safety Devil Hunter", body_type="Hourglass"),
+        Waifu(w_char_id=12, first_name="Fern", last_name="", hair_colour="Purple", height=165, personality="ISTJ", profession="Mage", body_type="Rectangle"),
+        Waifu(w_char_id=13, first_name="Frieren", last_name="", hair_colour="Silver", height=160, personality="INTP", profession="Mage", body_type="Rectangle"),
+        Waifu(w_char_id=14, first_name="Nami", last_name="", hair_colour="Orange", height=170, personality="ESTJ", profession="Navigator", body_type="Hourglass"),
+        Waifu(w_char_id=15, first_name="Yor", last_name="Forger", hair_colour="Black", height=165, personality="ISFJ", profession="Assassin", body_type="Hourglass"),
+        Waifu(w_char_id=16, first_name="Chizuru", last_name="Ichinose", hair_colour="Brown", height=158, personality="ESTJ", profession="Girlfriend", body_type="Hourglass"),
+        Waifu(w_char_id=17, first_name="Raphtalia", last_name="", hair_colour="Brown", height=150, personality="ISFJ", profession="Sword Fighter", body_type="Hourglass"),
+        Waifu(w_char_id=18, first_name="Utahime", last_name="Iori", hair_colour="Black", height=163, personality="ISTJ", profession="Jujutsu Sorcerer", body_type="Hourglass"),
+        Waifu(w_char_id=19, first_name="Shoko", last_name="Nishimiya", hair_colour="Brown", height=160, personality="ISFJ", profession="Student", body_type="Hourglass"),
+        Waifu(w_char_id=20, first_name="Touka", last_name="Kirishima", hair_colour="Blue", height=162, personality="ISFJ", profession="Waitress", body_type="Hourglass"),
+        Waifu(w_char_id=21, first_name="Mai", last_name="Sakurajima", hair_colour="Black", height=162, personality="ISTJ", profession="Student", body_type="Hourglass"),
+        Waifu(w_char_id=22, first_name="Asuna", last_name="Yuuki", hair_colour="Brown", height=166, personality="ENFJ", profession="Student", body_type="Hourglass"),
+        Waifu(w_char_id=23, first_name="Marin", last_name="Kitagawa", hair_colour="Blonde", height=164, personality="ENFP", profession="Student", body_type="Hourglass"),
+        Waifu(w_char_id=24, first_name="Altria", last_name="Pendragon", hair_colour="Blonde", height=154, personality="ISTJ", profession="Saber-class Servant", body_type="Inverted Triangle"),
+        Waifu(w_char_id=25, first_name="Kaguya", last_name="Shinomiya", hair_colour="Black", height=158, personality="INTJ", profession="Student Council Vice President", body_type="Rectangle")
     ]
 
     husbandos = [
@@ -40,7 +60,7 @@ with app.app_context():
         Husbando(h_char_id=22, first_name="Ichigo", last_name="Kurosaki", hair_colour="Orange", height=181, personality="ISFP", profession="Substitute Shinigami", body_type="Inverted Triangle"),
         Husbando(h_char_id=23, first_name="Byakuya", last_name="Kuchiki", hair_colour="Black", height=180, personality="ISFP", profession="Captain", body_type="Rectangle"),
         Husbando(h_char_id=24, first_name="Howl", last_name="Pendragon", hair_colour="Blonde", height=185, personality="ENFP", profession="Wizard", body_type="Hourglass"),
-        Husbando(h_char_id=25, first_name="Jin-Woo", last_name="Sung", hair_colour="Black", height=178, personality="ISFJ", profession="Shadow Monarch", body_type="Inverted Triangle"),
+        Husbando(h_char_id=25, first_name="Jin-Woo", last_name="Sung", hair_colour="Black", height=178, personality="ISFJ", profession="Shadow Monarch", body_type="Inverted Triangle")
     ]
 
     others = [
