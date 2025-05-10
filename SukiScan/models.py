@@ -97,3 +97,39 @@ class OtherCheck(db.Model):
     mod_notes = db.Column(db.Text, nullable=True)  # Allow mod_notes to be NULL
 
     user = db.relationship('User', backref=db.backref('other_checks', lazy=True))
+
+class Shares(db.Model):
+    __tablename__ = 'Shares'
+
+    sharer_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    recipient_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+
+    sharer = db.relationship('User', foreign_keys=[sharer_id], backref='shared_with')
+    recipient = db.relationship('User', foreign_keys=[recipient_id], backref='received_from')
+
+class WaifuLike(db.Model):
+    __tablename__ = 'Waifu_Like'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    w_char_id = db.Column(db.Integer, db.ForeignKey('waifu.w_char_id'), primary_key=True)
+
+    user = db.relationship('User', backref='waifu_likes')
+    waifu = db.relationship('Waifu', backref='liked_by_users')
+
+class HusbandoLike(db.Model):
+    __tablename__ = 'Husbando_Like'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    h_char_id = db.Column(db.Integer, db.ForeignKey('husbando.h_char_id'), primary_key=True)
+
+    user = db.relationship('User', backref='husbando_likes')
+    husbando = db.relationship('Husbando', backref='liked_by_users')
+
+class OtherLike(db.Model):
+    __tablename__ = 'Other_Like'
+
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
+    o_char_id = db.Column(db.Integer, db.ForeignKey('other.o_char_id'), primary_key=True)
+
+    user = db.relationship('User', backref='other_likes')
+    other = db.relationship('Other', backref='liked_by_users')
