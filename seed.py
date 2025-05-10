@@ -64,7 +64,31 @@ with app.app_context():
     ]
 
     others = [
-        Other(o_char_id=1, first_name="Totoro", last_name="", hair_colour="Grey", height=210, personality="CUTE", profession="Forest Spirit", body_type="Round"),
+        Other(o_char_id=1, first_name="Rimuru", last_name="Tempest", hair_colour="Blue", height=150, personality="ENTP", profession="Slime", body_type="Oval"),
+        Other(o_char_id=2, first_name="Felix", last_name="Argyle", hair_colour="Blonde", height=160, personality="ENFJ", profession="Healer", body_type="Hourglass"),
+        Other(o_char_id=3, first_name="Astolfo", last_name="", hair_colour="Pink", height=155, personality="ESFP", profession="Rider", body_type="Hourglass"),
+        Other(o_char_id=4, first_name="Haku", last_name="", hair_colour="Black", height=160, personality="ISFJ", profession="Shinobi", body_type="Hourglass"),
+        Other(o_char_id=5, first_name="Appa", last_name="", hair_colour="White", height=400, personality="ISFP", profession="Sky Bison", body_type="Massive"),
+        Other(o_char_id=6, first_name="Totoro", last_name="", hair_colour="Gray", height=200, personality="ENFP", profession="Forest Spirit", body_type="Round"),
+        Other(o_char_id=7, first_name="Pikachu", last_name="", hair_colour="Yellow", height=40, personality="ESFP", profession="Companion", body_type="Small"),
+        Other(o_char_id=8, first_name="Meowth", last_name="", hair_colour="Cream", height=43, personality="ENTP", profession="Thief", body_type="Feline"),
+        Other(o_char_id=9, first_name="Luna", last_name="", hair_colour="Black", height=35, personality="INFJ", profession="Guide", body_type="Feline"),
+        Other(o_char_id=10, first_name="Arcanine", last_name="", hair_colour="Orange", height=190, personality="ISFJ", profession="Guardian", body_type="Canine"),
+        Other(o_char_id=11, first_name="Mokona", last_name="", hair_colour="White", height=30, personality="ENFP", profession="Messenger", body_type="Rabbit-like"),
+        Other(o_char_id=12, first_name="Chopper", last_name="", hair_colour="Brown", height=90, personality="INFP", profession="Doctor", body_type="Reindeer"),
+        Other(o_char_id=13, first_name="Happy", last_name="", hair_colour="Blue", height=40, personality="ENFP", profession="Support", body_type="Feline"),
+        Other(o_char_id=14, first_name="Jiji", last_name="", hair_colour="Black", height=30, personality="ISTP", profession="Companion", body_type="Feline"),
+        Other(o_char_id=15, first_name="Moogle", last_name="", hair_colour="White", height=50, personality="INTP", profession="Guide", body_type="Fluffy"),
+        Other(o_char_id=16, first_name="Koromon", last_name="", hair_colour="Pink", height=20, personality="ESTJ", profession="Baby Digimon", body_type="Blob"),
+        Other(o_char_id=17, first_name="Calcifer", last_name="", hair_colour="Flame", height=10, personality="ENTP", profession="Fire Demon", body_type="Flame"),
+        Other(o_char_id=18, first_name="Lotor", last_name="Beast Form", hair_colour="Purple", height=180, personality="INTJ", profession="General", body_type="Alien"),
+        Other(o_char_id=19, first_name="Kirara", last_name="", hair_colour="Cream", height=35, personality="ESFJ", profession="Companion", body_type="Feline-Demon"),
+        Other(o_char_id=20, first_name="BMO", last_name="", hair_colour="Teal", height=50, personality="ENFP", profession="Game Console", body_type="Electronic"),
+        Other(o_char_id=21, first_name="Muffin", last_name="", hair_colour="Blue", height=25, personality="ISFP", profession="Toddler", body_type="Dog"),
+        Other(o_char_id=22, first_name="Plankton", last_name="", hair_colour="Green", height=10, personality="ENTJ", profession="Business Owner", body_type="Single Cell"),
+        Other(o_char_id=23, first_name="Snorlax", last_name="", hair_colour="Blue", height=210, personality="ISFP", profession="Sleeper", body_type="Massive"),
+        Other(o_char_id=24, first_name="Onion", last_name="", hair_colour="White", height=60, personality="??", profession="??", body_type="Cartoon Veggie"),
+        Other(o_char_id=25, first_name="Shenron", last_name="", hair_colour="Green", height=2000, personality="INTJ", profession="Dragon God", body_type="Serpentine")
     ]
 
     db.session.add_all(waifus + husbandos + others)
