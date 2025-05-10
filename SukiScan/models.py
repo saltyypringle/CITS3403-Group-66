@@ -1,6 +1,7 @@
 from SukiScan import db
 from flask_login import UserMixin, current_user
 from sqlalchemy.sql import func
+from datetime import datetime
 
 class User(UserMixin, db.Model):
     __tablename__ = 'user'
@@ -134,3 +135,28 @@ class OtherLike(db.Model):
 
     user = db.relationship('User', backref='other_likes')
     other = db.relationship('Other', backref='liked_by_users')
+
+class ForumPost(db.Model):
+    __tablename__ = 'forum_post'
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    user = db.relationship('User', backref='forum_posts')
+
+class ForumComment(db.Model):
+    __tablename__ = 'forum_comment'
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    post_id = db.Column(db.Integer, db.ForeignKey('forum_post.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+
+    user = db.relationship('User', backref='forum_comments')
+    post = db.relationship('ForumPost', backref='comments')
+
