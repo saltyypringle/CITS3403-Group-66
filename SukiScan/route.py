@@ -94,11 +94,6 @@ def mypage():
 def myhome():
     return render_template("myhome.html")
 
-@app.route("/social")
-@login_required
-def social():
-    return render_template("social.html")
-
 @app.route("/placeholder")
 @login_required
 def placeholder():
