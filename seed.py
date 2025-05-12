@@ -89,7 +89,7 @@ with app.app_context():
         Other(o_char_id=15, first_name="Moogle", last_name="", hair_colour="White", height=50, personality="INTP", profession="Guide", body_type="Oval", image_url=build_image_url("Moogle", "")),
         Other(o_char_id=16, first_name="Koromon", last_name="", hair_colour="Pink", height=20, personality="ESTJ", profession="Baby Digimon", body_type="Oval", image_url=build_image_url("Koromon", "")),
         Other(o_char_id=17, first_name="Calcifer", last_name="", hair_colour="Flame", height=10, personality="ENTP", profession="Fire Demon", body_type="Diamond", image_url=build_image_url("Calcifer", "")),
-        Other(o_char_id=18, first_name="Lotor", last_name="Beast Form", hair_colour="Purple", height=180, personality="INTJ", profession="General", body_type="Inverted Triangle", image_url=build_image_url("Lotor", "Beast Form")),
+        Other(o_char_id=18, first_name="Lotor", last_name="Beast Form", hair_colour="Purple", height=180, personality="INTJ", profession="General", body_type="Inverted Triangle", image_url=build_image_url("Lotor", "")),
         Other(o_char_id=19, first_name="Kirara", last_name="", hair_colour="Cream", height=35, personality="ESFJ", profession="Companion", body_type="Hourglass", image_url=build_image_url("Kirara", "")),
         Other(o_char_id=20, first_name="BMO", last_name="", hair_colour="Teal", height=50, personality="ENFP", profession="Game Console", body_type="Rectangle", image_url=build_image_url("BMO", "")),
         Other(o_char_id=21, first_name="Muffin", last_name="", hair_colour="Blue", height=25, personality="ISFP", profession="Toddler", body_type="Rectangle", image_url=build_image_url("Muffin", "")),
