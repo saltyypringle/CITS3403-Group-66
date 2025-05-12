@@ -941,4 +941,204 @@ div.top-characters img {
     opacity: 0;
     pointer-events: none;
   }
-  
+
+.forum-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 80vh;
+    padding: 40px 0;
+}
+
+.forum-box {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(164, 19, 60, 0.10);
+    padding: 32px 36px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.new-post h2, .post-list h2 {
+    color: var(--text-color, #a4133c);
+    margin-bottom: 12px;
+}
+
+.new-post form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.new-post input[type="text"],
+.new-post textarea {
+    padding: 10px;
+    border: 1px solid var(--accent-color, #a4133c);
+    border-radius: 8px;
+    font-size: 1em;
+    background: #fff0f3;
+    color: var(--text-color, #a4133c);
+}
+
+.new-post button {
+    align-self: flex-end;
+    background: var(--text-color, #a4133c);
+    color: var(--background-color, #fff0f3);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.new-post button:hover {
+    background: var(--accent-color, #ffb3c6);
+    color: var(--text-color, #a4133c);
+}
+
+.post-list-scroll {
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.post-list ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.post-list li {
+    background: #fff0f3;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 8px rgba(164, 19, 60, 0.06);
+    transition: background 0.2s;
+}
+
+.post-list li a {
+    color: var(--text-color, #a4133c);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.post-list li a:hover {
+    text-decoration: underline;
+    color: #800f2f;
+}
+
+.post-list small {
+    color: #888;
+    font-size: 0.9em;
+    margin-left: 8px;
+}
+
+.post-detail-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 80vh;
+    padding: 40px 0;
+}
+
+.post-detail-box {
+    background: rgba(255,255,255,0.97);
+    border-radius: 18px;
+    box-shadow: 0 4px 24px rgba(164, 19, 60, 0.10);
+    padding: 36px 40px;
+    max-width: 700px;
+    width: 100%;
+    margin: 40px auto;
+}
+
+.post-detail-box h2 {
+    color: var(--text-color, #a4133c);
+    margin-bottom: 8px;
+}
+
+.post-meta {
+    color: #888;
+    font-size: 1em;
+    margin-bottom: 18px;
+}
+
+.post-content {
+    font-size: 1.15em;
+    margin-bottom: 32px;
+    color: var(--text-color, #a4133c);
+    background: #fff0f3;
+    padding: 18px;
+    border-radius: 10px;
+}
+
+.comment-list-scroll {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 24px;
+    padding-right: 8px;
+}
+
+.comment-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.comment-list li {
+    background: #f8d3e0;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    padding: 12px 16px;
+    box-shadow: 0 2px 8px rgba(164, 19, 60, 0.06);
+}
+
+.comment-meta {
+    font-size: 0.95em;
+    color: #a4133c;
+    margin-bottom: 4px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.comment-date {
+    color: #888;
+    font-size: 0.9em;
+}
+
+.comment-body {
+    color: var(--text-color, #a4133c);
+    font-size: 1.05em;
+}
+
+.comment-form textarea {
+    width: 100%;
+    min-height: 60px;
+    border-radius: 8px;
+    border: 1px solid var(--accent-color, #a4133c);
+    padding: 8px;
+    font-size: 1em;
+    background: #fff0f3;
+    color: var(--text-color, #a4133c);
+    margin-bottom: 10px;
+}
+
+.comment-form button, .comment-form input[type="submit"] {
+    background: var(--text-color, #a4133c);
+    color: var(--background-color, #fff0f3);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.comment-form button:hover, .comment-form input[type="submit"]:hover {
+    background: var(--accent-color, #ffb3c6);
+    color: var(--text-color, #a4133c);
+}
+

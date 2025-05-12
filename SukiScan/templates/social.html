@@ -31,26 +31,32 @@
   </div>
 
   <main class="forum-container">
-    <section class="new-post">
-      <h2>Create New Post</h2>
-      <form method="POST" action="{{ url_for('social') }}">
-        <input type="text" name="title" placeholder="Post title" required>
-        <textarea name="content" placeholder="Write your message..." required></textarea>
-        <button type="submit">Submit Post</button>
-      </form>
-    </section>
+    <section class="forum-box">
+      <section class="new-post">
+        <h2>Create New Post</h2>
+        <form method="POST" action="{{ url_for('social') }}">
+          <input type="text" name="title" placeholder="Post title" required>
+          <textarea name="content" placeholder="Write your message..." required></textarea>
+          <button type="submit">Submit Post</button>
+        </form>
+      </section>
 
-    <section class="post-list">
-      <h2>Forum Posts</h2>
-      <ul>
-        {% for post in posts %}
-          <li>
-            <a href="{{ url_for('view_post', post_id=post.id) }}">
-              {{ post.title }} <small>by {{ post.user.username }} on {{ post.created_at.strftime('%d %B %Y') }}</small>
-            </a>
-          </li>
-        {% endfor %}
-      </ul>
+      <section class="post-list">
+        <h2>Forum Posts</h2>
+        <div class="post-list-scroll">
+          <ul>
+            {% for post in posts %}
+              <li>
+                <a href="{{ url_for('view_post', post_id=post.id) }}">
+                  {{ post.title }}
+                </a>
+                <br>
+                <small>by {{ post.user.username }} on {{ post.created_at.strftime('%d %B %Y') }}</small>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
     </section>
   </main>
 

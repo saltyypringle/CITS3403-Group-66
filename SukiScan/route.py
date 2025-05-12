@@ -295,9 +295,14 @@ def friends():
 @login_required
 def social():
     if request.method == "POST":
+        title = request.form.get("title")  # <-- get the title from the form
         content = request.form.get("content")
-        if content:
-            new_post = ForumPost(title="Post by " + current_user.username, content=content, user_id=current_user.user_id)
+        if title and content:
+            new_post = ForumPost(
+                title=title,  # <-- use the actual title
+                content=content,
+                user_id=current_user.user_id
+            )
             db.session.add(new_post)
             db.session.commit()
             flash("Post submitted!")

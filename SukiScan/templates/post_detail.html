@@ -1,22 +1,85 @@
-{% extends "base.html" %}
-{% block content %}
-  <h2>{{ post.title }}</h2>
-  <p><em>by {{ post.user.username }} on {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</em></p>
-  <p>{{ post.content }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ post.title }} - SukiScan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li>
+                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search characters...">
+                        <button type="submit">Go</button>
+                    </form>
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
+            </ul>
+        </nav>
+    </header>
 
-  <h3>Comments</h3>
-  <ul>
-    {% for comment in comments %}
-      <li><strong>{{ comment.user.username }}</strong> at {{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}<br>
-      {{ comment.content }}</li>
-    {% endfor %}
-  </ul>
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
 
-  <h4>Leave a Comment</h4>
-  <form method="POST">
-    {{ form.hidden_tag() }}
-    {{ form.content.label }}<br>
-    {{ form.content(rows=3, cols=60) }}<br>
-    {{ form.submit() }}
-  </form>
-{% endblock %}
+    <div class="post-detail-container">
+        <section class="post-detail-box">
+            <h2>{{ post.title }}</h2>
+            <p class="post-meta"><em>by {{ post.user.username }} on {{ post.created_at.strftime('%Y-%m-%d %H:%M') }}</em></p>
+            <div class="post-content">{{ post.content }}</div>
+
+            <h3>Comments</h3>
+            <div class="comment-list-scroll">
+                <ul class="comment-list">
+                    {% for comment in comments %}
+                    <li>
+                        <div class="comment-meta">
+                            <strong>{{ comment.user.username }}</strong>
+                            <span class="comment-date">{{ comment.created_at.strftime('%Y-%m-%d %H:%M') }}</span>
+                        </div>
+                        <div class="comment-body">{{ comment.content }}</div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <h4>Leave a Comment</h4>
+            <form method="POST" class="comment-form">
+                {{ form.hidden_tag() }}
+                {{ form.content.label }}<br>
+                {{ form.content(rows=3, cols=60) }}<br>
+                {{ form.submit() }}
+            </form>
+        </section>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+    </script>
+</body>
+</html>
