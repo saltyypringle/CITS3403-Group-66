@@ -1,93 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SukiScan Chatroom</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+  <meta charset="UTF-8">
+  <title>SukiScan Forum</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
 </head>
 <body class="social-page">
-    <header>
-        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('myhome') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
-                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
-                <li>
-                    <form action="{{ url_for('searchcharacter') }}" method="GET">
-                        <input type="text" name="query" placeholder="Search characters...">
-                        <button type="submit">Go</button>
-                      </form>  
-                </li>
-                <li>
-                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
-                         alt="Avatar"
-                         id="avatar"
-                         onclick="toggleSidebar()">
-                </li>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('myhome') }}">Home</a></li>
+        <li><a href="{{ url_for('social') }}">Social</a></li>
+        <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+        <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+        <li>
+          <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Avatar" id="avatar" onclick="toggleSidebar()">
+        </li>
+      </ul>
+    </nav>
+  </header>
 
-    <div id="sidebar" class="sidebar">
-        <div class="sidebar-header">
-            <h2>MY ACCOUNT</h2>
-        </div>
-        <ul class="sidebar-menu">
-            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
-            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
-        </ul>
-    </div>
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header"><h2>MY ACCOUNT</h2></div>
+    <ul class="sidebar-menu">
+      <li><a href="{{ url_for('profile') }}">Profile</a></li>
+      <li><a href="{{ url_for('friends') }}">Friends</a></li>
+      <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+    </ul>
+  </div>
 
-    <main class="chatroom">
-        <div class="chat-header">
-            <h2>Welcome to the SukiScan Chatroom!</h2>
-        </div>
+  <main class="chatroom">
+    <div class="chat-header"><h2>Forum Discussions</h2></div>
 
-        <div class="chat-messages">
-            <div class="message">
+    <form method="POST" action="{{ url_for('social') }}" class="chat-input">
+      <input type="text" name="content" placeholder="Start a new post..." required>
+      <button type="submit">Post</button>
+    </form>
+
+    <div class="chat-messages">
+      {% for post in posts %}
+        <div class="message">
+          <div class="name-date">
+            <span class="name">{{ post.user.username }}</span>
+            <span class="date">{{ post.created_at.strftime('%d %B %Y') }}</span>
+          </div>
+          <p>{{ post.content }}</p>
+
+          <div class="comments">
+            {% for comment in post.comments %}
+              <div class="message user-message">
                 <div class="name-date">
-                    <span class="name">Johnathon</span>
-                    <span class="date">25th January 2025</span>
+                  <span class="name">{{ comment.user.username }}</span>
+                  <span class="date">{{ comment.created_at.strftime('%d %B %Y') }}</span>
                 </div>
-                <p>I Love Gojo SO FREAKING MUCH!!!!</p>
-            </div>
-
-            <div class="message">
-                <div class="name-date">
-                    <span class="name">Horace</span>
-                    <span class="date">29th January 2025</span>
-                </div>
-                <p><span class="mention">@Johnathon </span>FRFRFR</p>
-            </div>
-
-            <div class="message user-message">
-                <div class="name-date">
-                    <span class="name">You</span>
-                    <span class="date">3rd February 2025</span>
-                </div>
-                <p>Gojo is the best character ever!</p>
-            </div>
-        </div>
-
-        <div class="chat-input">
-            <form>
-                <input type="text" placeholder="Type your message..." required>
-                <button type="submit">Send</button>
+                <p>{{ comment.content }}</p>
+              </div>
+            {% endfor %}
+            <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}" class="chat-input">
+              <input type="text" name="comment" placeholder="Add a comment..." required>
+              <button type="submit">Reply</button>
             </form>
+          </div>
         </div>
-    </main>
-    <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            if (sidebar) {
-                sidebar.classList.toggle('open');
-            }
-        }
-    </script>  
+      {% endfor %}
+    </div>
+  </main>
+
+  <script>
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+  </script>
 </body>
 </html>

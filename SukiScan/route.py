@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
 from SukiScan.models import User
 from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck, Waifu, Husbando, Other
+from SukiScan.models import ForumPost, ForumComment
 
 #HTML Routes Pre-Login
 @app.route("/")
@@ -293,3 +294,29 @@ def profile():
 @app.route("/friends")
 def friends():
     return render_template("friends.html")
+
+@app.route("/social", methods=["GET", "POST"])
+@login_required
+def social():
+    if request.method == "POST":
+        content = request.form.get("content")
+        if content:
+            new_post = ForumPost(title="Post by " + current_user.username, content=content, user_id=current_user.user_id)
+            db.session.add(new_post)
+            db.session.commit()
+            flash("Post submitted!")
+        return redirect(url_for('social'))
+
+    posts = ForumPost.query.order_by(ForumPost.created_at.desc()).all()
+    return render_template("social.html", posts=posts)
+
+@app.route("/comment/<int:post_id>", methods=["POST"])
+@login_required
+def add_comment(post_id):
+    content = request.form.get("comment")
+    if content:
+        new_comment = ForumComment(content=content, user_id=current_user.user_id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+        flash("Comment added!")
+    return redirect(url_for('social'))
