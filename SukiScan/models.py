@@ -26,6 +26,7 @@ class Waifu(db.Model):
     personality = db.Column(db.String(10))
     profession = db.Column(db.String(100))
     body_type = db.Column(db.String(50))
+    image_url = db.Column(db.String(200))
     
 class Husbando(db.Model):
     __tablename__ = 'husbando'
@@ -37,6 +38,7 @@ class Husbando(db.Model):
     personality = db.Column(db.String(10))
     profession = db.Column(db.String(100))
     body_type = db.Column(db.String(50))
+    image_url = db.Column(db.String(200))
 
 class Other(db.Model):
     __tablename__ = 'other'
@@ -48,9 +50,11 @@ class Other(db.Model):
     personality = db.Column(db.String(10))
     profession = db.Column(db.String(100))
     body_type = db.Column(db.String(50))
+    image_url = db.Column(db.String(200))
     
 class WaifuCheck(db.Model):
     __tablename__ = 'waifu_check'
+    image_url = db.Column(db.String(200))
     wc_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50), nullable=True)
@@ -68,6 +72,7 @@ class WaifuCheck(db.Model):
 
 class HusbandCheck(db.Model):
     __tablename__ = 'husbando_check'
+    image_url = db.Column(db.String(200))
     hc_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50), nullable=True)
@@ -85,6 +90,7 @@ class HusbandCheck(db.Model):
 
 class OtherCheck(db.Model):
     __tablename__ = 'other_check'
+    image_url = db.Column(db.String(200))
     oc_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50), nullable=True)
