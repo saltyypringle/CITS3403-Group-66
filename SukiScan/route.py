@@ -5,6 +5,7 @@ from SukiScan import app, db
 from SukiScan.models import User
 from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck, Waifu, Husbando, Other
 from SukiScan.models import ForumPost, ForumComment
+from SukiScan.forms import ForumCommentForm
 
 #HTML Routes Pre-Login
 @app.route("/")
@@ -315,3 +316,21 @@ def add_comment(post_id):
         db.session.commit()
         flash("Comment added!")
     return redirect(url_for('social'))
+
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@login_required
+def view_post(post_id):
+    post = ForumPost.query.get_or_404(post_id)
+    comments = post.comments
+    form = ForumCommentForm()
+    if form.validate_on_submit():
+        new_comment = ForumComment(
+            content=form.content.data,
+            user_id=current_user.user_id,
+            post_id=post_id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        flash("Comment added!")
+        return redirect(url_for('view_post', post_id=post_id))
+    return render_template("post_detail.html", post=post, comments=comments, form=form)

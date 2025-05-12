@@ -30,41 +30,28 @@
     </ul>
   </div>
 
-  <main class="chatroom">
-    <div class="chat-header"><h2>Forum Discussions</h2></div>
+  <main class="forum-container">
+    <section class="new-post">
+      <h2>Create New Post</h2>
+      <form method="POST" action="{{ url_for('social') }}">
+        <input type="text" name="title" placeholder="Post title" required>
+        <textarea name="content" placeholder="Write your message..." required></textarea>
+        <button type="submit">Submit Post</button>
+      </form>
+    </section>
 
-    <form method="POST" action="{{ url_for('social') }}" class="chat-input">
-      <input type="text" name="content" placeholder="Start a new post..." required>
-      <button type="submit">Post</button>
-    </form>
-
-    <div class="chat-messages">
-      {% for post in posts %}
-        <div class="message">
-          <div class="name-date">
-            <span class="name">{{ post.user.username }}</span>
-            <span class="date">{{ post.created_at.strftime('%d %B %Y') }}</span>
-          </div>
-          <p>{{ post.content }}</p>
-
-          <div class="comments">
-            {% for comment in post.comments %}
-              <div class="message user-message">
-                <div class="name-date">
-                  <span class="name">{{ comment.user.username }}</span>
-                  <span class="date">{{ comment.created_at.strftime('%d %B %Y') }}</span>
-                </div>
-                <p>{{ comment.content }}</p>
-              </div>
-            {% endfor %}
-            <form method="POST" action="{{ url_for('add_comment', post_id=post.id) }}" class="chat-input">
-              <input type="text" name="comment" placeholder="Add a comment..." required>
-              <button type="submit">Reply</button>
-            </form>
-          </div>
-        </div>
-      {% endfor %}
-    </div>
+    <section class="post-list">
+      <h2>Forum Posts</h2>
+      <ul>
+        {% for post in posts %}
+          <li>
+            <a href="{{ url_for('view_post', post_id=post.id) }}">
+              {{ post.title }} <small>by {{ post.user.username }} on {{ post.created_at.strftime('%d %B %Y') }}</small>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </section>
   </main>
 
   <script>

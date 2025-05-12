@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SukiScan{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('index') }}">
+            <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        </a>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li>
+                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search characters...">
+                        <button type="submit">Go</button>
+                    </form>
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <div id="sidebar">
+        <h2>My Account</h2>
+        <div class="sidebar-content">
+            <h3>Login Required</h3>
+            <p>You need to log in to access this section.</p>
+            <a href="{{ url_for('login') }}" class="login-link">Login</a>
+        </div>
+    </div>
+
+    <div id="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+    </div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
