@@ -21,4 +21,3 @@ application-env/
 
 # Migrations 
 migrations/**/__pycache__
-migrations/versions/__pycache__/fda7353c5cc0_fix_forum_foreign_keys.cpython-313.pyc
