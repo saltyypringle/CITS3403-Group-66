@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
@@ -52,26 +53,11 @@
     
         <!-- Pie Charts Section -->
         <section class="waifu-charts">
-            <div class="chart-container">
-                <h3>Hair Color</h3>
-                <div class="pie"></div>
-            </div>
-            <div class="chart-container">
-                <h3>Height</h3>
-                <div class="pie"></div>
-            </div>
-            <div class="chart-container">
-                <h3>Personality (MBTI)</h3>
-                <div class="pie"></div>
-            </div>
-            <div class="chart-container">
-                <h3>Profession</h3>
-                <div class="pie"></div>
-            </div>
-            <div class="chart-container">
-                <h3>Body Type</h3>
-                <div class="pie"></div>
-            </div>
+            <div class="chart-container"><h3>Hair Color</h3><canvas id="hairChart"></canvas></div>
+            <div class="chart-container"><h3>Height</h3><canvas id="heightChart"></canvas></div>
+            <div class="chart-container"><h3>Personality (MBTI)</h3><canvas id="personalityChart"></canvas></div>
+            <div class="chart-container"><h3>Profession</h3><canvas id="professionChart"></canvas></div>
+            <div class="chart-container"><h3>Body Type</h3><canvas id="bodyTypeChart"></canvas></div>
         </section>
     
         <section class="waifu-table">
@@ -89,33 +75,17 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% for h in husbandos %}
                     <tr>
-                        <td><img src="../static/images/gojo.png" alt="Husbando 1" class="waifu-avatar"></td>
-                        <td>Satoru Gojo</td>
-                        <td>White</td>
-                        <td>190cm</td>
-                        <td>ENTP</td>
-                        <td>Jujutsu Sorcerer</td>
-                        <td>Inverted Triangle</td>
+                        <td><img src="{{ h.image_url }}" alt="{{ h.first_name }}" class="waifu-avatar"></td>
+                        <td>{{ h.first_name }} {{ h.last_name }}</td>
+                        <td>{{ h.hair_colour }}</td>
+                        <td>{{ h.height }} cm</td>
+                        <td>{{ h.personality }}</td>
+                        <td>{{ h.profession }}</td>
+                        <td>{{ h.body_type }}</td>
                     </tr>
-                    <tr>
-                        <td><img src="../static/images/leviackerman.png" alt="Husbando 2" class="waifu-avatar"></td>
-                        <td>Levi Ackerman</td>
-                        <td>Black</td>
-                        <td>160cm</td>
-                        <td>ISTJ</td>
-                        <td>Soldier</td>
-                        <td>Rectangle</td>
-                    </tr>
-                    <tr>
-                        <td><img src="../static/images/todoroki.png" alt="Husbando 3" class="waifu-avatar"></td>
-                        <td>Shoto Todoroki</td>
-                        <td>Red/White</td>
-                        <td>176cm</td>
-                        <td>INFJ</td>
-                        <td>Student Hero</td>
-                        <td>Rectangle</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </section>
@@ -127,6 +97,30 @@
                 sidebar.classList.toggle('open');
             }
         }
+
+        // Chart.js rendering (same as waifus)
+        const pieData = {{ pie_data | tojson }};
+        function renderPie(chartId, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{ data: Object.values(data) }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+        renderPie('hairChart', pieData.hair_colour);
+        renderPie('heightChart', pieData.height);
+        renderPie('personalityChart', pieData.personality);
+        renderPie('professionChart', pieData.profession);
+        renderPie('bodyTypeChart', pieData.body_type);
     </script> 
 </body>
 </html>
