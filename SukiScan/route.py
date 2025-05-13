@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
-from SukiScan.models import User
+from SukiScan.models import User, Friends
 from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck, Waifu, Husbando, Other
 from SukiScan.models import ForumPost, ForumComment
 from SukiScan.forms import ForumCommentForm
@@ -287,8 +287,125 @@ def profile():
     return render_template("profile.html", user=current_user)
 
 @app.route("/friends")
+@login_required
 def friends():
-    return render_template("friends.html")
+    # Get current user's friends (accepted requests)
+    friends_sent = Friends.query.filter_by(
+        user_id=current_user.user_id, 
+        status='accepted'
+    ).all()
+    friends_received = Friends.query.filter_by(
+        friend_id=current_user.user_id, 
+        status='accepted'
+    ).all()
+    
+    # Get friend objects
+    friend_list = []
+    for f in friends_sent:
+        friend_list.append(User.query.get(f.friend_id))
+    for f in friends_received:
+        friend_list.append(User.query.get(f.user_id))
+    
+    # Get pending friend requests
+    pending_requests = Friends.query.filter_by(
+        friend_id=current_user.user_id, 
+        status='pending'
+    ).all()
+    
+    pending_users = [User.query.get(f.user_id) for f in pending_requests]
+    
+    return render_template(
+        "friends.html",
+        friends=friend_list,
+        pending_requests=pending_users
+    )
+
+@app.route("/search_users")
+@login_required
+def search_users():
+    query = request.args.get('query', '')
+    if not query:
+        return jsonify([])
+    
+    # Search for users whose username contains the query (case-insensitive)
+    users = User.query.filter(
+        User.username.ilike(f'%{query}%'),
+        User.user_id != current_user.user_id  # Exclude current user
+    ).limit(10).all()
+    
+    # Format results
+    results = []
+    for user in users:
+        # Check if already friends or has pending request
+        existing_friendship = Friends.query.filter(
+            ((Friends.user_id == current_user.user_id) & (Friends.friend_id == user.user_id)) |
+            ((Friends.user_id == user.user_id) & (Friends.friend_id == current_user.user_id))
+        ).first()
+        
+        status = existing_friendship.status if existing_friendship else None
+        
+        results.append({
+            'id': user.user_id,
+            'username': user.username,
+            'status': status
+        })
+    
+    return jsonify(results)
+
+@app.route("/add_friend/<int:friend_id>", methods=['POST'])
+@login_required
+def add_friend(friend_id):
+    if friend_id == current_user.user_id:
+        return jsonify({'error': 'Cannot add yourself as friend'}), 400
+        
+    # Check if friendship already exists
+    existing_friendship = Friends.query.filter(
+        ((Friends.user_id == current_user.user_id) & (Friends.friend_id == friend_id)) |
+        ((Friends.user_id == friend_id) & (Friends.friend_id == current_user.user_id))
+    ).first()
+    
+    if existing_friendship:
+        return jsonify({'error': 'Friend request already exists'}), 400
+    
+    # Create new friend request
+    friend_request = Friends(
+        user_id=current_user.user_id,
+        friend_id=friend_id,
+        status='pending'
+    )
+    
+    db.session.add(friend_request)
+    db.session.commit()
+    
+    return jsonify({'message': 'Friend request sent successfully'})
+
+@app.route("/accept_friend/<int:request_id>", methods=['POST'])
+@login_required
+def accept_friend(request_id):
+    friend_request = Friends.query.get_or_404(request_id)
+    
+    # Verify the request is for the current user
+    if friend_request.friend_id != current_user.user_id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    friend_request.status = 'accepted'
+    db.session.commit()
+    
+    return jsonify({'message': 'Friend request accepted'})
+
+@app.route("/reject_friend/<int:request_id>", methods=['POST'])
+@login_required
+def reject_friend(request_id):
+    friend_request = Friends.query.get_or_404(request_id)
+    
+    # Verify the request is for the current user
+    if friend_request.friend_id != current_user.user_id:
+        return jsonify({'error': 'Unauthorized'}), 403
+    
+    friend_request.status = 'rejected'
+    db.session.commit()
+    
+    return jsonify({'message': 'Friend request rejected'})
 
 @app.route("/social", methods=["GET", "POST"])
 @login_required
