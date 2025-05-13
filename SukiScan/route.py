@@ -326,7 +326,15 @@ def profile():
 @app.route("/friends")
 @login_required
 def friends():
-    return render_template("friends.html")
+    shareto = db.session.query(Shares.recipient_id).filter_by(sharer_id=current_user.user_id).all()
+    shareto_ids = [r[0] for r in shareto]
+    shareto_users = User.query.filter(User.user_id.in_(shareto_ids)).all()
+    
+    sharefrom = db.session.query(Shares.sharer_id).filter_by(recipient_id=current_user.user_id).all()
+    sharefrom_ids = [r[0] for r in sharefrom]
+    sharefrom_users = User.query.filter(User.user_id.in_(sharefrom_ids)).all()
+    
+    return render_template("friends.html", shareto=shareto_users, sharefrom=sharefrom_users)
 
 
 @app.route("/social", methods=["GET", "POST"])

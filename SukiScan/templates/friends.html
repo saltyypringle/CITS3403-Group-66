@@ -44,32 +44,29 @@
 
     <div class="friends-page">
         <div class="left-section">
-            <h2>Your Friends</h2>
-            <ul class="friends-list">
-                {% for friend in friends %}
-                    <li class="friend-item">
+            <h2>Your Shares</h2>
+            <ul class="share-list">
+                {% for user in shareto %}
+                    <li class="shared-to">
                         <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Friend Avatar" class="friend-avatar">
-                        <span class="friend-name">{{ friend.username }}</span>
+                        <span class="share-name">{{ user.username }}</span>
                     </li>
                 {% else %}
-                    <li>You have no friends yet.</li>
+                    <li>You have not shared with anyone yet.</li>
                 {% endfor %}
             </ul>
-
-            {% if pending_requests %}
-            <h3>Pending Friend Requests</h3>
-            <ul class="pending-requests">
-                {% for user in pending_requests %}
-                    <li class="pending-request-item">
-                        <span>{{ user.username }}</span>
-                        <div class="request-actions">
-                            <button onclick="handleFriendRequest({{ user.user_id }}, 'accept')" class="accept-btn">Accept</button>
-                            <button onclick="handleFriendRequest({{ user.user_id }}, 'reject')" class="reject-btn">Reject</button>
-                        </div>
+        
+            <h2>Shared With You</h2>
+            <ul class="recieve-list">
+                {% for user in sharedfrom %}
+                    <li class="shared-from">
+                        <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Friend Avatar" class="friend-avatar">
+                        <span class="share-name">{{ user.username }}</span>
                     </li>
+                {% else %}
+                    <li>No one has shared with you yet.</li>
                 {% endfor %}
             </ul>
-            {% endif %}
         </div>
 
         <div class="right-section">
