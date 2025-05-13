@@ -211,6 +211,7 @@ def search():
             'mbti': c.personality,
             'profession': c.profession,
             'body_type': c.body_type,
+            'image_url': c.image_url,
         } for c in w_query.all()])
         
     #Check is husbandos is selected
@@ -236,6 +237,7 @@ def search():
             'mbti': c.personality,
             'profession': c.profession,
             'body_type': c.body_type,
+            'image_url': c.image_url,
         } for c in h_query.all()])
         
     
@@ -261,6 +263,7 @@ def search():
             'mbti': c.personality,
             'profession': c.profession,
             'body_type': c.body_type,
+            'image_url': c.image_url,
         } for c in o_query.all()])
     
     return jsonify({'characters': characters})

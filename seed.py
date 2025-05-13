@@ -5,7 +5,7 @@ from SukiScan.models import Waifu, Husbando, Other
 def build_image_url(first_name, last_name):
     # Combine names without space, lowercase, and use .png extension
     filename = (first_name + last_name).replace(" ", "").lower() + ".png"
-    return f"/SukiScan/static/images/{filename}"
+    return f"/static/images/{filename}"
 
 with app.app_context():
     # Clear existing data if needed
