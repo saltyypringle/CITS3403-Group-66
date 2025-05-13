@@ -1142,3 +1142,118 @@ div.top-characters img {
     color: var(--text-color, #a4133c);
 }
 
+.friends-list {
+    list-style: none;
+    padding: 0;
+}
+
+.friend-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ffb3c1;
+    transition: background-color 0.2s;
+}
+
+.friend-item:hover {
+    background-color: #ffe5e9;
+}
+
+.friend-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.friend-name {
+    font-size: 1.1em;
+    color: #590d22;
+}
+
+.pending-requests {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.pending-request-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ffb3c1;
+    background-color: #fff0f3;
+}
+
+.request-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.accept-btn, .reject-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.accept-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.reject-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.accept-btn:hover {
+    background-color: #45a049;
+}
+
+.reject-btn:hover {
+    background-color: #da190b;
+}
+
+.search-result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ffb3c1;
+    transition: background-color 0.2s;
+}
+
+.search-result-item:hover {
+    background-color: #ffe5e9;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.username {
+    font-size: 1.1em;
+    color: #590d22;
+}
+
+.pending-status {
+    color: #ff9800;
+    font-style: italic;
+}
+
+.friend-status {
+    color: #4CAF50;
+    font-style: italic;
+}
+
