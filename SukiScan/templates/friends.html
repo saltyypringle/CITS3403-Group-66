@@ -63,6 +63,7 @@
                     <li class="shared-from">
                         <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Friend Avatar" class="friend-avatar">
                         <span class="share-name">{{ user.username }}</span>
+                        <button onclick="window.location.href='/placeholder'" class="remove-btn">View</button>
                     </li>
                 {% else %}
                     <li>No one has shared with you yet.</li>
