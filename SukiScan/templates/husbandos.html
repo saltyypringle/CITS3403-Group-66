@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li>
+                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search characters...">
+                        <button type="submit">Go</button>
+                    </form>
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
+            </ul>
+        </nav>
+    </header>
+                
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
+    
+    <main class="waifu-list-page">
+
+        <!-- Top Trends Message -->
+        <section class="top-trends">
+            <h2>💙 Your Top Trends</h2>
+            <p>You tend to love strong, reliable, and charming husbandos! 💪</p>
+        </section>
+    
+        <!-- Pie Charts Section -->
+        <section class="waifu-charts">
+            <div class="chart-container"><h3>Hair Color</h3><canvas id="hairChart"></canvas></div>
+            <div class="chart-container"><h3>Height</h3><canvas id="heightChart"></canvas></div>
+            <div class="chart-container"><h3>Personality (MBTI)</h3><canvas id="personalityChart"></canvas></div>
+            <div class="chart-container"><h3>Profession</h3><canvas id="professionChart"></canvas></div>
+            <div class="chart-container"><h3>Body Type</h3><canvas id="bodyTypeChart"></canvas></div>
+        </section>
+    
+        <section class="waifu-table">
+            <h2>💙 Your Husbando List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Name</th>
+                        <th>Hair Color</th>
+                        <th>Height</th>
+                        <th>Personality (MBTI)</th>
+                        <th>Profession</th>
+                        <th>Body Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for h in husbandos %}
+                    <tr>
+                        <td><img src="{{ h.image_url }}" alt="{{ h.first_name }}" class="waifu-avatar"></td>
+                        <td>{{ h.first_name }} {{ h.last_name }}</td>
+                        <td>{{ h.hair_colour }}</td>
+                        <td>{{ h.height }} cm</td>
+                        <td>{{ h.personality }}</td>
+                        <td>{{ h.profession }}</td>
+                        <td>{{ h.body_type }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main> 
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+
+        // Chart.js rendering (same as waifus)
+        const pieData = {{ pie_data | tojson }};
+        function renderPie(chartId, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{ data: Object.values(data) }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+        renderPie('hairChart', pieData.hair_colour);
+        renderPie('heightChart', pieData.height);
+        renderPie('personalityChart', pieData.personality);
+        renderPie('professionChart', pieData.profession);
+        renderPie('bodyTypeChart', pieData.body_type);
+    </script> 
+</body>
+</html>
