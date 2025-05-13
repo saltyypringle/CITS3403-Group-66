@@ -389,61 +389,6 @@ def search_users():
     
     return jsonify(results)
 
-@app.route("/add_friend/<int:friend_id>", methods=['POST'])
-@login_required
-def add_friend(friend_id):
-    if friend_id == current_user.user_id:
-        return jsonify({'error': 'Cannot add yourself as friend'}), 400
-        
-    # Check if friendship already exists
-    existing_friendship = Friends.query.filter(
-        ((Friends.user_id == current_user.user_id) & (Friends.friend_id == friend_id)) |
-        ((Friends.user_id == friend_id) & (Friends.friend_id == current_user.user_id))
-    ).first()
-    
-    if existing_friendship:
-        return jsonify({'error': 'Friend request already exists'}), 400
-    
-    # Create new friend request
-    friend_request = Friends(
-        user_id=current_user.user_id,
-        friend_id=friend_id,
-        status='pending'
-    )
-    
-    db.session.add(friend_request)
-    db.session.commit()
-    
-    return jsonify({'message': 'Friend request sent successfully'})
-
-@app.route("/accept_friend/<int:request_id>", methods=['POST'])
-@login_required
-def accept_friend(request_id):
-    friend_request = Friends.query.get_or_404(request_id)
-    
-    # Verify the request is for the current user
-    if friend_request.friend_id != current_user.user_id:
-        return jsonify({'error': 'Unauthorized'}), 403
-    
-    friend_request.status = 'accepted'
-    db.session.commit()
-    
-    return jsonify({'message': 'Friend request accepted'})
-
-@app.route("/reject_friend/<int:request_id>", methods=['POST'])
-@login_required
-def reject_friend(request_id):
-    friend_request = Friends.query.get_or_404(request_id)
-    
-    # Verify the request is for the current user
-    if friend_request.friend_id != current_user.user_id:
-        return jsonify({'error': 'Unauthorized'}), 403
-    
-    friend_request.status = 'rejected'
-    db.session.commit()
-    
-    return jsonify({'message': 'Friend request rejected'})
-
 @app.route("/social", methods=["GET", "POST"])
 @login_required
 def social():

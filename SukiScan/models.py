@@ -166,19 +166,3 @@ class ForumComment(db.Model):
     user = db.relationship('User', backref='forum_comments')
     post = db.relationship('ForumPost', backref='comments')
 
-class Friends(db.Model):
-    __tablename__ = 'friends'
-    
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    friend_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    status = db.Column(db.String(20), default='pending', nullable=False)  # pending, accepted, rejected
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
-    # Define relationships
-    user = db.relationship('User', foreign_keys=[user_id], backref='friend_requests_sent')
-    friend = db.relationship('User', foreign_keys=[friend_id], backref='friend_requests_received')
-
-    def __repr__(self):
-        return f"<Friends {self.user_id} -> {self.friend_id} ({self.status})>"
-
