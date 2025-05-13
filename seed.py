@@ -67,7 +67,7 @@ with app.app_context():
         Husbando(h_char_id=22, first_name="Ichigo", last_name="Kurosaki", hair_colour="Orange", height=181, personality="ISFP", profession="Substitute Shinigami", body_type="Inverted Triangle", image_url=build_image_url("Ichigo", "Kurosaki")),
         Husbando(h_char_id=23, first_name="Byakuya", last_name="Kuchiki", hair_colour="Black", height=180, personality="ISFP", profession="Captain", body_type="Rectangle", image_url=build_image_url("Byakuya", "Kuchiki")),
         Husbando(h_char_id=24, first_name="Howl", last_name="Pendragon", hair_colour="Blonde", height=185, personality="ENFP", profession="Wizard", body_type="Hourglass", image_url=build_image_url("Howl", "Pendragon")),
-        Husbando(h_char_id=25, first_name="Jin-Woo", last_name="Sung", hair_colour="Black", height=178, personality="ISFJ", profession="Shadow Monarch", body_type="Inverted Triangle", image_url=build_image_url("Jin-Woo", "Sung"))
+        Husbando(h_char_id=25, first_name="Jin-Woo", last_name="Sung", hair_colour="Black", height=178, personality="ISFJ", profession="Shadow Monarch", body_type="Inverted Triangle", image_url=build_image_url("Jinwoo", "Sung"))
     ]
 
 
