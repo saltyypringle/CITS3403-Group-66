@@ -50,6 +50,7 @@
                     <li class="shared-to">
                         <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Friend Avatar" class="friend-avatar">
                         <span class="share-name">{{ user.username }}</span>
+                        <button onclick="removeShare({{ user.user_id }})" class="remove-btn">Remove</button>
                     </li>
                 {% else %}
                     <li>You have not shared with anyone yet.</li>
@@ -107,7 +108,7 @@
 
                     const addButton = document.createElement("button");
                     addButton.textContent = "Share";
-                    addButton.onclick = () => addFriend(user.user_id);
+                    addButton.onclick = () => addShare(user.user_id);
 
                     li.appendChild(span);
                     li.appendChild(addButton);
@@ -116,6 +117,48 @@
                 });
             })
             .catch(err => console.error("Search Failed"));
+        }
+
+        function addShare(userID) {
+            fetch(`/addshare/${userID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/friends";
+                } else {
+                    alert('data.message')
+                }
+            })
+            .catch(err => {
+                alert("Something went wrong");
+                console.error(err);
+            });
+        }
+
+        function removeShare(userID) {
+            fetch(`/removeshare/${userID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/friends";
+                } else {
+                    alert('data.message');
+                }
+            })
+            .catch(err => {
+                alert("Something went wrong");
+                console.error(err);
+            });
         }
 
         function toggleSidebar() {

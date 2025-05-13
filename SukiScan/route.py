@@ -351,6 +351,22 @@ def searchfriends():
         for user in results if user.user_id != current_user.user_id
     ])
 
+@app.route("/addshare/<int:user_id>", methods=["POST"])
+@login_required
+def addShare(user_id):
+    db.session.add(Shares(sharer_id=current_user.user_id, recipient_id=user_id))
+    db.session.commit()
+    
+    return jsonify({"success" : True})
+
+@app.route("/removeshare/<int:user_id>", methods=["POST"])
+@login_required
+def removeShare(user_id):
+    share = Shares.query.filter_by(sharer_id=current_user.user_id, recipient_id=user_id).first()
+    db.session.delete(share)
+    db.session.commit()
+    return jsonify({"success" : True})
+
 
 @app.route("/social", methods=["GET", "POST"])
 @login_required
