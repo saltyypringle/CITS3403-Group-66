@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, session
+from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
@@ -184,15 +184,8 @@ def search():
     
     #Check if a first name and last name is searched
     full_name = name.split()
-    if len(full_name) == 0:
-        f_name = ''
-        l_name = ''
-    elif len(full_name) == 1:
-        f_name = full_name[0]
-        l_name = ''
-    elif len(full_name) == 2:
-        f_name = full_name[0]
-        l_name = full_name[1]
+    f_name = full_name[0] if len(full_name) > 0 else ''
+    l_name = full_name[1] if len(full_name) > 1 else ''
     
     characters = []
     
@@ -201,42 +194,70 @@ def search():
         w_query = db.session.query(Waifu)
         #Query for waifus
         w_query = w_query.filter(
-            Waifu.first_name.ilike(f"%{f_name}%"),
-            Waifu.last_name.ilike(f"%{l_name}%"),
+            Waifu.first_name.ilike(f"{f_name}%"),
+            Waifu.last_name.ilike(f"{l_name}%"),
             Waifu.hair_colour.ilike(f"%{hair}%"),
-            Waifu.personality.ilike(f"%{mbti}%"),
-            Waifu.body_type.in_(body))
-        #Add Waifu characters to list
-        w_characters = w_query.all()
-        characters.extend(w_characters)
-    
+            Waifu.personality.ilike(f"%{mbti}%"))
+        if body:
+            w_query = w_query.filter(Waifu.body_type.in_(body))
+
+        characters.extend([{
+            'first_name': c.first_name,
+            'last_name': c.last_name,
+            'hair_colour': c.hair_colour,
+            'height': c.height,
+            'mbti': c.personality,
+            'profession': c.profession,
+            'body_type': c.body_type,
+        } for c in w_query.all()])
+        
     #Check is husbandos is selected
     if 'husbando' in type or (len(type) == 0):
         h_query = db.session.query(Husbando)
         #Query for husbandos
         h_query = h_query.filter(
-            Husbando.first_name.ilike(f"%{f_name}%"),
-            Husbando.last_name.ilike(f"%{l_name}%"),
+            Husbando.first_name.ilike(f"{f_name}%"),
+            Husbando.last_name.ilike(f"{l_name}%"),
             Husbando.hair_colour.ilike(f"%{hair}%"),
-            Husbando.personality.ilike(f"%{mbti}%"),
-            Husbando.body_type.in_(body))
-        #Add Waifu characters to list
-        h_characters = h_query.all()
-        characters.extend(h_characters)
+            Husbando.personality.ilike(f"%{mbti}%"))
+        if body:
+            h_query = h_query.filter(Husbando.body_type.in_(body))
+
+        characters.extend([{
+            'first_name': c.first_name,
+            'last_name': c.last_name,
+            'hair_colour': c.hair_colour,
+            'height': c.height,
+            'mbti': c.personality,
+            'profession': c.profession,
+            'body_type': c.body_type,
+        } for c in h_query.all()])
+        
     
     #Check is others is selected
     if 'other' in type or (len(type) == 0):
         o_query = db.session.query(Other)
         #Query for others
         o_query = o_query.filter(
-            Other.first_name.ilike(f"%{f_name}%"),
-            Other.last_name.ilike(f"%{l_name}%"),
+            Other.first_name.ilike(f"{f_name}%"),
+            Other.last_name.ilike(f"{l_name}%"),
             Other.hair_colour.ilike(f"%{hair}%"),
-            Other.personality.ilike(f"%{mbti}%"),
-            Other.body_type.in_(body))
-        #Add Waifu characters to list
-        o_characters = o_query.all()
-        characters.extend(o_characters) 
+            Other.personality.ilike(f"%{mbti}%"))
+        if body:
+            o_query = o_query.filter(Other.body_type.in_(body))
+
+        characters.extend([{
+            'first_name': c.first_name,
+            'last_name': c.last_name,
+            'hair_colour': c.hair_colour,
+            'height': c.height,
+            'mbti': c.personality,
+            'profession': c.profession,
+            'body_type': c.body_type,
+        } for c in o_query.all()])
+    
+    return jsonify({'characters': characters})
+         
 
 
 #HTML Route Post Logout

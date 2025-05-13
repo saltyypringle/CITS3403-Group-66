@@ -49,7 +49,7 @@
                 <img src="{{ url_for('static', filename='images/search.png') }}" alt="Filter Icon" style="width: 50px; height: 50px;">
                 Filter Characters
             </h2>    
-            <form method="GET" action="{{ url_for('searchcharacter') }}">
+            <form method="GET" action="{{ url_for('searchcharacter') }}" id="searchForm">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name"
                     style="width: 250px; padding: 8px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 10px;">
@@ -87,6 +87,7 @@
 
         <div style="flex: 3;">
             <table class="Results" style="width: 100%; border-collapse: collapse;">
+
                 <thead style="background-color: #A4133C; color: white;">
                     <tr>
                         <th style="padding: 10px; border: 1px solid #ccc;">First Name</th>
@@ -98,28 +99,57 @@
                         <th style="padding: 10px; border: 1px solid #ccc;">Body Type</th>
                     </tr>
                 </thead>
+
+                <tbody id="characters">
+
+                </tbody>
             </table>
         </div>
     </div>
     <script>
-        {% if characters %}
-            <tbody>
-                {% for char in characters %}
-                <tr>
-                    <td style="padding: 10px; border: 1px solid #ccc;">{{ char.first_name }}</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">{{ char.last_name }}</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">{{ char.hair_colour }}</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">{{ char.height }}</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">{{ char.personality }}</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">{{ char.profession }}</td>
-                    <td style="padding: 10px; border: 1px solid #ccc;">{{ char.body_type }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p style="margin-top: 20px;">No match</p>
-    {% endif %}
+        document.getElementById("searchForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+            const query = new URLSearchParams(formData).toString();
+
+            fetch(`/search?${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById("characters");
+                    tableBody.innerHTML = "";
+
+                    const characters = data.characters;
+                    if (characters.length === 0) {
+                        const row = document.createElement("tr");
+                        const cell = document.createElement("td");
+                        cell.colSpan = 8;
+                        cell.textContent = "No match";
+                        cell.style.textAlign = "center";
+                        row.appendChild(cell);
+                        tableBody.appendChild(row);
+                    } else {
+                        characters.forEach(char => {
+                            const row = document.createElement("tr");
+                            row.innerHTML = `
+                                <td>${char.first_name}</td>
+                                <td>${char.last_name}</td>
+                                <td>${char.hair_colour}</td>
+                                <td>${char.height}</td>
+                                <td>${char.mbti}</td>
+                                <td>${char.profession}</td>
+                                <td>${char.body_type}</td>
+                            `;
+                            tableBody.appendChild(row);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error("Error Fetching Results")
+                });
+        });
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             if (sidebar) {
