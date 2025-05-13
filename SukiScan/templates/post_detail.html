@@ -62,6 +62,7 @@
                     {% endfor %}
                 </ul>
             </div>
+            
 
             <h4>Leave a Comment</h4>
             <form method="POST" class="comment-form">
@@ -70,9 +71,18 @@
                 {{ form.content(rows=3, cols=60) }}<br>
                 {{ form.submit() }}
             </form>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                <div style="color:red;">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
         </section>
     </div>
-
+    
     <script>
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
