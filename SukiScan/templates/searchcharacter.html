@@ -85,7 +85,7 @@
             </form>
         </div>
 
-        <div style="flex: 3;">
+        <div style="flex: 3; margin-right: 20px">
             <table class="Results" style="width: 100%; border-collapse: collapse;">
 
                 <thead style="background-color: #A4133C; color: white;">
@@ -98,10 +98,11 @@
                         <th style="padding: 10px; border: 1px solid #ccc;">MBTI</th>
                         <th style="padding: 10px; border: 1px solid #ccc;">Profession</th>
                         <th style="padding: 10px; border: 1px solid #ccc;">Body Type</th>
+                        <th style="padding: 10px; border: 1px solid #ccc;">Add</th>
                     </tr>
                 </thead>
 
-                <tbody id="characters">
+                <tbody id="characters" style="background-color: #f9f9f9;">
 
                 </tbody>
             </table>
@@ -134,7 +135,7 @@
                         characters.forEach(char => {
                             const row = document.createElement("tr");
                             row.innerHTML = `
-                                <td><img src="${char.image_url}" alt="Characterimage" id="logo"></td>
+                                <td><img src="${char.image_url}" alt="Characterimage" class="character-image"></td>
                                 <td>${char.first_name}</td>
                                 <td>${char.last_name}</td>
                                 <td>${char.hair_colour}</td>
