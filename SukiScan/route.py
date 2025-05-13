@@ -330,11 +330,11 @@ def friends():
     shareto_ids = [r[0] for r in shareto]
     shareto_users = User.query.filter(User.user_id.in_(shareto_ids)).all()
     
-    sharefrom = db.session.query(Shares.sharer_id).filter_by(recipient_id=current_user.user_id).all()
-    sharefrom_ids = [r[0] for r in sharefrom]
-    sharefrom_users = User.query.filter(User.user_id.in_(sharefrom_ids)).all()
+    sharedfrom = db.session.query(Shares.sharer_id).filter_by(recipient_id=current_user.user_id).all()
+    sharedfrom_ids = [r[0] for r in sharedfrom]
+    sharedfrom_users = User.query.filter(User.user_id.in_(sharedfrom_ids)).all()
     
-    return render_template("friends.html", shareto=shareto_users, sharefrom=sharefrom_users)
+    return render_template("friends.html", shareto=shareto_users, sharedfrom=sharedfrom_users)
 
 
 @app.route("/social", methods=["GET", "POST"])
