@@ -144,7 +144,7 @@
                                 <td>${char.profession}</td>
                                 <td>${char.body_type}</td>
                                 <td>
-                                    <form onsubmit="addlike(event, '${char.id}'', '${char.type}')">
+                                    <form onsubmit="addlike(event, '${char.id}', '${char.type}')">
                                         <button 
                                             style="margin-top: 20px; padding: 10px 20px; background-color: #A4133C; color: white; border: none; border-radius: 8px; cursor: pointer;
                                             "type="submit">Add</button>
@@ -163,7 +163,7 @@
         function addlike(event, charid, chartype) {
             event.preventDefault();
 
-            fetch('/add', {
+            fetch('/addlike', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
