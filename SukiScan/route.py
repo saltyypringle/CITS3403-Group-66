@@ -3,7 +3,9 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
 from SukiScan.models import User, Friends
-from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck, Waifu, Husbando, Other
+from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck
+from SukiScan.models import Waifu, Husbando, Other, WaifuLike
+from SukiScan.models import WaifuLike, HusbandoLike, OtherLike
 from SukiScan.models import ForumPost, ForumComment
 from SukiScan.forms import ForumCommentForm
 
@@ -204,6 +206,7 @@ def search():
             w_query = w_query.filter(Waifu.body_type.in_(body))
 
         characters.extend([{
+            'id': c.w_char_id,
             'first_name': c.first_name,
             'last_name': c.last_name,
             'hair_colour': c.hair_colour,
@@ -212,6 +215,7 @@ def search():
             'profession': c.profession,
             'body_type': c.body_type,
             'image_url': c.image_url,
+            'type' : "Waifu",
         } for c in w_query.all()])
         
     #Check is husbandos is selected
@@ -230,6 +234,7 @@ def search():
         
 
         characters.extend([{
+            'id': c.h_char_id,
             'first_name': c.first_name,
             'last_name': c.last_name,
             'hair_colour': c.hair_colour,
@@ -238,6 +243,7 @@ def search():
             'profession': c.profession,
             'body_type': c.body_type,
             'image_url': c.image_url,
+            'type' : "Husbando",
         } for c in h_query.all()])
         
     
@@ -256,6 +262,7 @@ def search():
             o_query = o_query.filter(Other.body_type.in_(body))
 
         characters.extend([{
+            'id': c.o_char_id,
             'first_name': c.first_name,
             'last_name': c.last_name,
             'hair_colour': c.hair_colour,
@@ -264,11 +271,41 @@ def search():
             'profession': c.profession,
             'body_type': c.body_type,
             'image_url': c.image_url,
+            'type' : "Other",
         } for c in o_query.all()])
     
     return jsonify({'characters': characters})
          
-
+@app.route("/addlike", methods=["POST"])
+@login_required
+def addlike():
+    data = request.get_json()
+    char_id = data.get("char_id")
+    char_type = data.get("char_type")
+    
+    if char_type == "Waifu":
+        exist = WaifuLike.query.filter_by(user_id=current_user.user_id, w_char_id=int(char_id)).first()
+        if not exist:
+            db.session.add(WaifuLike(user_id=current_user.user_id, w_char_id=int(char_id)))
+        else:
+            return jsonify({"message": "Character already added"})
+    
+    elif char_type == "Husbando":
+        exist = HusbandoLike.query.filter_by(user_id=current_user.user_id, h_char_id=int(char_id)).first()
+        if not exist:
+            db.session.add(HusbandoLike(user_id=current_user.user_id, h_char_id=int(char_id)))
+        else:
+            return jsonify({"message": "Character already added"})
+    
+    elif char_type == "Other":
+        exist = OtherLike.query.filter_by(user_id=current_user.user_id, o_char_id=int(char_id)).first()
+        if not exist:
+            db.session.add(OtherLike(user_id=current_user.user_id, o_char_id=int(char_id)))
+        else:
+            return jsonify({"message": "Character already added"})
+    
+    db.session.commit()
+    return jsonify({"message": "Character Added"})
 
 #HTML Route Post Logout
 @app.route("/logout")
