@@ -39,6 +39,15 @@
           <textarea name="content" placeholder="Write your message..." required></textarea>
           <button type="submit">Submit Post</button>
         </form>
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div style="color:red;">
+              {% for message in messages %}
+                <p>{{ message }}</p>
+              {% endfor %}
+            </div>
+            {% endif %}
+        {% endwith %}
       </section>
 
       <section class="post-list">

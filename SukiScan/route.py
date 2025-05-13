@@ -183,7 +183,16 @@ def search():
     type = request.args.getlist('character_type')
     
     #Check if a first name and last name is searched
-    f_name, l_name = name.split()
+    full_name = name.split()
+    if len(full_name) == 0:
+        f_name = ''
+        l_name = ''
+    elif len(full_name) == 1:
+        f_name = full_name[0]
+        l_name = ''
+    elif len(full_name) == 2:
+        f_name = full_name[0]
+        l_name = full_name[1]
     
     characters = []
     
@@ -195,8 +204,7 @@ def search():
             Waifu.first_name.ilike(f"%{f_name}%"),
             Waifu.last_name.ilike(f"%{l_name}%"),
             Waifu.hair_colour.ilike(f"%{hair}%"),
-            Waifu.height == int(height),
-            Waifu.personality(f"%{mbti}%"),
+            Waifu.personality.ilike(f"%{mbti}%"),
             Waifu.body_type.in_(body))
         #Add Waifu characters to list
         w_characters = w_query.all()
@@ -210,8 +218,7 @@ def search():
             Husbando.first_name.ilike(f"%{f_name}%"),
             Husbando.last_name.ilike(f"%{l_name}%"),
             Husbando.hair_colour.ilike(f"%{hair}%"),
-            Husbando.height == int(height),
-            Husbando.personality(f"%{mbti}%"),
+            Husbando.personality.ilike(f"%{mbti}%"),
             Husbando.body_type.in_(body))
         #Add Waifu characters to list
         h_characters = h_query.all()
@@ -221,12 +228,11 @@ def search():
     if 'other' in type or (len(type) == 0):
         o_query = db.session.query(Other)
         #Query for others
-        h_query = h_query.filter(
+        o_query = o_query.filter(
             Other.first_name.ilike(f"%{f_name}%"),
             Other.last_name.ilike(f"%{l_name}%"),
             Other.hair_colour.ilike(f"%{hair}%"),
-            Other.height == int(height),
-            Other.personality(f"%{mbti}%"),
+            Other.personality.ilike(f"%{mbti}%"),
             Other.body_type.in_(body))
         #Add Waifu characters to list
         o_characters = o_query.all()
