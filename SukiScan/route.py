@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
-from SukiScan.models import User, Friends
+from SukiScan.models import User, Shares
 from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck
 from SukiScan.models import Waifu, Husbando, Other, WaifuLike
 from SukiScan.models import WaifuLike, HusbandoLike, OtherLike
@@ -326,68 +326,8 @@ def profile():
 @app.route("/friends")
 @login_required
 def friends():
-    # Get current user's friends (accepted requests)
-    friends_sent = Friends.query.filter_by(
-        user_id=current_user.user_id, 
-        status='accepted'
-    ).all()
-    friends_received = Friends.query.filter_by(
-        friend_id=current_user.user_id, 
-        status='accepted'
-    ).all()
-    
-    # Get friend objects
-    friend_list = []
-    for f in friends_sent:
-        friend_list.append(User.query.get(f.friend_id))
-    for f in friends_received:
-        friend_list.append(User.query.get(f.user_id))
-    
-    # Get pending friend requests
-    pending_requests = Friends.query.filter_by(
-        friend_id=current_user.user_id, 
-        status='pending'
-    ).all()
-    
-    pending_users = [User.query.get(f.user_id) for f in pending_requests]
-    
-    return render_template(
-        "friends.html",
-        friends=friend_list,
-        pending_requests=pending_users
-    )
+    return render_template("friends.html")
 
-@app.route("/search_users")
-@login_required
-def search_users():
-    query = request.args.get('query', '')
-    if not query:
-        return jsonify([])
-    
-    # Search for users whose username contains the query (case-insensitive)
-    users = User.query.filter(
-        User.username.ilike(f'%{query}%'),
-        User.user_id != current_user.user_id  # Exclude current user
-    ).limit(10).all()
-    
-    # Format results
-    results = []
-    for user in users:
-        # Check if already friends or has pending request
-        existing_friendship = Friends.query.filter(
-            ((Friends.user_id == current_user.user_id) & (Friends.friend_id == user.user_id)) |
-            ((Friends.user_id == user.user_id) & (Friends.friend_id == current_user.user_id))
-        ).first()
-        
-        status = existing_friendship.status if existing_friendship else None
-        
-        results.append({
-            'id': user.user_id,
-            'username': user.username,
-            'status': status
-        })
-    
-    return jsonify(results)
 
 @app.route("/social", methods=["GET", "POST"])
 @login_required
