@@ -97,11 +97,6 @@ def mypage():
 def myhome():
     return render_template("myhome.html")
 
-@app.route("/placeholder")
-@login_required
-def placeholder():
-    return render_template("placeholder.html")
-
 @app.route("/addcharacter", methods=["GET", "POST"])
 @login_required
 def addcharacter():
@@ -492,3 +487,4 @@ def view_post(post_id):
         flash("Comment added!")
         return redirect(url_for('view_post', post_id=post_id))
     return render_template("post_detail.html", post=post, comments=comments, form=form)
+
