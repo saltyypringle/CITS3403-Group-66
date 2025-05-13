@@ -336,6 +336,21 @@ def friends():
     
     return render_template("friends.html", shareto=shareto_users, sharedfrom=sharedfrom_users)
 
+@app.route("/searchfriends")
+@login_required
+def searchfriends():
+    query = request.args.get("q", "").strip()
+    
+    if not query:
+        return jsonify([])
+    
+    results = User.query.filter(User.username.ilike(f"{query}%")).all()
+    
+    return jsonify([
+        {"username": user.username, "user_id": user.user_id}
+        for user in results if user.user_id != current_user.user_id
+    ])
+
 
 @app.route("/social", methods=["GET", "POST"])
 @login_required

@@ -85,6 +85,29 @@
     </div>
 
     <script>
+        function searchUsers() {
+            const query = document.getElementById("search-bar").value;
+
+            fetch(`/searchfriends?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(users => {
+                const resultsList = document.getElementById("search-results-list");
+                resultsList.innerHTML = "";
+
+                if (users.length === 0) {
+                    resultsList.innerHTML = "<li> No Users Found</li>";
+                    return;
+                }
+
+                users.forEach(user => {
+                    const li = document.createElement("li");
+                    li.textContent = user.username;
+                    resultsList.appendChild(li);
+                });
+            })
+            .catch(err => console.error("Search Failed"));
+        }
+        
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             if (sidebar) {
