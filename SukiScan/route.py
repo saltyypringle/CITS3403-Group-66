@@ -186,93 +186,55 @@ def search():
     type = request.args.getlist('character_type')
     
     #Check if a first name and last name is searched
-    full_name = name.split()
-    if len(full_name) > 0:
-        f_name = full_name[0]
-    else:
-        f_name = ''
-    
-    if len(name) > 1:
-        l_name = full_name[1]
-    else:
-        l_name = ''
-    
+    f_name, l_name = name.split()
     
     characters = []
     
     #Check is waifus is selected
-    if 'waifu' in type:
+    if 'waifu' in type or (len(type) == 0):
         w_query = db.session.query(Waifu)
-        #Query for name
+        #Query for waifus
         w_query = w_query.filter(
             Waifu.first_name.ilike(f"%{f_name}%"),
-            Waifu.last_name.ilike(f"%{l_name}%")
-        )
-        #Query for hair colour
-        if hair:
-            w_query = w_query.filter(Waifu.hair_colour(f"%{hair}%"))
-        #Query for Height
-        if height:
-            w_query = w_query.filter(Waifu.height == int(height))
-        #Query for Personality
-        if mbti:
-            w_query = w_query.filter(Waifu.personality(f"%{mbti}%"))
-        #Query for Body Type
-        if body:
-            w_query = w_query.filter(Waifu.body_type.in_(type))
+            Waifu.last_name.ilike(f"%{l_name}%"),
+            Waifu.hair_colour.ilike(f"%{hair}%"),
+            Waifu.height == int(height),
+            Waifu.personality(f"%{mbti}%"),
+            Waifu.body_type.in_(body))
         #Add Waifu characters to list
         w_characters = w_query.all()
         characters.extend(w_characters)
     
     #Check is husbandos is selected
-    if 'husbando' in type:
+    if 'husbando' in type or (len(type) == 0):
         h_query = db.session.query(Husbando)
-        #Query for name
+        #Query for husbandos
         h_query = h_query.filter(
             Husbando.first_name.ilike(f"%{f_name}%"),
-            Husbando.last_name.ilike(f"%{l_name}%")
-        )
-        #Query for hair colour
-        if hair:
-            h_query = h_query.filter(Husbando.hair_colour(f"%{hair}%"))
-        #Query for Height
-        if height:
-            h_query = h_query.filter(Husbando.height == int(height))
-        #Query for Personality
-        if mbti:
-            h_query = h_query.filter(Husbando.personality(f"%{mbti}%"))
-        #Query for Body Type
-        if body:
-            h_query = h_query.filter(Husbando.body_type.in_(type))
+            Husbando.last_name.ilike(f"%{l_name}%"),
+            Husbando.hair_colour.ilike(f"%{hair}%"),
+            Husbando.height == int(height),
+            Husbando.personality(f"%{mbti}%"),
+            Husbando.body_type.in_(body))
         #Add Waifu characters to list
         h_characters = h_query.all()
         characters.extend(h_characters)
     
     #Check is others is selected
-    if 'other' in type:
+    if 'other' in type or (len(type) == 0):
         o_query = db.session.query(Other)
-        #Query for name
-        o_query = o_query.filter(
+        #Query for others
+        h_query = h_query.filter(
             Other.first_name.ilike(f"%{f_name}%"),
-            Other.last_name.ilike(f"%{l_name}%")
-        )
-        #Query for hair colour
-        if hair:
-            o_query = o_query.filter(Other.hair_colour(f"%{hair}%"))
-        #Query for Height
-        if height:
-            o_query = o_query.filter(Other.height == int(height))
-        #Query for Personality
-        if mbti:
-            o_query = o_query.filter(Other.personality(f"%{mbti}%"))
-        #Query for Body Type
-        if body:
-            o_query = o_query.filter(Other.body_type.in_(type))
+            Other.last_name.ilike(f"%{l_name}%"),
+            Other.hair_colour.ilike(f"%{hair}%"),
+            Other.height == int(height),
+            Other.personality(f"%{mbti}%"),
+            Other.body_type.in_(body))
         #Add Waifu characters to list
         o_characters = o_query.all()
         characters.extend(o_characters) 
-        
-    return render_template('searchcharacter.html', characters=characters)
+
 
 #HTML Route Post Logout
 @app.route("/logout")
