@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li>
+                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search characters...">
+                        <button type="submit">Go</button>
+                    </form>
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
+            </ul>
+        </nav>
+    </header>
+                
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
+    
+    <main class="waifu-list-page">
+
+        <!-- Top Trends Message -->
+        <section class="top-trends">
+            <h2>💙 Your Top Trends</h2>
+            <p>You tend to love strong, reliable, and charming husbandos! 💪</p>
+        </section>
+    
+        <!-- Pie Charts Section -->
+        <section class="waifu-charts">
+            <div class="chart-container">
+                <h3>Hair Color</h3>
+                <div class="pie"></div>
+            </div>
+            <div class="chart-container">
+                <h3>Height</h3>
+                <div class="pie"></div>
+            </div>
+            <div class="chart-container">
+                <h3>Personality (MBTI)</h3>
+                <div class="pie"></div>
+            </div>
+            <div class="chart-container">
+                <h3>Profession</h3>
+                <div class="pie"></div>
+            </div>
+            <div class="chart-container">
+                <h3>Body Type</h3>
+                <div class="pie"></div>
+            </div>
+        </section>
+    
+        <section class="waifu-table">
+            <h2>💙 Your Husbando List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Name</th>
+                        <th>Hair Color</th>
+                        <th>Height</th>
+                        <th>Personality (MBTI)</th>
+                        <th>Profession</th>
+                        <th>Body Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><img src="../static/images/gojo.png" alt="Husbando 1" class="waifu-avatar"></td>
+                        <td>Satoru Gojo</td>
+                        <td>White</td>
+                        <td>190cm</td>
+                        <td>ENTP</td>
+                        <td>Jujutsu Sorcerer</td>
+                        <td>Inverted Triangle</td>
+                    </tr>
+                    <tr>
+                        <td><img src="../static/images/leviackerman.png" alt="Husbando 2" class="waifu-avatar"></td>
+                        <td>Levi Ackerman</td>
+                        <td>Black</td>
+                        <td>160cm</td>
+                        <td>ISTJ</td>
+                        <td>Soldier</td>
+                        <td>Rectangle</td>
+                    </tr>
+                    <tr>
+                        <td><img src="../static/images/todoroki.png" alt="Husbando 3" class="waifu-avatar"></td>
+                        <td>Shoto Todoroki</td>
+                        <td>Red/White</td>
+                        <td>176cm</td>
+                        <td>INFJ</td>
+                        <td>Student Hero</td>
+                        <td>Rectangle</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </main> 
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+    </script> 
+</body>
+</html>

@@ -98,11 +98,6 @@ def myhome():
 def social():
     return render_template("social.html")
 
-@app.route("/placeholder")
-@login_required
-def placeholder():
-    return render_template("placeholder.html")
-
 @app.route("/addcharacter", methods=["GET", "POST"])
 @login_required
 def addcharacter():
@@ -293,3 +288,21 @@ def profile():
 @app.route("/friends")
 def friends():
     return render_template("friends.html")
+
+@app.route("/waifus")
+@login_required
+def waifus():
+    waifu_list = Waifu.query.all()
+    return render_template("waifus.html", waifus=waifu_list)
+
+@app.route("/husbandos")
+@login_required
+def husbandos():
+    husbando_list = Husbando.query.all()
+    return render_template("husbandos.html", husbandos=husbando_list)
+
+@app.route("/others")
+@login_required
+def others():
+    other_list = Other.query.all()
+    return render_template("others.html", others=other_list)
