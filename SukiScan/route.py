@@ -4,6 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
 from SukiScan.models import User
 from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck, Waifu, Husbando, Other
+from SukiScan.models import ForumPost, ForumComment
+from SukiScan.forms import ForumCommentForm
 
 #HTML Routes Pre-Login
 @app.route("/")
@@ -92,11 +94,6 @@ def mypage():
 @login_required
 def myhome():
     return render_template("myhome.html")
-
-@app.route("/social")
-@login_required
-def social():
-    return render_template("social.html")
 
 @app.route("/placeholder")
 @login_required
@@ -255,3 +252,52 @@ def profile():
 @app.route("/friends")
 def friends():
     return render_template("friends.html")
+
+@app.route("/social", methods=["GET", "POST"])
+@login_required
+def social():
+    if request.method == "POST":
+        title = request.form.get("title")  # <-- get the title from the form
+        content = request.form.get("content")
+        if title and content:
+            new_post = ForumPost(
+                title=title,  # <-- use the actual title
+                content=content,
+                user_id=current_user.user_id
+            )
+            db.session.add(new_post)
+            db.session.commit()
+            flash("Post submitted!")
+        return redirect(url_for('social'))
+
+    posts = ForumPost.query.order_by(ForumPost.created_at.desc()).all()
+    return render_template("social.html", posts=posts)
+
+@app.route("/comment/<int:post_id>", methods=["POST"])
+@login_required
+def add_comment(post_id):
+    content = request.form.get("comment")
+    if content:
+        new_comment = ForumComment(content=content, user_id=current_user.user_id, post_id=post_id)
+        db.session.add(new_comment)
+        db.session.commit()
+        flash("Comment added!")
+    return redirect(url_for('social'))
+
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@login_required
+def view_post(post_id):
+    post = ForumPost.query.get_or_404(post_id)
+    comments = post.comments
+    form = ForumCommentForm()
+    if form.validate_on_submit():
+        new_comment = ForumComment(
+            content=form.content.data,
+            user_id=current_user.user_id,
+            post_id=post_id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        flash("Comment added!")
+        return redirect(url_for('view_post', post_id=post_id))
+    return render_template("post_detail.html", post=post, comments=comments, form=form)
