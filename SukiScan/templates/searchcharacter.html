@@ -144,7 +144,7 @@
                                 <td>${char.profession}</td>
                                 <td>${char.body_type}</td>
                                 <td>
-                                    <form method="POST" action="add${char.id}">
+                                    <form onsubmit="addlike(event, '${char.id}', '${char.type}')">
                                         <button 
                                             style="margin-top: 20px; padding: 10px 20px; background-color: #A4133C; color: white; border: none; border-radius: 8px; cursor: pointer;
                                             "type="submit">Add</button>
@@ -159,6 +159,28 @@
                     console.error("Error Fetching Results")
                 });
         });
+
+        function addlike(event, charid, chartype) {
+            event.preventDefault();
+
+            fetch('/addlike', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    char_id: charid,
+                    char_type: chartype
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                consol.error('Error')
+            });
+        }
 
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
