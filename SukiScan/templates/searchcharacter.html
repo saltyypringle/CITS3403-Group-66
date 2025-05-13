@@ -140,6 +140,11 @@
                                 <td>${char.mbti}</td>
                                 <td>${char.profession}</td>
                                 <td>${char.body_type}</td>
+                                <td>
+                                    <form method="POST" action="add${char.id}">
+                                        <button type="submit">Add</button>
+                                    </form>
+                                </td>
                             `;
                             tableBody.appendChild(row);
                         });
