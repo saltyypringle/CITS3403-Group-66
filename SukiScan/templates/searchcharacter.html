@@ -90,6 +90,7 @@
 
                 <thead style="background-color: #A4133C; color: white;">
                     <tr>
+                        <th style="padding: 10px; border: 1px solid #ccc;"></th>
                         <th style="padding: 10px; border: 1px solid #ccc;">First Name</th>
                         <th style="padding: 10px; border: 1px solid #ccc;">Last Name</th>
                         <th style="padding: 10px; border: 1px solid #ccc;">Hair Colour</th>
@@ -133,6 +134,7 @@
                         characters.forEach(char => {
                             const row = document.createElement("tr");
                             row.innerHTML = `
+                                <td><img src="${char.image_url}" alt="Characterimage" id="logo"></td>
                                 <td>${char.first_name}</td>
                                 <td>${char.last_name}</td>
                                 <td>${char.hair_colour}</td>
