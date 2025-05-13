@@ -190,7 +190,7 @@ def search():
     characters = []
     
     #Check is waifus is selected
-    if 'waifu' in type or (len(type) == 0):
+    if 'waifu' in type or not type:
         w_query = db.session.query(Waifu)
         #Query for waifus
         w_query = w_query.filter(
@@ -198,6 +198,8 @@ def search():
             Waifu.last_name.ilike(f"{l_name}%"),
             Waifu.hair_colour.ilike(f"%{hair}%"),
             Waifu.personality.ilike(f"%{mbti}%"))
+        if height:
+            w_query = w_query.filter(Waifu.height == int(height))
         if body:
             w_query = w_query.filter(Waifu.body_type.in_(body))
 
@@ -212,7 +214,7 @@ def search():
         } for c in w_query.all()])
         
     #Check is husbandos is selected
-    if 'husbando' in type or (len(type) == 0):
+    if 'husbando' in type or not type:
         h_query = db.session.query(Husbando)
         #Query for husbandos
         h_query = h_query.filter(
@@ -220,8 +222,11 @@ def search():
             Husbando.last_name.ilike(f"{l_name}%"),
             Husbando.hair_colour.ilike(f"%{hair}%"),
             Husbando.personality.ilike(f"%{mbti}%"))
+        if height:
+            h_query = h_query.filter(Husbando.height == int(height))
         if body:
             h_query = h_query.filter(Husbando.body_type.in_(body))
+        
 
         characters.extend([{
             'first_name': c.first_name,
@@ -235,7 +240,7 @@ def search():
         
     
     #Check is others is selected
-    if 'other' in type or (len(type) == 0):
+    if 'other' in type or not type:
         o_query = db.session.query(Other)
         #Query for others
         o_query = o_query.filter(
@@ -243,6 +248,8 @@ def search():
             Other.last_name.ilike(f"{l_name}%"),
             Other.hair_colour.ilike(f"%{hair}%"),
             Other.personality.ilike(f"%{mbti}%"))
+        if height:
+            o_query = o_query.filter(Other.height == int(height))
         if body:
             o_query = o_query.filter(Other.body_type.in_(body))
 
