@@ -101,13 +101,23 @@
 
                 users.forEach(user => {
                     const li = document.createElement("li");
-                    li.textContent = user.username;
+
+                    const span = document.createElement("span");
+                    span.textContent = user.username;
+
+                    const addButton = document.createElement("button");
+                    addButton.textContent = "Share";
+                    addButton.onclick = () => addFriend(user.user_id);
+
+                    li.appendChild(span);
+                    li.appendChild(addButton);
+
                     resultsList.appendChild(li);
                 });
             })
             .catch(err => console.error("Search Failed"));
         }
-        
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             if (sidebar) {
