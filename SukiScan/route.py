@@ -555,3 +555,39 @@ def like_other(o_char_id):
         db.session.add(OtherLike(user_id=current_user.user_id, o_char_id=o_char_id))
         db.session.commit()
     return redirect(request.referrer or url_for("others"))
+
+@app.route('/remove_waifu/<int:waifu_id>', methods=['POST'])
+@login_required
+def remove_waifu(waifu_id):
+    waifu_like = WaifuLike.query.filter_by(user_id=current_user.user_id, w_char_id=waifu_id).first()
+    if waifu_like:
+        db.session.delete(waifu_like)
+        db.session.commit()
+        flash('Waifu removed from your list.', 'success')
+    else:
+        flash('Waifu not found in your list.', 'warning')
+    return redirect(url_for('waifus'))
+
+@app.route('/remove_husbando/<int:husbando_id>', methods=['POST'])
+@login_required
+def remove_husbando(husbando_id):
+    husbando_like = HusbandoLike.query.filter_by(user_id=current_user.user_id, h_char_id=husbando_id).first()
+    if husbando_like:
+        db.session.delete(husbando_like)
+        db.session.commit()
+        flash('Husbando removed from your list.', 'success')
+    else:
+        flash('Husbando not found in your list.', 'warning')
+    return redirect(url_for('husbandos'))
+
+@app.route('/remove_other/<int:other_id>', methods=['POST'])
+@login_required
+def remove_other(other_id):
+    other_like = OtherLike.query.filter_by(user_id=current_user.user_id, o_char_id=other_id).first()
+    if other_like:
+        db.session.delete(other_like)
+        db.session.commit()
+        flash('Other character removed from your list.', 'success')
+    else:
+        flash('Character not found in your list.', 'warning')
+    return redirect(url_for('others'))

@@ -70,6 +70,7 @@
                     <th>Personality (MBTI)</th>
                     <th>Profession</th>
                     <th>Body Type</th>
+                    <th>Remove</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,6 +83,11 @@
                     <td>{{ w.personality }}</td>
                     <td>{{ w.profession }}</td>
                     <td>{{ w.body_type }}</td>
+                    <td>
+                        <form action="{{ url_for('remove_waifu', waifu_id=w.w_char_id) }}" method="POST" style="margin:0;">
+                            <button type="submit" class="remove-btn">Remove</button>
+                        </form>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>

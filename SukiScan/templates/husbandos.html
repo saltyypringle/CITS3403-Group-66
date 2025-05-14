@@ -76,6 +76,7 @@
                         <th>Personality (MBTI)</th>
                         <th>Profession</th>
                         <th>Body Type</th>
+                        <th>Remove</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -88,6 +89,11 @@
                         <td>{{ h.personality }}</td>
                         <td>{{ h.profession }}</td>
                         <td>{{ h.body_type }}</td>
+                        <td>
+                            <form action="{{ url_for('remove_husbando', husbando_id=h.h_char_id) }}" method="POST" style="margin:0;">
+                                <button type="submit" class="remove-btn">Remove</button>
+                            </form>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
