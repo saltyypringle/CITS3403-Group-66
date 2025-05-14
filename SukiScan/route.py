@@ -88,12 +88,6 @@ def logging_in():
     #Redirect to mypage
     return redirect(url_for('mypage'))
 
-#HTML Route Post Login
-@app.route("/mypage")
-def mypage():
-    #Pass variables into render so they can be used in webpage
-    return render_template("mypage.html", user=current_user)
-
 @app.route("/myhome")
 @login_required
 def myhome():
@@ -515,3 +509,49 @@ def remove_other(other_id):
     else:
         flash('Character not found in your list.', 'warning')
     return redirect(url_for('others'))
+
+
+@app.route("/mypage")
+@login_required
+def mypage():
+    # Get liked characters
+    liked_waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=current_user.user_id).all()]
+    liked_husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=current_user.user_id).all()]
+    liked_others = [like.other for like in OtherLike.query.filter_by(user_id=current_user.user_id).all()]
+
+    # Combine all liked characters
+    all_liked = liked_waifus + liked_husbandos + liked_others
+
+    # Gather all traits
+    hair_colours = [c.hair_colour for c in all_liked if c.hair_colour]
+    heights = [c.height for c in all_liked if c.height]
+    personalities = [c.personality for c in all_liked if c.personality]
+    professions = [c.profession for c in all_liked if c.profession]
+    body_types = [c.body_type for c in all_liked if c.body_type]
+
+    # Find most common traits
+    def most_common(lst):
+        return Counter(lst).most_common(1)[0][0] if lst else None
+
+    top_traits = []
+    if hair_colours:
+        top_traits.append(f"💛 {most_common(hair_colours)} Hair")
+    if heights:
+        top_traits.append(f"📏 {most_common(heights)}cm")
+    if personalities:
+        top_traits.append(f"🧠 {most_common(personalities)} Personality")
+    if professions:
+        top_traits.append(f"💼 {most_common(professions)}")
+    if body_types:
+        top_traits.append(f"🏋️ {most_common(body_types)} Body Type")
+
+    top_traits = top_traits[:3]
+
+    perfect_match = all_liked[0] if all_liked else None
+
+    return render_template(
+        "mypage.html",
+        user=current_user,
+        top_traits=top_traits,
+        perfect_match=perfect_match
+    )
