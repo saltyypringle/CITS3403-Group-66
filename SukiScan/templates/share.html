@@ -29,6 +29,16 @@
             </ul>
         </nav>
     </header>
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
     <main class="user-page">
         <h1 style="margin-top:32px; color:var(--text-color);">Welcome to {{ user.username }}'s SukiScan!</h1>
 
@@ -190,6 +200,14 @@ document.querySelectorAll('.waifu-charts-carousel').forEach(carousel => {
 setupCarousel('.waifu-charts-carousel:nth-of-type(1)');
 setupCarousel('.waifu-charts-carousel:nth-of-type(2)');
 setupCarousel('.waifu-charts-carousel:nth-of-type(3)');
+</script>
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+    }
+}
 </script>
 </body>
 </html>
