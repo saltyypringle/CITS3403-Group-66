@@ -31,6 +31,8 @@
             </ul>
         </nav>
     </header>
+
+    <div id="flash-messages" style="position: fixed; top: 80px; right: 20px; z-index: 9999;"></div>
                 
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
@@ -173,11 +175,29 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                if (data.success) {
+                    flashMessage("Character Added!", "success");
+                } else {
+                    flashMessage("Character Already Added!", "error")
+                }
             })
             .catch(error => {
                 consol.error('Error')
             });
+        }
+
+        function flashMessage(message, category = "success") {
+            const flashMessages = document.getElementById("flash-messages");
+
+            const alertDiv = document.createElement("div");
+            alertDiv.className = `alert alert-${category}`;
+            alertDiv.textContent = message;
+
+            flashMessages.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
         }
 
         function toggleSidebar() {

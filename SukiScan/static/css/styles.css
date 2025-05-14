@@ -1013,6 +1013,10 @@ div.top-characters img {
   .alert-success {
     background-color: green;
   }
+
+  .alert-error {
+    background-color: red;
+  }
   
   .alert-warning {
     background-color: orange;
