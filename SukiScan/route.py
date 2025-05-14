@@ -2,7 +2,7 @@ from flask import render_template, request, redirect, url_for, flash, jsonify
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
-from SukiScan.models import User, Friends
+from SukiScan.models import User, Shares
 from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck
 from SukiScan.models import Waifu, Husbando, Other, WaifuLike
 from SukiScan.models import WaifuLike, HusbandoLike, OtherLike
@@ -323,123 +323,47 @@ def profile():
 @app.route("/friends")
 @login_required
 def friends():
-    # Get current user's friends (accepted requests)
-    friends_sent = Friends.query.filter_by(
-        user_id=current_user.user_id, 
-        status='accepted'
-    ).all()
-    friends_received = Friends.query.filter_by(
-        friend_id=current_user.user_id, 
-        status='accepted'
-    ).all()
+    shareto = db.session.query(Shares.recipient_id).filter_by(sharer_id=current_user.user_id).all()
+    shareto_ids = [r[0] for r in shareto]
+    shareto_users = User.query.filter(User.user_id.in_(shareto_ids)).all()
     
-    # Get friend objects
-    friend_list = []
-    for f in friends_sent:
-        friend_list.append(User.query.get(f.friend_id))
-    for f in friends_received:
-        friend_list.append(User.query.get(f.user_id))
+    sharedfrom = db.session.query(Shares.sharer_id).filter_by(recipient_id=current_user.user_id).all()
+    sharedfrom_ids = [r[0] for r in sharedfrom]
+    sharedfrom_users = User.query.filter(User.user_id.in_(sharedfrom_ids)).all()
     
-    # Get pending friend requests
-    pending_requests = Friends.query.filter_by(
-        friend_id=current_user.user_id, 
-        status='pending'
-    ).all()
-    
-    pending_users = [User.query.get(f.user_id) for f in pending_requests]
-    
-    return render_template(
-        "friends.html",
-        friends=friend_list,
-        pending_requests=pending_users
-    )
+    return render_template("friends.html", shareto=shareto_users, sharedfrom=sharedfrom_users)
 
-@app.route("/search_users")
+@app.route("/searchfriends")
 @login_required
-def search_users():
-    query = request.args.get('query', '')
+def searchfriends():
+    query = request.args.get("q", "").strip()
+    
     if not query:
         return jsonify([])
     
-    # Search for users whose username contains the query (case-insensitive)
-    users = User.query.filter(
-        User.username.ilike(f'%{query}%'),
-        User.user_id != current_user.user_id  # Exclude current user
-    ).limit(10).all()
+    results = User.query.filter(User.username.ilike(f"{query}%")).all()
     
-    # Format results
-    results = []
-    for user in users:
-        # Check if already friends or has pending request
-        existing_friendship = Friends.query.filter(
-            ((Friends.user_id == current_user.user_id) & (Friends.friend_id == user.user_id)) |
-            ((Friends.user_id == user.user_id) & (Friends.friend_id == current_user.user_id))
-        ).first()
-        
-        status = existing_friendship.status if existing_friendship else None
-        
-        results.append({
-            'id': user.user_id,
-            'username': user.username,
-            'status': status
-        })
-    
-    return jsonify(results)
+    return jsonify([
+        {"username": user.username, "user_id": user.user_id}
+        for user in results if user.user_id != current_user.user_id
+    ])
 
-@app.route("/add_friend/<int:friend_id>", methods=['POST'])
+@app.route("/addshare/<int:user_id>", methods=["POST"])
 @login_required
-def add_friend(friend_id):
-    if friend_id == current_user.user_id:
-        return jsonify({'error': 'Cannot add yourself as friend'}), 400
-        
-    # Check if friendship already exists
-    existing_friendship = Friends.query.filter(
-        ((Friends.user_id == current_user.user_id) & (Friends.friend_id == friend_id)) |
-        ((Friends.user_id == friend_id) & (Friends.friend_id == current_user.user_id))
-    ).first()
-    
-    if existing_friendship:
-        return jsonify({'error': 'Friend request already exists'}), 400
-    
-    # Create new friend request
-    friend_request = Friends(
-        user_id=current_user.user_id,
-        friend_id=friend_id,
-        status='pending'
-    )
-    
-    db.session.add(friend_request)
+def addShare(user_id):
+    db.session.add(Shares(sharer_id=current_user.user_id, recipient_id=user_id))
     db.session.commit()
     
-    return jsonify({'message': 'Friend request sent successfully'})
+    return jsonify({"success" : True})
 
-@app.route("/accept_friend/<int:request_id>", methods=['POST'])
+@app.route("/removeshare/<int:user_id>", methods=["POST"])
 @login_required
-def accept_friend(request_id):
-    friend_request = Friends.query.get_or_404(request_id)
-    
-    # Verify the request is for the current user
-    if friend_request.friend_id != current_user.user_id:
-        return jsonify({'error': 'Unauthorized'}), 403
-    
-    friend_request.status = 'accepted'
+def removeShare(user_id):
+    share = Shares.query.filter_by(sharer_id=current_user.user_id, recipient_id=user_id).first()
+    db.session.delete(share)
     db.session.commit()
-    
-    return jsonify({'message': 'Friend request accepted'})
+    return jsonify({"success" : True})
 
-@app.route("/reject_friend/<int:request_id>", methods=['POST'])
-@login_required
-def reject_friend(request_id):
-    friend_request = Friends.query.get_or_404(request_id)
-    
-    # Verify the request is for the current user
-    if friend_request.friend_id != current_user.user_id:
-        return jsonify({'error': 'Unauthorized'}), 403
-    
-    friend_request.status = 'rejected'
-    db.session.commit()
-    
-    return jsonify({'message': 'Friend request rejected'})
 
 @app.route("/social", methods=["GET", "POST"])
 @login_required

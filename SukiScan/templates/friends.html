@@ -44,32 +44,31 @@
 
     <div class="friends-page">
         <div class="left-section">
-            <h2>Your Friends</h2>
-            <ul class="friends-list">
-                {% for friend in friends %}
-                    <li class="friend-item">
+            <h2>Your Shares</h2>
+            <ul class="share-list">
+                {% for user in shareto %}
+                    <li class="shared-to">
                         <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Friend Avatar" class="friend-avatar">
-                        <span class="friend-name">{{ friend.username }}</span>
+                        <span class="share-name">{{ user.username }}</span>
+                        <button onclick="removeShare({{ user.user_id }})" class="remove-btn">Remove</button>
                     </li>
                 {% else %}
-                    <li>You have no friends yet.</li>
+                    <li>You have not shared with anyone yet.</li>
                 {% endfor %}
             </ul>
-
-            {% if pending_requests %}
-            <h3>Pending Friend Requests</h3>
-            <ul class="pending-requests">
-                {% for user in pending_requests %}
-                    <li class="pending-request-item">
-                        <span>{{ user.username }}</span>
-                        <div class="request-actions">
-                            <button onclick="handleFriendRequest({{ user.user_id }}, 'accept')" class="accept-btn">Accept</button>
-                            <button onclick="handleFriendRequest({{ user.user_id }}, 'reject')" class="reject-btn">Reject</button>
-                        </div>
+        
+            <h2>Shared With You</h2>
+            <ul class="recieve-list">
+                {% for user in sharedfrom %}
+                    <li class="shared-from">
+                        <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Friend Avatar" class="friend-avatar">
+                        <span class="share-name">{{ user.username }}</span>
+                        <button onclick="window.location.href='/placeholder'" class="remove-btn">View</button>
                     </li>
+                {% else %}
+                    <li>No one has shared with you yet.</li>
                 {% endfor %}
             </ul>
-            {% endif %}
         </div>
 
         <div class="right-section">
@@ -88,96 +87,86 @@
     </div>
 
     <script>
+        function searchUsers() {
+            const query = document.getElementById("search-bar").value;
+
+            fetch(`/searchfriends?q=${encodeURIComponent(query)}`)
+            .then(response => response.json())
+            .then(users => {
+                const resultsList = document.getElementById("search-results-list");
+                resultsList.innerHTML = "";
+
+                if (users.length === 0) {
+                    resultsList.innerHTML = "<li> No Users Found</li>";
+                    return;
+                }
+
+                users.forEach(user => {
+                    const li = document.createElement("li");
+
+                    const span = document.createElement("span");
+                    span.textContent = user.username;
+
+                    const addButton = document.createElement("button");
+                    addButton.textContent = "Share";
+                    addButton.onclick = () => addShare(user.user_id);
+
+                    li.appendChild(span);
+                    li.appendChild(addButton);
+
+                    resultsList.appendChild(li);
+                });
+            })
+            .catch(err => console.error("Search Failed"));
+        }
+
+        function addShare(userID) {
+            fetch(`/addshare/${userID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/friends";
+                } else {
+                    alert('data.message')
+                }
+            })
+            .catch(err => {
+                alert("Something went wrong");
+                console.error(err);
+            });
+        }
+
+        function removeShare(userID) {
+            fetch(`/removeshare/${userID}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = "/friends";
+                } else {
+                    alert('data.message');
+                }
+            })
+            .catch(err => {
+                alert("Something went wrong");
+                console.error(err);
+            });
+        }
+
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             if (sidebar) {
                 sidebar.classList.toggle('open');
             }
-        }
-
-        let searchTimeout;
-        const searchBar = document.getElementById('search-bar');
-        
-        searchBar.addEventListener('input', function() {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(searchUsers, 300);
-        });
-
-        function searchUsers() {
-            const query = document.getElementById('search-bar').value;
-            if (query.length < 2) {
-                document.getElementById('search-results-list').innerHTML = '';
-                return;
-            }
-
-            fetch(`/search_users?query=${encodeURIComponent(query)}`)
-                .then(response => response.json())
-                .then(users => {
-                    const resultsList = document.getElementById('search-results-list');
-                    resultsList.innerHTML = '';
-                    
-                    users.forEach(user => {
-                        const li = document.createElement('li');
-                        li.className = 'search-result-item';
-                        
-                        const status = user.status;
-                        let buttonHtml = '';
-                        
-                        if (!status) {
-                            buttonHtml = `<button onclick="addFriend(${user.id})" class="add-btn">Add Friend</button>`;
-                        } else if (status === 'pending') {
-                            buttonHtml = '<span class="pending-status">Request Pending</span>';
-                        } else if (status === 'accepted') {
-                            buttonHtml = '<span class="friend-status">Already Friends</span>';
-                        }
-                        
-                        li.innerHTML = `
-                            <div class="user-info">
-                                <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="User Avatar" class="user-avatar">
-                                <span class="username">${user.username}</span>
-                            </div>
-                            ${buttonHtml}
-                        `;
-                        resultsList.appendChild(li);
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        function addFriend(userId) {
-            fetch(`/add_friend/${userId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    searchUsers(); // Refresh the search results
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-
-        function handleFriendRequest(requestId, action) {
-            fetch(`/${action}_friend/${requestId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.error) {
-                    alert(data.error);
-                } else {
-                    window.location.reload(); // Refresh the page to update the lists
-                }
-            })
-            .catch(error => console.error('Error:', error));
         }
     </script>
 </body>
