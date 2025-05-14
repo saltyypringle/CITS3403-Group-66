@@ -90,6 +90,7 @@ def logging_in():
 
 #HTML Route Post Login
 @app.route("/mypage")
+@login_required
 def mypage():
     #Pass variables into render so they can be used in webpage
     return render_template("mypage.html", user=current_user)
