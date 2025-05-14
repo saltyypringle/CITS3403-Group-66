@@ -510,26 +510,96 @@ def remove_other(other_id):
         flash('Character not found in your list.', 'warning')
     return redirect(url_for('others'))
 
-
-@app.route("/mypage")
+@app.route("/share/<int:user_id>")
 @login_required
-def mypage():
-    # Get liked characters
-    liked_waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=current_user.user_id).all()]
-    liked_husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=current_user.user_id).all()]
-    liked_others = [like.other for like in OtherLike.query.filter_by(user_id=current_user.user_id).all()]
+def share(user_id):
+    # Only allow if the user is a friend
+    is_friend = Shares.query.filter(
+        ((Shares.sharer_id == current_user.user_id) & (Shares.recipient_id == user_id)) |
+        ((Shares.sharer_id == user_id) & (Shares.recipient_id == current_user.user_id))
+    ).first()
+    if not is_friend and user_id != current_user.user_id:
+        flash("You are not friends with this user.", "warning")
+        return redirect(url_for("mypage"))
 
-    # Combine all liked characters
-    all_liked = liked_waifus + liked_husbandos + liked_others
+    user = User.query.get_or_404(user_id)
+    waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=user_id).all()]
+    husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=user_id).all()]
+    others = [like.other for like in OtherLike.query.filter_by(user_id=user_id).all()]
 
-    # Gather all traits
+    def count_traits(characters, attr):
+        return dict(Counter(getattr(c, attr) for c in characters if getattr(c, attr)))
+
+    pie_data = {
+        "waifus": {
+            "hair_colour": count_traits(waifus, "hair_colour"),
+            "height": count_traits(waifus, "height"),
+            "personality": count_traits(waifus, "personality"),
+            "profession": count_traits(waifus, "profession"),
+            "body_type": count_traits(waifus, "body_type"),
+        },
+        "husbandos": {
+            "hair_colour": count_traits(husbandos, "hair_colour"),
+            "height": count_traits(husbandos, "height"),
+            "personality": count_traits(husbandos, "personality"),
+            "profession": count_traits(husbandos, "profession"),
+            "body_type": count_traits(husbandos, "body_type"),
+        },
+        "others": {
+            "hair_colour": count_traits(others, "hair_colour"),
+            "height": count_traits(others, "height"),
+            "personality": count_traits(others, "personality"),
+            "profession": count_traits(others, "profession"),
+            "body_type": count_traits(others, "body_type"),
+        }
+    }
+
+    all_liked = waifus + husbandos + others
+
     hair_colours = [c.hair_colour for c in all_liked if c.hair_colour]
     heights = [c.height for c in all_liked if c.height]
     personalities = [c.personality for c in all_liked if c.personality]
     professions = [c.profession for c in all_liked if c.profession]
     body_types = [c.body_type for c in all_liked if c.body_type]
 
-    # Find most common traits
+    def most_common(lst):
+        return Counter(lst).most_common(1)[0][0] if lst else None
+
+    top_traits = []
+    if hair_colours:
+        top_traits.append(f"💛 {most_common(hair_colours)} Hair")
+    if heights:
+        top_traits.append(f"📏 {most_common(heights)}cm")
+    if personalities:
+        top_traits.append(f"🧠 {most_common(personalities)} Personality")
+    if professions:
+        top_traits.append(f"💼 {most_common(professions)}")
+    if body_types:
+        top_traits.append(f"🏋️ {most_common(body_types)} Body Type")
+    top_traits = top_traits[:3]
+
+    return render_template(
+        "share.html",
+        user=user,
+        pie_data=pie_data,
+        top_traits=top_traits
+    )
+
+@app.route("/mypage")
+@login_required
+def mypage():
+    liked_waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=current_user.user_id).all()]
+    liked_husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=current_user.user_id).all()]
+    liked_others = [like.other for like in OtherLike.query.filter_by(user_id=current_user.user_id).all()]
+
+    all_liked = liked_waifus + liked_husbandos + liked_others
+
+    hair_colours = [c.hair_colour for c in all_liked if c.hair_colour]
+    heights = [c.height for c in all_liked if c.height]
+    personalities = [c.personality for c in all_liked if c.personality]
+    professions = [c.profession for c in all_liked if c.profession]
+    body_types = [c.body_type for c in all_liked if c.body_type]
+
     def most_common(lst):
         return Counter(lst).most_common(1)[0][0] if lst else None
 
@@ -546,7 +616,6 @@ def mypage():
         top_traits.append(f"🏋️ {most_common(body_types)} Body Type")
 
     top_traits = top_traits[:3]
-
     perfect_match = all_liked[0] if all_liked else None
 
     return render_template(
@@ -554,4 +623,6 @@ def mypage():
         user=current_user,
         top_traits=top_traits,
         perfect_match=perfect_match
+    )
+
     )

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Welcome to {{ user.username }}'s SukiScan!</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li>
+                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search characters...">
+                        <button type="submit">Go</button>
+                    </form>
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
+            </ul>
+        </nav>
+    </header>
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
+    <main class="user-page">
+        <h1 style="margin-top:32px; color:var(--text-color);">Welcome to {{ user.username }}'s SukiScan!</h1>
+
+        <section class="trait-summary">
+            <h2>Top Traits</h2>
+            <div class="traits">
+                {% for trait in top_traits %}
+                <div class="trait"><span>{{ trait }}</span></div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section>
+            <h2>Waifu Charts</h2>
+            <div class="waifu-charts-carousel">
+                <div class="carousel-track">
+                    <div class="chart-container"><h3>Hair Color</h3><canvas id="waifuHairChart"></canvas></div>
+                    <div class="chart-container"><h3>Height</h3><canvas id="waifuHeightChart"></canvas></div>
+                    <div class="chart-container"><h3>Personality</h3><canvas id="waifuPersonalityChart"></canvas></div>
+                    <div class="chart-container"><h3>Profession</h3><canvas id="waifuProfessionChart"></canvas></div>
+                    <div class="chart-container"><h3>Body Type</h3><canvas id="waifuBodyTypeChart"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Husbando Charts</h2>
+            <div class="waifu-charts-carousel">
+                <div class="carousel-track">
+                    <div class="chart-container"><h3>Hair Color</h3><canvas id="husbandoHairChart"></canvas></div>
+                    <div class="chart-container"><h3>Height</h3><canvas id="husbandoHeightChart"></canvas></div>
+                    <div class="chart-container"><h3>Personality</h3><canvas id="husbandoPersonalityChart"></canvas></div>
+                    <div class="chart-container"><h3>Profession</h3><canvas id="husbandoProfessionChart"></canvas></div>
+                    <div class="chart-container"><h3>Body Type</h3><canvas id="husbandoBodyTypeChart"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Other Charts</h2>
+            <div class="waifu-charts-carousel">
+                <div class="carousel-track">
+                    <div class="chart-container"><h3>Hair Color</h3><canvas id="otherHairChart"></canvas></div>
+                    <div class="chart-container"><h3>Height</h3><canvas id="otherHeightChart"></canvas></div>
+                    <div class="chart-container"><h3>Personality</h3><canvas id="otherPersonalityChart"></canvas></div>
+                    <div class="chart-container"><h3>Profession</h3><canvas id="otherProfessionChart"></canvas></div>
+                    <div class="chart-container"><h3>Body Type</h3><canvas id="otherBodyTypeChart"></canvas></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script>
+        // Pie data from Flask
+        const pieData = {{ pie_data | tojson }};
+
+        function renderPie(chartId, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{ data: Object.values(data) }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+        renderPie('waifuHairChart', pieData.waifus.hair_colour);
+        renderPie('waifuHeightChart', pieData.waifus.height);
+        renderPie('waifuPersonalityChart', pieData.waifus.personality);
+        renderPie('waifuProfessionChart', pieData.waifus.profession);
+        renderPie('waifuBodyTypeChart', pieData.waifus.body_type);
+
+        renderPie('husbandoHairChart', pieData.husbandos.hair_colour);
+        renderPie('husbandoHeightChart', pieData.husbandos.height);
+        renderPie('husbandoPersonalityChart', pieData.husbandos.personality);
+        renderPie('husbandoProfessionChart', pieData.husbandos.profession);
+        renderPie('husbandoBodyTypeChart', pieData.husbandos.body_type);
+
+        renderPie('otherHairChart', pieData.others.hair_colour);
+        renderPie('otherHeightChart', pieData.others.height);
+        renderPie('otherPersonalityChart', pieData.others.personality);
+        renderPie('otherProfessionChart', pieData.others.profession);
+        renderPie('otherBodyTypeChart', pieData.others.body_type);
+    </script>
+    <script>
+function setupCarousel(carouselSelector) {
+    let carouselIndex = 0;
+
+    function getChartsPerView() {
+        if (window.innerWidth < 700) return 1;
+        if (window.innerWidth < 1000) return 2;
+        return 3;
+    }
+
+    function updateCarousel() {
+        const carousel = document.querySelector(carouselSelector);
+        if (!carousel) return;
+        const track = carousel.querySelector('.carousel-track');
+        const chart = track.querySelector('.chart-container');
+        if (!chart) return;
+        const chartStyle = window.getComputedStyle(chart);
+        const chartWidth = chart.offsetWidth +
+            parseInt(chartStyle.marginLeft) +
+            parseInt(chartStyle.marginRight);
+        const totalCharts = track.querySelectorAll('.chart-container').length;
+        const chartsPerViewNow = getChartsPerView();
+        const maxIndex = Math.max(0, totalCharts - chartsPerViewNow);
+
+        if (carouselIndex > maxIndex) carouselIndex = maxIndex;
+        if (carouselIndex < 0) carouselIndex = 0;
+
+        const scroll = carouselIndex * chartWidth;
+        track.style.transform = `translateX(-${scroll}px)`;
+
+        const leftArrow = carousel.querySelector('.carousel-arrow.left');
+        const rightArrow = carousel.querySelector('.carousel-arrow.right');
+        if (leftArrow) leftArrow.disabled = carouselIndex === 0;
+        if (rightArrow) rightArrow.disabled = carouselIndex === maxIndex;
+    }
+
+    function moveCarousel(dir) {
+        carouselIndex += dir;
+        updateCarousel();
+    }
+
+    // Attach event listeners if arrows exist
+    const carousel = document.querySelector(carouselSelector);
+    if (carousel) {
+        const leftArrow = carousel.querySelector('.carousel-arrow.left');
+        const rightArrow = carousel.querySelector('.carousel-arrow.right');
+        if (leftArrow) leftArrow.addEventListener('click', () => moveCarousel(-1));
+        if (rightArrow) rightArrow.addEventListener('click', () => moveCarousel(1));
+        window.addEventListener('resize', updateCarousel);
+        window.addEventListener('DOMContentLoaded', updateCarousel);
+        updateCarousel();
+    }
+}
+
+// Add arrows to each carousel section in your HTML:
+document.querySelectorAll('.waifu-charts-carousel').forEach(carousel => {
+    // Only add arrows if not already present
+    if (!carousel.querySelector('.carousel-arrow')) {
+        const leftArrow = document.createElement('button');
+        leftArrow.className = 'carousel-arrow left';
+        leftArrow.innerHTML = '&#8592;';
+        carousel.insertBefore(leftArrow, carousel.firstChild);
+
+        const rightArrow = document.createElement('button');
+        rightArrow.className = 'carousel-arrow right';
+        rightArrow.innerHTML = '&#8594;';
+        carousel.appendChild(rightArrow);
+    }
+});
+
+// Setup carousels for all chart sections
+setupCarousel('.waifu-charts-carousel:nth-of-type(1)');
+setupCarousel('.waifu-charts-carousel:nth-of-type(2)');
+setupCarousel('.waifu-charts-carousel:nth-of-type(3)');
+</script>
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+        sidebar.classList.toggle('open');
+    }
+}
+</script>
+</body>
+</html>
