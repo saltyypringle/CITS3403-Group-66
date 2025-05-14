@@ -61,29 +61,36 @@
                 </div>
             </section>
 
+            <!-- Top Traits Section -->
             <section class="trait-summary">
                 <h2>Your Type 💖</h2>
                 <div class="traits">
+                    {% for trait in top_traits %}
                     <div class="trait">
-                        <span>💛 Blonde Hair</span>
+                        <span>{{ trait }}</span>
                     </div>
-                    <div class="trait">
-                        <span>📏 170cm+</span>
-                    </div>
-                    <div class="trait">
-                        <span>🌶️ Likes Spicy Food</span>
-                    </div>
+                    {% endfor %}
                 </div>
             </section>
 
+            <!-- Perfect Match Section -->
             <section class="suggested-character">
                 <h2>Your Perfect Match 💘</h2>
+                {% if perfect_match %}
                 <div class="character-card">
-                    <img src="{{ url_for('static', filename='images/usui-takumi.webp') }}" alt="Suggested Character">
-                    <p><strong>Usui Takumi</strong></p>
-                    <p>Blonde | 178cm | Loves spicy ramen 🍜</p>
-                    <button>Learn More</button>
+                    <img src="{{ perfect_match.image_url or url_for('static', filename='images/default-avatar.png') }}" alt="Suggested Character">
+                    <p><strong>{{ perfect_match.first_name }} {{ perfect_match.last_name }}</strong></p>
+                    <p>
+                        {{ perfect_match.hair_colour }} |
+                        {{ perfect_match.height }}cm |
+                        {{ perfect_match.personality }} |
+                        {{ perfect_match.profession }}
+                    </p>
+                    <!-- Add more details as you wish -->
                 </div>
+                {% else %}
+                <p>No matches yet! Like some characters to get a match.</p>
+                {% endif %}
             </section>
         </div>
     </main>
