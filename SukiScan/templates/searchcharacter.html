@@ -31,6 +31,8 @@
             </ul>
         </nav>
     </header>
+
+    <div id="flash-messages" style="position: fixed; top: 80px; right: 20px; z-index: 9999;"></div>
                 
     <div id="sidebar" class="sidebar">
         <div class="sidebar-header">
@@ -80,8 +82,7 @@
                     </label>
                 {% endfor %}
         
-                <button type="submit"
-                    style="margin-top: 20px; padding: 10px 20px; background-color: #A4133C; color: white; border: none; border-radius: 8px; cursor: pointer;">Search</button>
+                <button type="submit" class="remove-btn">Search</button>
             </form>
         </div>
 
@@ -146,8 +147,7 @@
                                 <td>
                                     <form onsubmit="addlike(event, '${char.id}', '${char.type}')">
                                         <button 
-                                            style="margin-top: 20px; padding: 10px 20px; background-color: #A4133C; color: white; border: none; border-radius: 8px; cursor: pointer;
-                                            type="submit">Add</button>
+                                            type="submit" class="remove-btn">Add</button>
                                     </form>
                                 </td>
                             `;
@@ -175,11 +175,29 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(data);
+                if (data.success) {
+                    flashMessage("Character Added!", "success");
+                } else {
+                    flashMessage("Character Already Added!", "error")
+                }
             })
             .catch(error => {
                 consol.error('Error')
             });
+        }
+
+        function flashMessage(message, category = "success") {
+            const flashMessages = document.getElementById("flash-messages");
+
+            const alertDiv = document.createElement("div");
+            alertDiv.className = `alert alert-${category}`;
+            alertDiv.textContent = message;
+
+            flashMessages.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
         }
 
         function toggleSidebar() {

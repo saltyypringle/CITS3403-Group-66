@@ -109,6 +109,7 @@
 
                     const addButton = document.createElement("button");
                     addButton.textContent = "Share";
+                    addButton.className = "remove-btn";
                     addButton.onclick = () => addShare(user.user_id);
 
                     li.appendChild(span);

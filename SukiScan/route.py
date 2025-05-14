@@ -285,24 +285,24 @@ def addlike():
         if not exist:
             db.session.add(WaifuLike(user_id=current_user.user_id, w_char_id=int(char_id)))
         else:
-            return jsonify({"message": "Character already added"})
+            return jsonify(success=False, message="Character Already Added!")
     
     elif char_type == "Husbando":
         exist = HusbandoLike.query.filter_by(user_id=current_user.user_id, h_char_id=int(char_id)).first()
         if not exist:
             db.session.add(HusbandoLike(user_id=current_user.user_id, h_char_id=int(char_id)))
         else:
-            return jsonify({"message": "Character already added"})
+            return jsonify(success=False, message="Character Already Added!")
     
     elif char_type == "Other":
         exist = OtherLike.query.filter_by(user_id=current_user.user_id, o_char_id=int(char_id)).first()
         if not exist:
             db.session.add(OtherLike(user_id=current_user.user_id, o_char_id=int(char_id)))
         else:
-            return jsonify({"message": "Character already added"})
+            return jsonify(success=False, message="Character Already Added!")
     
     db.session.commit()
-    return jsonify({"message": "Character Added"})
+    return jsonify(success=True, message="Character Added")
 
 #HTML Route Post Logout
 @app.route("/logout")
