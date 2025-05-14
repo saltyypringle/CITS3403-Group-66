@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('social') }}">Social</a></li>
+                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li>
+                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                        <input type="text" name="query" placeholder="Search characters...">
+                        <button type="submit">Go</button>
+                    </form>
+                </li>
+                <li>
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}"
+                         alt="Avatar"
+                         id="avatar"
+                         onclick="toggleSidebar()">
+                </li>
+            </ul>
+        </nav>
+    </header>
+                
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-header">
+            <h2>MY ACCOUNT</h2>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+        </ul>
+    </div>
+    
+    <main class="waifu-list-page">
+        <section class="top-trends">
+            <h2>💫 Your Top Trends</h2>
+            <p>You tend to love unique, quirky companions with special abilities! 🌟</p>
+        </section>
+
+        <section class="waifu-charts-carousel">
+            <button class="carousel-arrow left" onclick="moveCarousel(-1)">&#8592;</button>
+            <div class="carousel-track">
+                <div class="chart-container"><h3>Hair Color</h3><canvas id="hairChart"></canvas></div>
+                <div class="chart-container"><h3>Height</h3><canvas id="heightChart"></canvas></div>
+                <div class="chart-container"><h3>Personality (MBTI)</h3><canvas id="personalityChart"></canvas></div>
+                <div class="chart-container"><h3>Profession</h3><canvas id="professionChart"></canvas></div>
+                <div class="chart-container"><h3>Body Type</h3><canvas id="bodyTypeChart"></canvas></div>
+            </div>
+            <button class="carousel-arrow right" onclick="moveCarousel(1)">&#8594;</button>
+        </section>
+
+        <section class="waifu-table">
+            <h2>🌟 Your Others List</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Avatar</th>
+                        <th>Name</th>
+                        <th>Hair Color</th>
+                        <th>Height</th>
+                        <th>Personality (MBTI)</th>
+                        <th>Profession</th>
+                        <th>Body Type</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for o in others %}
+                    <tr>
+                        <td><img src="{{ o.image_url }}" alt="{{ o.first_name }}" class="waifu-avatar"></td>
+                        <td>{{ o.first_name }} {{ o.last_name }}</td>
+                        <td>{{ o.hair_colour }}</td>
+                        <td>{{ o.height }} cm</td>
+                        <td>{{ o.personality }}</td>
+                        <td>{{ o.profession }}</td>
+                        <td>{{ o.body_type }}</td>
+                        <td>
+                            <form action="{{ url_for('remove_other', other_id=o.o_char_id) }}" method="POST" style="margin:0;">
+                                <button type="submit" class="remove-btn">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main> 
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
+            }
+        }
+
+        const pieData = {{ pie_data | tojson }};
+
+        function renderPie(chartId, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{ data: Object.values(data) }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        renderPie('hairChart', pieData.hair_colour);
+        renderPie('heightChart', pieData.height);
+        renderPie('personalityChart', pieData.personality);
+        renderPie('professionChart', pieData.profession);
+        renderPie('bodyTypeChart', pieData.body_type);
+
+        let carouselIndex = 0;
+
+        function getChartsPerView() {
+            if (window.innerWidth < 700) return 1;
+            if (window.innerWidth < 1000) return 2;
+            return 3;
+        }
+
+        function updateCarousel() {
+            const chartsPerViewNow = getChartsPerView();
+            const track = document.querySelector('.carousel-track');
+            const chart = track.querySelector('.chart-container');
+            if (!chart) return;
+            const chartStyle = window.getComputedStyle(chart);
+            const chartWidth = chart.offsetWidth +
+                parseInt(chartStyle.marginLeft) +
+                parseInt(chartStyle.marginRight);
+            const totalCharts = track.querySelectorAll('.chart-container').length;
+
+            const maxIndex = Math.max(0, totalCharts - chartsPerViewNow);
+
+            if (carouselIndex > maxIndex) carouselIndex = maxIndex;
+            if (carouselIndex < 0) carouselIndex = 0;
+
+            const scroll = carouselIndex * chartWidth;
+
+            track.style.transform = `translateX(-${scroll}px)`;
+            document.querySelector('.carousel-arrow.left').disabled = carouselIndex === 0;
+            document.querySelector('.carousel-arrow.right').disabled = carouselIndex === maxIndex;
+        }
+
+        function moveCarousel(dir) {
+            carouselIndex += dir;
+            updateCarousel();
+        }
+
+        window.addEventListener('resize', updateCarousel);
+        window.addEventListener('DOMContentLoaded', updateCarousel);
+    </script> 
+</body>
+</html>
