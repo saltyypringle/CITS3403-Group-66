@@ -44,7 +44,7 @@
 
     <section class="add-character-section" style="max-width: 600px; margin: 40px auto; padding: 30px; background-color: #fff0f3; border-radius: 12px; border: 2px solid #A4133C; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
         <h1 style="text-align: center; color: #A4133C; font-size: 2em; margin-bottom: 20px;"> Add a New Character</h1>
-        <form method="POST" action="{{ url_for('addcharacter') }}" style="display: flex; flex-direction: column; gap: 15px;">
+        <form method="POST" action="{{ url_for('addcharacter') }}" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 15px;">
             
             <div>
                 <label for="first_name">First Name:</label><br>
@@ -101,6 +101,11 @@
                     <option value="other">Other</option>
                 </select>
             </div>
+
+            <div>
+                <label for="image">Character Image:</label><br>
+                <input type="file" id="image" name="image" accept="image/*" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc;">
+            </div>
     
             <button type="submit" style="margin-top: 20px; padding: 12px; background-color: #A4133C; color: white; border: none; border-radius: 10px; font-size: 1em; cursor: pointer;">
                 Add Character
@@ -126,20 +131,19 @@
     {% endif %}
     {% endwith %}
 
-    <!-- JavaScript to automatically fade out the flash messages -->
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Find all flash messages
-        const flashMessages = document.querySelectorAll('#flash-messages .alert');
-
-        flashMessages.forEach((message) => {
-        // Delay hiding the message for 3 seconds (adjust the time as needed)
-        setTimeout(() => {
-            message.classList.add('fade-out');
-        }, 3000); // 3000ms = 3 seconds
+        document.addEventListener('DOMContentLoaded', function () {
+            const flashes = document.querySelectorAll('.flash-message');
+            flashes.forEach(flash => {
+                setTimeout(() => {
+                    flash.classList.add('fade-out');
+                    setTimeout(() => {
+                        flash.remove(); 
+                    }, 500); 
+                }, 3000); 
+            });
         });
-    });
-    </script>
+        </script>
 </body>
 </html>
 

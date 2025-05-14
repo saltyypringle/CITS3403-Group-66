@@ -625,3 +625,46 @@ def mypage():
         perfect_match=perfect_match
     )
 
+@app.route('/update-username', methods=['POST'])
+@login_required
+def update_username():
+    current_password = request.form['current_password']
+    new_username = request.form['username']
+    
+    if check_current_password(current_user, current_password) and is_username_available(new_username):
+        update_user_username(current_user, new_username)
+        flash('Username successfully updated!', 'success')
+    else:
+        flash('Invalid password or username already taken!', 'error')
+    
+    return redirect(url_for('profile'))
+
+def check_current_password(user, password):
+    return check_password_hash(user.password, password)
+
+def is_username_available(new_username):
+    user = User.query.filter_by(username=new_username).first()
+    return user is None
+
+def update_user_username(user, new_username):
+    user.username = new_username
+    db.session.commit()
+
+@app.route('/update-password', methods=['POST'])
+@login_required
+def update_password():
+    current_password = request.form['current_password']
+    new_password = request.form['new_password']
+
+    if check_current_password(current_user, current_password):
+        update_user_password(current_user, new_password)
+        flash('Password successfully updated!', 'success')
+    else:
+        flash('Current password is incorrect!', 'error')
+
+    return redirect(url_for('profile'))
+
+def update_user_password(user, new_password):
+    hashed_password = generate_password_hash(new_password)
+    user.password = hashed_password
+    db.session.commit()
