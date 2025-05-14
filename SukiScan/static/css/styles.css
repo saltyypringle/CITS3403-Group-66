@@ -459,19 +459,81 @@ div.top-characters img {
     color: var(--text-color);
 }
 
-.waifu-charts {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
-    justify-items: center;
+.waifu-charts-carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 948px;
+    margin: 0 auto 40px auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-arrow {
+    background: var(--accent-color, #FFCCD5);
+    border: none;
+    color: var(--text-color, #A4133C);
+    font-size: 2rem;
+    padding: 10px 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.carousel-arrow.left {
+    left: 0;
+}
+.carousel-arrow.right {
+    right: 0;
+}
+.carousel-arrow:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.4s cubic-bezier(.77,0,.18,1);
+    width: 100%; /* Fills the available space */
+    overflow: visible;
+    justify-content: flex-start;
 }
 
 .chart-container {
+    min-width: 300px;
+    max-width: 300px;
+    width: 300px;
+    margin: 0 8px;
     background: var(--background-color);
-    padding: 20px;
+    padding: 24px 16px 16px 16px;
     border-radius: 15px;
     box-shadow: 0 2px 8px rgba(164, 19, 60, 0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+}
+
+@media (max-width: 1000px) {
+    .waifu-charts-carousel { width: 856px; } 
+}
+@media (max-width: 700px) {
+    .waifu-charts-carousel { width: 276px; } 
+}
+
+.chart-container h3 {
+    margin-bottom: 16px;
+    font-size: 1.1em;
+}
+
+.chart-container canvas {
+    max-width: 220px;
+    max-height: 220px;
+    width: 100%;
+    height: 220px;
 }
 
 .waifu-table table {
