@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{ user.username }}'s Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <main class="user-page">
+        <h1>{{ user.username }}'s Shared Page</h1>
+
+        <section class="trait-summary">
+            <h2>Top Traits</h2>
+            <div class="traits">
+                {% for trait in top_traits %}
+                <div class="trait"><span>{{ trait }}</span></div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="waifu-charts-carousel">
+            <h2>Waifu Trends</h2>
+            <div class="carousel-track">
+                <div class="chart-container"><h3>Hair Color</h3><canvas id="waifuHairChart"></canvas></div>
+                <div class="chart-container"><h3>Height</h3><canvas id="waifuHeightChart"></canvas></div>
+                <div class="chart-container"><h3>Personality</h3><canvas id="waifuPersonalityChart"></canvas></div>
+                <div class="chart-container"><h3>Profession</h3><canvas id="waifuProfessionChart"></canvas></div>
+                <div class="chart-container"><h3>Body Type</h3><canvas id="waifuBodyTypeChart"></canvas></div>
+            </div>
+        </section>
+
+        <section class="waifu-charts-carousel">
+            <h2>Husbando Trends</h2>
+            <div class="carousel-track">
+                <div class="chart-container"><h3>Hair Color</h3><canvas id="husbandoHairChart"></canvas></div>
+                <div class="chart-container"><h3>Height</h3><canvas id="husbandoHeightChart"></canvas></div>
+                <div class="chart-container"><h3>Personality</h3><canvas id="husbandoPersonalityChart"></canvas></div>
+                <div class="chart-container"><h3>Profession</h3><canvas id="husbandoProfessionChart"></canvas></div>
+                <div class="chart-container"><h3>Body Type</h3><canvas id="husbandoBodyTypeChart"></canvas></div>
+            </div>
+        </section>
+
+        <section class="waifu-charts-carousel">
+            <h2>Other Trends</h2>
+            <div class="carousel-track">
+                <div class="chart-container"><h3>Hair Color</h3><canvas id="otherHairChart"></canvas></div>
+                <div class="chart-container"><h3>Height</h3><canvas id="otherHeightChart"></canvas></div>
+                <div class="chart-container"><h3>Personality</h3><canvas id="otherPersonalityChart"></canvas></div>
+                <div class="chart-container"><h3>Profession</h3><canvas id="otherProfessionChart"></canvas></div>
+                <div class="chart-container"><h3>Body Type</h3><canvas id="otherBodyTypeChart"></canvas></div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // Pie data from Flask
+        const pieData = {{ pie_data | tojson }};
+
+        // Render charts for waifus
+        function renderPie(chartId, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{ data: Object.values(data) }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+        renderPie('waifuHairChart', pieData.waifus.hair_colour);
+        renderPie('waifuHeightChart', pieData.waifus.height);
+        renderPie('waifuPersonalityChart', pieData.waifus.personality);
+        renderPie('waifuProfessionChart', pieData.waifus.profession);
+        renderPie('waifuBodyTypeChart', pieData.waifus.body_type);
+
+        // Render charts for husbandos
+        renderPie('husbandoHairChart', pieData.husbandos.hair_colour);
+        renderPie('husbandoHeightChart', pieData.husbandos.height);
+        renderPie('husbandoPersonalityChart', pieData.husbandos.personality);
+        renderPie('husbandoProfessionChart', pieData.husbandos.profession);
+        renderPie('husbandoBodyTypeChart', pieData.husbandos.body_type);
+
+        // Render charts for others
+        renderPie('otherHairChart', pieData.others.hair_colour);
+        renderPie('otherHeightChart', pieData.others.height);
+        renderPie('otherPersonalityChart', pieData.others.personality);
+        renderPie('otherProfessionChart', pieData.others.profession);
+        renderPie('otherBodyTypeChart', pieData.others.body_type);
+    </script>
+</body>
+</html>
