@@ -8,6 +8,8 @@ from SukiScan.models import Waifu, Husbando, Other, WaifuLike
 from SukiScan.models import WaifuLike, HusbandoLike, OtherLike
 from SukiScan.models import ForumPost, ForumComment
 from SukiScan.forms import ForumCommentForm
+from collections import Counter
+
 
 #HTML Routes Pre-Login
 @app.route("/")
@@ -96,11 +98,6 @@ def mypage():
 @login_required
 def myhome():
     return render_template("myhome.html")
-
-@app.route("/placeholder")
-@login_required
-def placeholder():
-    return render_template("placeholder.html")
 
 @app.route("/addcharacter", methods=["GET", "POST"])
 @login_required
@@ -416,3 +413,105 @@ def view_post(post_id):
         flash("Comment added!")
         return redirect(url_for('view_post', post_id=post_id))
     return render_template("post_detail.html", post=post, comments=comments, form=form)
+
+@app.route("/waifus")
+@login_required
+def waifus():
+    liked_waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=current_user.user_id).all()]
+    pie_data = {
+        "hair_colour": dict(Counter([c.hair_colour for c in liked_waifus])),
+        "height": dict(Counter([c.height for c in liked_waifus])),
+        "personality": dict(Counter([c.personality for c in liked_waifus])),
+        "profession": dict(Counter([c.profession for c in liked_waifus])),
+        "body_type": dict(Counter([c.body_type for c in liked_waifus]))
+    }
+    return render_template("waifus.html", waifus=liked_waifus, pie_data=pie_data)
+
+@app.route("/like/waifu/<int:w_char_id>", methods=["POST"])
+@login_required
+def like_waifu(w_char_id):
+    existing = WaifuLike.query.filter_by(user_id=current_user.user_id, w_char_id=w_char_id).first()
+    if not existing:
+        db.session.add(WaifuLike(user_id=current_user.user_id, w_char_id=w_char_id))
+        db.session.commit()
+    return redirect(request.referrer or url_for("waifus"))
+
+@app.route("/husbandos")
+@login_required
+def husbandos():
+    liked_husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=current_user.user_id).all()]
+    pie_data = {
+        "hair_colour": dict(Counter([c.hair_colour for c in liked_husbandos])),
+        "height": dict(Counter([c.height for c in liked_husbandos])),
+        "personality": dict(Counter([c.personality for c in liked_husbandos])),
+        "profession": dict(Counter([c.profession for c in liked_husbandos])),
+        "body_type": dict(Counter([c.body_type for c in liked_husbandos]))
+    }
+    return render_template("husbandos.html", husbandos=liked_husbandos, pie_data=pie_data)
+
+@app.route("/like/husbando/<int:h_char_id>", methods=["POST"])
+@login_required
+def like_husbando(h_char_id):
+    existing = HusbandoLike.query.filter_by(user_id=current_user.user_id, h_char_id=h_char_id).first()
+    if not existing:
+        db.session.add(HusbandoLike(user_id=current_user.user_id, h_char_id=h_char_id))
+        db.session.commit()
+    return redirect(request.referrer or url_for("husbandos"))
+
+@app.route("/others")
+@login_required
+def others():
+    liked_others = [like.other for like in OtherLike.query.filter_by(user_id=current_user.user_id).all()]
+    pie_data = {
+        "hair_colour": dict(Counter([c.hair_colour for c in liked_others])),
+        "height": dict(Counter([c.height for c in liked_others])),
+        "personality": dict(Counter([c.personality for c in liked_others])),
+        "profession": dict(Counter([c.profession for c in liked_others])),
+        "body_type": dict(Counter([c.body_type for c in liked_others]))
+    }
+    return render_template("others.html", others=liked_others, pie_data=pie_data)
+
+@app.route("/like/other/<int:o_char_id>", methods=["POST"])
+@login_required
+def like_other(o_char_id):
+    existing = OtherLike.query.filter_by(user_id=current_user.user_id, o_char_id=o_char_id).first()
+    if not existing:
+        db.session.add(OtherLike(user_id=current_user.user_id, o_char_id=o_char_id))
+        db.session.commit()
+    return redirect(request.referrer or url_for("others"))
+
+@app.route('/remove_waifu/<int:waifu_id>', methods=['POST'])
+@login_required
+def remove_waifu(waifu_id):
+    waifu_like = WaifuLike.query.filter_by(user_id=current_user.user_id, w_char_id=waifu_id).first()
+    if waifu_like:
+        db.session.delete(waifu_like)
+        db.session.commit()
+        flash('Waifu removed from your list.', 'success')
+    else:
+        flash('Waifu not found in your list.', 'warning')
+    return redirect(url_for('waifus'))
+
+@app.route('/remove_husbando/<int:husbando_id>', methods=['POST'])
+@login_required
+def remove_husbando(husbando_id):
+    husbando_like = HusbandoLike.query.filter_by(user_id=current_user.user_id, h_char_id=husbando_id).first()
+    if husbando_like:
+        db.session.delete(husbando_like)
+        db.session.commit()
+        flash('Husbando removed from your list.', 'success')
+    else:
+        flash('Husbando not found in your list.', 'warning')
+    return redirect(url_for('husbandos'))
+
+@app.route('/remove_other/<int:other_id>', methods=['POST'])
+@login_required
+def remove_other(other_id):
+    other_like = OtherLike.query.filter_by(user_id=current_user.user_id, o_char_id=other_id).first()
+    if other_like:
+        db.session.delete(other_like)
+        db.session.commit()
+        flash('Other character removed from your list.', 'success')
+    else:
+        flash('Character not found in your list.', 'warning')
+    return redirect(url_for('others'))
