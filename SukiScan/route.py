@@ -88,19 +88,6 @@ def logging_in():
     #Redirect to mypage
     return redirect(url_for('mypage'))
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-#HTML Route Post Login
-@app.route("/mypage")
-@login_required
-def mypage():
-    #Pass variables into render so they can be used in webpage
-    return render_template("mypage.html", user=current_user)
-
-=======
->>>>>>> 4d7292f176cbd0cca88a2963c56186911a72a4b1
-=======
->>>>>>> 6cbf94555fb120766cbb81d0a0d490c4b4d94ae4
 @app.route("/myhome")
 @login_required
 def myhome():
