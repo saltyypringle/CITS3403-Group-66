@@ -109,6 +109,20 @@
             </table>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const name = urlParams.get('query');
+
+            const nameField = document.querySelector('#searchForm input[name="name"]');
+            if (nameField) {
+                nameField.value = name;
+            }
+            document.getElementById("searchForm").dispatchEvent(new Event("submit"));
+        });
+    </script>
+
     <script>
         document.getElementById("searchForm").addEventListener("submit", function(event) {
             event.preventDefault();
