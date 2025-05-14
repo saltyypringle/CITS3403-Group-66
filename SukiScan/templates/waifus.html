@@ -95,80 +95,103 @@
     </section>
 </main>
 
-<script>
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    if (sidebar) {
-        sidebar.classList.toggle('open');
-    }
-}
-
-const pieData = {{ pie_data | tojson }};
-
-function renderPie(chartId, data) {
-    const ctx = document.getElementById(chartId).getContext('2d');
-    new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: Object.keys(data),
-            datasets: [{ data: Object.values(data) }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom' }
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            if (sidebar) {
+                sidebar.classList.toggle('open');
             }
         }
+
+        const pieData = {{ pie_data | tojson }};
+
+        function renderPie(chartId, data) {
+            const ctx = document.getElementById(chartId).getContext('2d');
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(data),
+                    datasets: [{ data: Object.values(data) }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        renderPie('hairChart', pieData.hair_colour);
+        renderPie('heightChart', pieData.height);
+        renderPie('personalityChart', pieData.personality);
+        renderPie('professionChart', pieData.profession);
+        renderPie('bodyTypeChart', pieData.body_type);
+    </script>
+    <script>
+        let carouselIndex = 0;
+
+        function getChartsPerView() {
+            if (window.innerWidth < 700) return 1;
+            if (window.innerWidth < 1000) return 2;
+            return 3;
+        }
+
+        function updateCarousel() {
+            const chartsPerViewNow = getChartsPerView();
+            const track = document.querySelector('.carousel-track');
+            const chart = track.querySelector('.chart-container');
+            if (!chart) return;
+            const chartStyle = window.getComputedStyle(chart);
+            const chartWidth = chart.offsetWidth +
+                parseInt(chartStyle.marginLeft) +
+                parseInt(chartStyle.marginRight);
+            const totalCharts = track.querySelectorAll('.chart-container').length;
+
+            // The max index is so the last visible window is the last N charts
+            const maxIndex = Math.max(0, totalCharts - chartsPerViewNow);
+
+            if (carouselIndex > maxIndex) carouselIndex = maxIndex;
+            if (carouselIndex < 0) carouselIndex = 0;
+
+            // Shift by one chart per click
+            const scroll = carouselIndex * chartWidth;
+
+            track.style.transform = `translateX(-${scroll}px)`;
+            document.querySelector('.carousel-arrow.left').disabled = carouselIndex === 0;
+            document.querySelector('.carousel-arrow.right').disabled = carouselIndex === maxIndex;
+        }
+
+        function moveCarousel(dir) {
+            carouselIndex += dir;
+            updateCarousel();
+        }
+
+        window.addEventListener('resize', updateCarousel);
+        window.addEventListener('DOMContentLoaded', updateCarousel);
+    </script>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div id="flash-messages">
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}" id="flash-message">{{ message }}</div>
+        {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Find all flash messages
+        const flashMessages = document.querySelectorAll('#flash-messages .alert');
+
+        flashMessages.forEach((message) => {
+        // Delay hiding the message for 3 seconds (adjust the time as needed)
+        setTimeout(() => {
+            message.classList.add('fade-out');
+        }, 3000); // 3000ms = 3 seconds
+        });
     });
-}
-
-renderPie('hairChart', pieData.hair_colour);
-renderPie('heightChart', pieData.height);
-renderPie('personalityChart', pieData.personality);
-renderPie('professionChart', pieData.profession);
-renderPie('bodyTypeChart', pieData.body_type);
-</script>
-<script>
-let carouselIndex = 0;
-
-function getChartsPerView() {
-    if (window.innerWidth < 700) return 1;
-    if (window.innerWidth < 1000) return 2;
-    return 3;
-}
-
-function updateCarousel() {
-    const chartsPerViewNow = getChartsPerView();
-    const track = document.querySelector('.carousel-track');
-    const chart = track.querySelector('.chart-container');
-    if (!chart) return;
-    const chartStyle = window.getComputedStyle(chart);
-    const chartWidth = chart.offsetWidth +
-        parseInt(chartStyle.marginLeft) +
-        parseInt(chartStyle.marginRight);
-    const totalCharts = track.querySelectorAll('.chart-container').length;
-
-    // The max index is so the last visible window is the last N charts
-    const maxIndex = Math.max(0, totalCharts - chartsPerViewNow);
-
-    if (carouselIndex > maxIndex) carouselIndex = maxIndex;
-    if (carouselIndex < 0) carouselIndex = 0;
-
-    // Shift by one chart per click
-    const scroll = carouselIndex * chartWidth;
-
-    track.style.transform = `translateX(-${scroll}px)`;
-    document.querySelector('.carousel-arrow.left').disabled = carouselIndex === 0;
-    document.querySelector('.carousel-arrow.right').disabled = carouselIndex === maxIndex;
-}
-
-function moveCarousel(dir) {
-    carouselIndex += dir;
-    updateCarousel();
-}
-
-window.addEventListener('resize', updateCarousel);
-window.addEventListener('DOMContentLoaded', updateCarousel);
-</script>
+    </script>
 </body>
 </html>
