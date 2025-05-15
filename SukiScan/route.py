@@ -9,12 +9,10 @@ from SukiScan.models import WaifuLike, HusbandoLike, OtherLike
 from SukiScan.models import ForumPost, ForumComment
 from SukiScan.forms import ForumCommentForm
 from collections import Counter
-<<<<<<< HEAD
-from sqlalchemy import func, union_all
-=======
+from sqlalchemy import func
 from werkzeug.utils import secure_filename
 import os
->>>>>>> 2e325de4ca055f79790aad1f4b9752a3dc5d24d8
+
 
 
 #HTML Routes Pre-Login
