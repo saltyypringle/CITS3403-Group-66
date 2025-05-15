@@ -14,6 +14,9 @@ from collections import Counter
 #HTML Routes Pre-Login
 @app.route("/")
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for("mypage"))
+    
     return render_template("index.html")
 
 @app.route("/home")
