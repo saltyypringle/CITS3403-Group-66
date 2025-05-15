@@ -9,7 +9,12 @@ from SukiScan.models import WaifuLike, HusbandoLike, OtherLike
 from SukiScan.models import ForumPost, ForumComment
 from SukiScan.forms import ForumCommentForm
 from collections import Counter
+<<<<<<< HEAD
 from sqlalchemy import func, union_all
+=======
+from werkzeug.utils import secure_filename
+import os
+>>>>>>> 2e325de4ca055f79790aad1f4b9752a3dc5d24d8
 
 
 #HTML Routes Pre-Login
@@ -156,6 +161,16 @@ def myhome():
     top_characters = get_most_popular()
     return render_template("myhome.html", top_characters=top_characters)
 
+UPLOAD_FOLDER = 'Sukiscan/static/image_checker'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @app.route("/addcharacter", methods=["GET", "POST"])
 @login_required
 def addcharacter():
@@ -169,7 +184,18 @@ def addcharacter():
         body_type = request.form.get("body_type")
         character_type = request.form.get("character_type")
 
-        # Normalize the body type to match the allowed values
+        image_file = request.files['image']
+        if image_file and allowed_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            image_file.save(filepath)
+            image_url = filename 
+
+        else:
+            flash('Please upload a valid image file.', 'error')
+            return redirect(url_for('addcharacter'))
+
+        # Normalise the body type to match the allowed values
         valid_body_types = ['Triangle', 'Inverted Triangle', 'Rectangle', 'Hourglass', 'Oval', 'Diamond']
         body_type = body_type.title() if body_type else None  # Capitalize the first letter
 
@@ -177,7 +203,6 @@ def addcharacter():
             flash(f"Invalid body type. Please choose from {', '.join(valid_body_types)}.", "error")
             return redirect(url_for("addcharacter"))
 
-        # Set full_name based on first and last name comparison
         full_name = f"{first_name} {last_name}".lower() if first_name.lower() != last_name.lower() else first_name.lower()
 
         check_model_map = {
@@ -212,8 +237,10 @@ def addcharacter():
                 body_type=body_type,
                 submitted_by=current_user.user_id,  # Refer to current_user.user_id
                 submission_date=db.func.current_timestamp(),
-                status="Pending"  # Default status
-            )
+                status="Pending",  # Default status
+                image_url=image_url,
+                )
+            
             db.session.add(new_check)
             db.session.commit()
             flash(f"{full_name.title()} has been submitted for review as a {character_type}.", "success")
