@@ -42,6 +42,22 @@
     <main class="user-page">
         <h1 style="margin-top:32px; color:var(--text-color);">Welcome to {{ user.username }}'s SukiScan!</h1>
 
+        {% if perfect_match %}
+        <section class="suggested-character">
+            <h2>{{ user.username }}'s Top {{ preferred_gender|capitalize }} 💘</h2>
+            <div class="character-card">
+                <img src="{{ perfect_match.image_url or url_for('static', filename='images/default-avatar.png') }}" alt="Top Character">
+                <p><strong>{{ perfect_match.first_name }} {{ perfect_match.last_name }}</strong></p>
+                <p>
+                    {{ perfect_match.hair_colour }} |
+                    {{ perfect_match.height }}cm |
+                    {{ perfect_match.personality }} |
+                    {{ perfect_match.profession }}
+                </p>
+            </div>
+        </section>
+        {% endif %}
+
         <section class="trait-summary">
             <h2>Top Traits</h2>
             <div class="traits">

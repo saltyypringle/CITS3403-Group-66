@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Characters - SukiScan</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
 
@@ -177,10 +178,13 @@
         function addlike(event, charid, chartype) {
             event.preventDefault();
 
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
             fetch('/addlike', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
                 },
                 body: JSON.stringify({
                     char_id: charid,
@@ -196,7 +200,7 @@
                 }
             })
             .catch(error => {
-                consol.error('Error')
+                console.error('Error')
             });
         }
 
