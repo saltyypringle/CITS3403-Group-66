@@ -7,3 +7,8 @@ class Config:
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or default_database_location
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'SukiScan'
+
+class TestConfig(Config):
+    SQLALCHEMY_DATABASE_URI = default_database_location
+    TESTING = True
+    WTF_CSRF_ENABLED = False
