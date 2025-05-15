@@ -68,12 +68,13 @@
         
         <div id="username-form" class="edit-form hidden">
             <form id="username-update-form" method="POST" action="{{ url_for('update_username') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <label for="current-password">Current Password:</label>
                 <input type="password" id="current-password" name="current_password" required>
-        
+
                 <label for="new-username">New Username:</label>
                 <input type="text" id="new-username" name="username" required>
-        
+
                 <button type="submit">Save</button>
                 <button type="button" onclick="toggleEdit('username-form')">Cancel</button>
             </form>
@@ -81,12 +82,13 @@
         
         <div id="password-form" class="edit-form hidden">
             <form id="password-update-form" method="POST" action="{{ url_for('update_password') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <label for="current-password">Current Password:</label>
                 <input type="password" id="current-password" name="current_password" required>
-        
+
                 <label for="new-password">New Password:</label>
                 <input type="password" id="new-password" name="new_password" required>
-        
+
                 <button type="submit">Save</button>
                 <button type="button" onclick="toggleEdit('password-form')">Cancel</button>
             </form>

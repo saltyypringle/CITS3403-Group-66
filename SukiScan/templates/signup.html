@@ -31,6 +31,7 @@
     <div class=account-content>
         <h2>Sign Up</h2>
         <form action="/add-details" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <label for="signup-email">Email:</label>
             <input type="email" id="signup-email" name="email" required><br>
             <label for="signup-username">Username:</label>

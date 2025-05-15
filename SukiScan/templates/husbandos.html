@@ -91,6 +91,7 @@
                         <td>{{ h.body_type }}</td>
                         <td>
                             <form action="{{ url_for('remove_husbando', husbando_id=h.h_char_id) }}" method="POST" style="margin:0;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="remove-btn">Remove</button>
                             </form>
                         </td>
