@@ -9,6 +9,7 @@ from SukiScan.models import WaifuLike, HusbandoLike, OtherLike
 from SukiScan.models import ForumPost, ForumComment
 from SukiScan.forms import ForumCommentForm
 from collections import Counter
+from sqlalchemy import func, union_all
 
 
 #HTML Routes Pre-Login
@@ -19,9 +20,67 @@ def index():
     
     return render_template("index.html")
 
+def get_most_popular():
+    waifus = (
+        db.session.query(
+            WaifuLike.w_char_id.label('char_id'),
+            func.count(WaifuLike.user_id).label('count'),
+            db.literal('waifu').label('category')
+        )
+        .group_by(WaifuLike.w_char_id)
+        .all()
+    )
+    
+    husbandos = (
+        db.session.query(
+            HusbandoLike.h_char_id.label('char_id'),
+            func.count(HusbandoLike.user_id).label('count'),
+            db.literal('hsubando').label('category')
+        )
+        .group_by(HusbandoLike.h_char_id)
+        .all()
+    )
+    
+    others = (
+        db.session.query(
+            OtherLike.o_char_id.label('char_id'),
+            func.count(OtherLike.user_id).label('count'),
+            db.literal('other').label('category')
+        )
+        .group_by(OtherLike.o_char_id)
+        .all()
+    )
+    
+    combined_counts = {}
+    
+    for c in waifus:
+        combined_counts[('waifu', c.char_id)] = c.count
+
+    for c in husbandos:
+        combined_counts[('husbando', c.char_id)] = c.count
+
+    for c in others:
+        combined_counts[('other', c.char_id)] = c.count
+    
+    top10 = sorted(combined_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+    
+    top_characters = []
+    for (category, char_id), count in top10:
+        if category == 'waifu':
+            character = Waifu.query.filter(Waifu.w_char_id == char_id).first()
+        elif category == 'husbando':
+            character = Husbando.query.filter(Husbando.h_char_id == char_id).first()
+        elif category == 'other':
+            character = Other.query.filter(Other.o_char_id == char_id).first()
+        
+        top_characters.append({'character' : character})
+    
+    return top_characters
+
 @app.route("/home")
 def home():
-    return render_template("home.html")
+    top_characters = get_most_popular()
+    return render_template("home.html", top_characters=top_characters)
 
 @app.route("/login")
 def login():
@@ -94,7 +153,8 @@ def logging_in():
 @app.route("/myhome")
 @login_required
 def myhome():
-    return render_template("myhome.html")
+    top_characters = get_most_popular()
+    return render_template("myhome.html", top_characters=top_characters)
 
 @app.route("/addcharacter", methods=["GET", "POST"])
 @login_required
