@@ -85,11 +85,11 @@
                         <td>
                             <form action="{{ url_for('move_other', o_char_id=ol.o_char_id, direction='up') }}" method="POST" style="display:inline;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                <button type="submit" {% if loop.first %}disabled{% endif %}>⬆️</button>
+                                <button type="submit" class="rank-btn rank-up" title="Move Up" {% if loop.first %}disabled{% endif %}>▲</button>
                             </form>
                             <form action="{{ url_for('move_other', o_char_id=ol.o_char_id, direction='down') }}" method="POST" style="display:inline;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                <button type="submit" {% if loop.last %}disabled{% endif %}>⬇️</button>
+                                <button type="submit" class="rank-btn rank-down" title="Move Down" {% if loop.last %}disabled{% endif %}>▼</button>
                             </form>
                         </td>
                         <td><img src="{{ ol.other.image_url }}" alt="{{ ol.other.first_name }}" class="waifu-avatar"></td>
