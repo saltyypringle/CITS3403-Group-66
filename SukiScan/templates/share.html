@@ -15,7 +15,7 @@
                 <li><a href="{{ url_for('main.mypage') }}">My Page</a></li>
                 <li><a href="{{ url_for('main.addcharacter') }}">Add Character</a></li>
                 <li>
-                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                    <form action="{{ url_for('main.searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
                         <button type="submit">Go</button>
                     </form>

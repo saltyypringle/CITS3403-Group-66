@@ -64,7 +64,7 @@
                     <li class="shared-from">
                         <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Friend Avatar" class="friend-avatar">
                         <span class="share-name">{{ user.username }}</span>
-                        <a href="{{ url_for('share', user_id=user.user_id) }}" class="remove-btn">View</a>
+                        <a href="{{ url_for('main.share', user_id=user.user_id) }}" class="remove-btn">View</a>
                     </li>
                 {% else %}
                     <li>No one has shared with you yet.</li>

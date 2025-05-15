@@ -12,7 +12,9 @@ from collections import Counter
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
 import os
-from SukiScan.blueprints import blueprint
+from flask import Blueprint
+
+blueprint = Blueprint("main", __name__)
 
 
 #HTML Routes Pre-Login
@@ -84,7 +86,8 @@ def get_most_popular():
 def home():
     top_characters = get_most_popular()
     recent_post = ForumPost.query.order_by(ForumPost.created_at.desc()).first()
-
+    comments = []
+    
     if recent_post:
         comments = ForumComment.query.filter_by(post_id=recent_post.id).order_by(ForumComment.created_at.asc()).all() 
                     
@@ -163,7 +166,8 @@ def logging_in():
 def myhome():
     top_characters = get_most_popular()
     recent_post = ForumPost.query.order_by(ForumPost.created_at.desc()).first()
-
+    comments = []
+    
     if recent_post:
         comments = ForumComment.query.filter_by(post_id=recent_post.id).order_by(ForumComment.created_at.asc()).all() 
                     
