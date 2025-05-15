@@ -1495,3 +1495,42 @@ div.top-characters img {
     transform: scale(1.08);
 }
 
+.preferred-gender {
+    margin: 32px auto 0 auto;
+    text-align: center;
+}
+
+.preferred-gender-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #ffe3ec;
+    padding: 14px 24px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(164, 19, 60, 0.08);
+    margin-top: 10px;
+}
+
+.preferred-gender-label {
+    color: #A4133C;
+    font-size: 1.1em;
+    margin-right: 8px;
+}
+
+.preferred-gender-select {
+    padding: 8px 16px;
+    border: 2px solid #A4133C;
+    border-radius: 8px;
+    background: #fff0f3;
+    color: #A4133C;
+    font-size: 1em;
+    font-weight: bold;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.preferred-gender-select:focus {
+    border-color: #FFB3C6;
+    box-shadow: 0 0 0 2px #FFB3C6;
+}
+

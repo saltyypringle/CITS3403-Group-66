@@ -63,10 +63,10 @@
 
             <!-- Preferred Gender Selector -->
             <section class="preferred-gender">
-    <form method="POST" action="{{ url_for('mypage') }}">
+    <form method="POST" action="{{ url_for('mypage') }}" class="preferred-gender-form">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <label for="preferred_gender"><strong>Preferred Character Gender:</strong></label>
-        <select name="preferred_gender" id="preferred_gender" onchange="this.form.submit()">
+        <label for="preferred_gender" class="preferred-gender-label"><strong>Preferred Character Gender:</strong></label>
+        <select name="preferred_gender" id="preferred_gender" class="preferred-gender-select" onchange="this.form.submit()">
             <option value="waifu" {% if preferred_gender == 'waifu' %}selected{% endif %}>Waifu</option>
             <option value="husbando" {% if preferred_gender == 'husbando' %}selected{% endif %}>Husbando</option>
             <option value="other" {% if preferred_gender == 'other' %}selected{% endif %}>Other</option>
