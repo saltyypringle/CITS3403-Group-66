@@ -14,6 +14,9 @@ from collections import Counter
 #HTML Routes Pre-Login
 @app.route("/")
 def index():
+    if current_user.is_authenticated:
+        return redirect(url_for("mypage"))
+    
     return render_template("index.html")
 
 @app.route("/home")
@@ -610,12 +613,10 @@ def mypage():
         top_traits.append(f"📏 {most_common(heights)}cm")
     if personalities:
         top_traits.append(f"🧠 {most_common(personalities)} Personality")
-    if professions:
-        top_traits.append(f"💼 {most_common(professions)}")
     if body_types:
         top_traits.append(f"🏋️ {most_common(body_types)} Body Type")
 
-    top_traits = top_traits[:3]
+    top_traits = top_traits[:4]
     perfect_match = all_liked[0] if all_liked else None
 
     return render_template(
