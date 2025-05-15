@@ -9,6 +9,6 @@ class Config:
     SECRET_KEY = 'SukiScan'
 
 class TestConfig(Config):
-    SQLALCHEMY_DATABASE_URI = default_database_location
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'data', 'test.db')
     TESTING = True
     WTF_CSRF_ENABLED = False
