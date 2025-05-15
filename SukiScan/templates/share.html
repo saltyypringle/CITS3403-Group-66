@@ -143,7 +143,7 @@
         renderPie('otherBodyTypeChart', pieData.others.body_type);
     </script>
     <script>
-function setupCarousel(carouselSelector) {
+function setupCarousel(carousel) {
     let carouselIndex = 0;
 
     function getChartsPerView() {
@@ -153,7 +153,6 @@ function setupCarousel(carouselSelector) {
     }
 
     function updateCarousel() {
-        const carousel = document.querySelector(carouselSelector);
         if (!carousel) return;
         const track = carousel.querySelector('.carousel-track');
         const chart = track.querySelector('.chart-container');
@@ -183,22 +182,16 @@ function setupCarousel(carouselSelector) {
         updateCarousel();
     }
 
-    // Attach event listeners if arrows exist
-    const carousel = document.querySelector(carouselSelector);
-    if (carousel) {
-        const leftArrow = carousel.querySelector('.carousel-arrow.left');
-        const rightArrow = carousel.querySelector('.carousel-arrow.right');
-        if (leftArrow) leftArrow.addEventListener('click', () => moveCarousel(-1));
-        if (rightArrow) rightArrow.addEventListener('click', () => moveCarousel(1));
-        window.addEventListener('resize', updateCarousel);
-        window.addEventListener('DOMContentLoaded', updateCarousel);
-        updateCarousel();
-    }
+    const leftArrow = carousel.querySelector('.carousel-arrow.left');
+    const rightArrow = carousel.querySelector('.carousel-arrow.right');
+    if (leftArrow) leftArrow.addEventListener('click', () => moveCarousel(-1));
+    if (rightArrow) rightArrow.addEventListener('click', () => moveCarousel(1));
+    window.addEventListener('resize', updateCarousel);
+    window.addEventListener('DOMContentLoaded', updateCarousel);
+    updateCarousel();
 }
 
-// Add arrows to each carousel section in your HTML:
 document.querySelectorAll('.waifu-charts-carousel').forEach(carousel => {
-    // Only add arrows if not already present
     if (!carousel.querySelector('.carousel-arrow')) {
         const leftArrow = document.createElement('button');
         leftArrow.className = 'carousel-arrow left';
@@ -210,12 +203,8 @@ document.querySelectorAll('.waifu-charts-carousel').forEach(carousel => {
         rightArrow.innerHTML = '&#8594;';
         carousel.appendChild(rightArrow);
     }
+    setupCarousel(carousel); 
 });
-
-// Setup carousels for all chart sections
-setupCarousel('.waifu-charts-carousel:nth-of-type(1)');
-setupCarousel('.waifu-charts-carousel:nth-of-type(2)');
-setupCarousel('.waifu-charts-carousel:nth-of-type(3)');
 </script>
 <script>
 function toggleSidebar() {
