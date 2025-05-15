@@ -33,77 +33,28 @@
 
     <section class="main-text">
         <h1>Welcome to SukiScans!</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        <p>"Start adding your favourite characters to your list now and we'll start analysing. If a character you are looking for doesn't exist... Not to worry, you can submit a form for them and we'll make it our duty to add them into our database."
         </p>
         <h1>Top Characters</h1>
         <div class="top-characters">
+            {% for c in top_characters %}
             <div class="character">
-                <a href="./zero-two.html">
-                    <img src="{{ url_for('static', filename='images/1-zero-two.webp') }}" alt="Zero Two">
+                <a>
+                    <img src="{{ c.character.image_url }}" alt="{{ c.character.first_name }} {{ c.character.last_name }}">
                 </a>
-                <span>Zero Two</span>
+                <span>{{ c.character.first_name }} {{ c.character.last_name }}</span>
             </div>
-            <div class="character">
-                <a href="./hatsune-miku.html">
-                    <img src="{{ url_for('static', filename='images/2-hatsune-miku.jpg') }}" alt="Hatsune Miku">
-                </a>
-                <span>Hatsune Miku</span>
-            </div>
-            <div class="character">
-                <a href="./rem.html">
-                    <img src="{{ url_for('static', filename='images/3-rem.jpg') }}" alt="Rem">
-                </a>
-                <span>Rem</span>
-            </div>
-            <div class="character">
-                <a href="./megumin.html">
-                    <img src="{{ url_for('static', filename='images/4-megumin.jpg') }}" alt="Megumin">
-                </a>
-                <span>Megumin</span>
-            </div>
-            <div class="character">
-                <a href="./rias-gremory.html">
-                    <img src="{{ url_for('static', filename='images/5-rias-gremory.jpg') }}" alt="Rias Gremory">
-                </a>
-                <span>Rias Gremory</span>
-            </div>
-            <div class="character">
-                <a href="./mai-sakurajima.html">
-                    <img src="{{ url_for('static', filename='images/6-mai-sakurajima.webp') }}" alt="Mai Sakurajima">
-                </a>
-                <span>Mai Sakurajima</span>
-            </div>
-            <div class="character">
-                <a href="./satoru-gojo.html">
-                    <img src="{{ url_for('static', filename='images/7-satoru-gojo.jpg') }}" alt="Satoru Gojo">
-                </a>
-                <span>Satoru Gojo</span>
-            </div>
-            <div class="character">
-                <a href="./power.html">
-                    <img src="{{ url_for('static', filename='images/8-power.jpg') }}" alt="Power">
-                </a>
-                <span>Power</span>
-            </div>
-            <div class="character">
-                <a href="./nami.html">
-                    <img src="{{ url_for('static', filename='images/9-nami.png') }}" alt="Nami">
-                </a>
-                <span>Nami</span>
-            </div>
-            <div class="character">
-                <a href="./saber.html">
-                    <img src="{{ url_for('static', filename='images/10-saber.jpg') }}" alt="Saber">
-                </a>
-                <span>Saber</span>
-            </div>
+            {% endfor %}
         </div>
         <h1>Recent Discussions</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        </p>
-        <h1>Featured Articles</h1>
-        <p>"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-        </p> 
+        {% if recent_post %}
+        <p>Title: {{recent_post.title }}</p>
+        <p>"{{ recent_post.content }}"</p>
+        <h1>Replies</h1>
+            {% for r in comments %}
+                <p>"{{ r.content }}"</p> 
+            {% endfor%}
+        {% endif %}
     </section>
 </body>
 </html>
