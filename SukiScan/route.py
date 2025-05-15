@@ -548,9 +548,26 @@ def share(user_id):
         return redirect(url_for("mypage"))
 
     user = User.query.get_or_404(user_id)
-    waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=user_id).all()]
-    husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=user_id).all()]
-    others = [like.other for like in OtherLike.query.filter_by(user_id=user_id).all()]
+    waifu_likes = WaifuLike.query.filter_by(user_id=user_id).order_by(WaifuLike.w_rank).all()
+    husbando_likes = HusbandoLike.query.filter_by(user_id=user_id).order_by(HusbandoLike.h_rank).all()
+    other_likes = OtherLike.query.filter_by(user_id=user_id).order_by(OtherLike.o_rank).all()
+
+    waifus = [like.waifu for like in waifu_likes]
+    husbandos = [like.husbando for like in husbando_likes]
+    others = [like.other for like in other_likes]
+
+    # Get preferred gender from session or default to waifu
+    preferred_gender = session.get("preferred_gender", "waifu")
+
+    # Get top character of preferred gender
+    if preferred_gender == "waifu":
+        perfect_match = waifus[0] if waifus else None
+    elif preferred_gender == "husbando":
+        perfect_match = husbandos[0] if husbandos else None
+    elif preferred_gender == "other":
+        perfect_match = others[0] if others else None
+    else:
+        perfect_match = None
 
     def count_traits(characters, attr):
         return dict(Counter(getattr(c, attr) for c in characters if getattr(c, attr)))
@@ -607,7 +624,9 @@ def share(user_id):
         "share.html",
         user=user,
         pie_data=pie_data,
-        top_traits=top_traits
+        top_traits=top_traits,
+        perfect_match=perfect_match,
+        preferred_gender=preferred_gender
     )
 
 @app.route("/mypage", methods=["GET", "POST"])
