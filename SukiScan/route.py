@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for, flash, jsonify
+from flask import render_template, request, redirect, url_for, flash, jsonify, session
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from SukiScan import app, db
@@ -610,12 +610,19 @@ def share(user_id):
         top_traits=top_traits
     )
 
-@app.route("/mypage")
+@app.route("/mypage", methods=["GET", "POST"])
 @login_required
 def mypage():
-    liked_waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=current_user.user_id).all()]
-    liked_husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=current_user.user_id).all()]
-    liked_others = [like.other for like in OtherLike.query.filter_by(user_id=current_user.user_id).all()]
+    # Handle preferred gender selection
+    if request.method == "POST":
+        preferred_gender = request.form.get("preferred_gender", "waifu")
+        session["preferred_gender"] = preferred_gender
+    else:
+        preferred_gender = session.get("preferred_gender", "waifu")
+
+    liked_waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=current_user.user_id).order_by(WaifuLike.w_rank).all()]
+    liked_husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=current_user.user_id).order_by(HusbandoLike.h_rank).all()]
+    liked_others = [like.other for like in OtherLike.query.filter_by(user_id=current_user.user_id).order_by(OtherLike.o_rank).all()]
 
     all_liked = liked_waifus + liked_husbandos + liked_others
 
@@ -639,15 +646,24 @@ def mypage():
         top_traits.append(f"💼 {most_common(professions)}")
     if body_types:
         top_traits.append(f"🏋️ {most_common(body_types)} Body Type")
-
     top_traits = top_traits[:3]
-    perfect_match = all_liked[0] if all_liked else None
+
+    # Select perfect match based on preferred gender
+    if preferred_gender == "waifu":
+        perfect_match = liked_waifus[0] if liked_waifus else None
+    elif preferred_gender == "husbando":
+        perfect_match = liked_husbandos[0] if liked_husbandos else None
+    elif preferred_gender == "other":
+        perfect_match = liked_others[0] if liked_others else None
+    else:
+        perfect_match = all_liked[0] if all_liked else None
 
     return render_template(
         "mypage.html",
         user=current_user,
         top_traits=top_traits,
-        perfect_match=perfect_match
+        perfect_match=perfect_match,
+        preferred_gender=preferred_gender
     )
 
 @app.route('/update-username', methods=['POST'])

@@ -61,17 +61,18 @@
                 </div>
             </section>
 
-            <!-- Top Traits Section -->
-            <section class="trait-summary">
-                <h2>Your Type 💖</h2>
-                <div class="traits">
-                    {% for trait in top_traits %}
-                    <div class="trait">
-                        <span>{{ trait }}</span>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
+            <!-- Preferred Gender Selector -->
+            <section class="preferred-gender">
+    <form method="POST" action="{{ url_for('mypage') }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <label for="preferred_gender"><strong>Preferred Character Gender:</strong></label>
+        <select name="preferred_gender" id="preferred_gender" onchange="this.form.submit()">
+            <option value="waifu" {% if preferred_gender == 'waifu' %}selected{% endif %}>Waifu</option>
+            <option value="husbando" {% if preferred_gender == 'husbando' %}selected{% endif %}>Husbando</option>
+            <option value="other" {% if preferred_gender == 'other' %}selected{% endif %}>Other</option>
+        </select>
+    </form>
+</section>
 
             <!-- Perfect Match Section -->
             <section class="suggested-character">
@@ -86,7 +87,6 @@
                         {{ perfect_match.personality }} |
                         {{ perfect_match.profession }}
                     </p>
-                    <!-- Add more details as you wish -->
                 </div>
                 {% else %}
                 <p>No matches yet! Like some characters to get a match.</p>
