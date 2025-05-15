@@ -66,6 +66,8 @@
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
+                        <th>Actions</th>
                         <th>Avatar</th>
                         <th>Name</th>
                         <th>Hair Color</th>
@@ -77,17 +79,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for o in others %}
+                    {% for ol in other_likes %}
                     <tr>
-                        <td><img src="{{ o.image_url }}" alt="{{ o.first_name }}" class="waifu-avatar"></td>
-                        <td>{{ o.first_name }} {{ o.last_name }}</td>
-                        <td>{{ o.hair_colour }}</td>
-                        <td>{{ o.height }} cm</td>
-                        <td>{{ o.personality }}</td>
-                        <td>{{ o.profession }}</td>
-                        <td>{{ o.body_type }}</td>
+                        <td>{{ loop.index }}</td>
                         <td>
-                            <form action="{{ url_for('remove_other', other_id=o.o_char_id) }}" method="POST" style="margin:0;">
+                            <form action="{{ url_for('move_other', o_char_id=ol.o_char_id, direction='up') }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" {% if loop.first %}disabled{% endif %}>⬆️</button>
+                            </form>
+                            <form action="{{ url_for('move_other', o_char_id=ol.o_char_id, direction='down') }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" {% if loop.last %}disabled{% endif %}>⬇️</button>
+                            </form>
+                        </td>
+                        <td><img src="{{ ol.other.image_url }}" alt="{{ ol.other.first_name }}" class="waifu-avatar"></td>
+                        <td>{{ ol.other.first_name }} {{ ol.other.last_name }}</td>
+                        <td>{{ ol.other.hair_colour }}</td>
+                        <td>{{ ol.other.height }} cm</td>
+                        <td>{{ ol.other.personality }}</td>
+                        <td>{{ ol.other.profession }}</td>
+                        <td>{{ ol.other.body_type }}</td>
+                        <td>
+                            <form action="{{ url_for('remove_other', other_id=ol.o_char_id) }}" method="POST" style="margin:0;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="remove-btn">Remove</button>
                             </form>

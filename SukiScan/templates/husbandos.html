@@ -69,6 +69,8 @@
             <table>
                 <thead>
                     <tr>
+                        <th>#</th>
+                        <th>Actions</th>
                         <th>Avatar</th>
                         <th>Name</th>
                         <th>Hair Color</th>
@@ -80,17 +82,28 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for h in husbandos %}
+                    {% for hl in husbando_likes %}
                     <tr>
-                        <td><img src="{{ h.image_url }}" alt="{{ h.first_name }}" class="waifu-avatar"></td>
-                        <td>{{ h.first_name }} {{ h.last_name }}</td>
-                        <td>{{ h.hair_colour }}</td>
-                        <td>{{ h.height }} cm</td>
-                        <td>{{ h.personality }}</td>
-                        <td>{{ h.profession }}</td>
-                        <td>{{ h.body_type }}</td>
+                        <td>{{ loop.index }}</td>
                         <td>
-                            <form action="{{ url_for('remove_husbando', husbando_id=h.h_char_id) }}" method="POST" style="margin:0;">
+                            <form action="{{ url_for('move_husbando', h_char_id=hl.h_char_id, direction='up') }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" {% if loop.first %}disabled{% endif %}>⬆️</button>
+                            </form>
+                            <form action="{{ url_for('move_husbando', h_char_id=hl.h_char_id, direction='down') }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" {% if loop.last %}disabled{% endif %}>⬇️</button>
+                            </form>
+                        </td>
+                        <td><img src="{{ hl.husbando.image_url }}" alt="{{ hl.husbando.first_name }}" class="waifu-avatar"></td>
+                        <td>{{ hl.husbando.first_name }} {{ hl.husbando.last_name }}</td>
+                        <td>{{ hl.husbando.hair_colour }}</td>
+                        <td>{{ hl.husbando.height }} cm</td>
+                        <td>{{ hl.husbando.personality }}</td>
+                        <td>{{ hl.husbando.profession }}</td>
+                        <td>{{ hl.husbando.body_type }}</td>
+                        <td>
+                            <form action="{{ url_for('remove_husbando', husbando_id=hl.h_char_id) }}" method="POST" style="margin:0;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="remove-btn">Remove</button>
                             </form>

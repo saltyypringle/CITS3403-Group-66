@@ -224,6 +224,7 @@ def search():
             h_query = h_query.filter(Husbando.body_type.in_(body))
         
 
+
         characters.extend([{
             'id': c.h_char_id,
             'first_name': c.first_name,
@@ -412,15 +413,15 @@ def view_post(post_id):
 @login_required
 def waifus():
     waifu_likes = WaifuLike.query.filter_by(user_id=current_user.user_id).order_by(WaifuLike.w_rank).all()
-    liked_waifus = [like.waifu for like in waifu_likes]
+    
     pie_data = {
-        "hair_colour": dict(Counter([c.hair_colour for c in liked_waifus])),
-        "height": dict(Counter([c.height for c in liked_waifus])),
-        "personality": dict(Counter([c.personality for c in liked_waifus])),
-        "profession": dict(Counter([c.profession for c in liked_waifus])),
-        "body_type": dict(Counter([c.body_type for c in liked_waifus]))
+        "hair_colour": dict(Counter([wl.waifu.hair_colour for wl in waifu_likes])),
+        "height": dict(Counter([wl.waifu.height for wl in waifu_likes])),
+        "personality": dict(Counter([wl.waifu.personality for wl in waifu_likes])),
+        "profession": dict(Counter([wl.waifu.profession for wl in waifu_likes])),
+        "body_type": dict(Counter([wl.waifu.body_type for wl in waifu_likes]))
     }
-    return render_template("waifus.html", waifus=liked_waifus, pie_data=pie_data)
+    return render_template("waifus.html", waifu_likes=waifu_likes, pie_data=pie_data)
 
 @app.route("/like/waifu/<int:w_char_id>", methods=["POST"])
 @login_required
@@ -441,9 +442,15 @@ def move_waifu(w_char_id, direction):
         return redirect(url_for('waifus'))
 
     if direction == 'up' and idx > 0:
-        waifu_likes[idx].w_rank, waifu_likes[idx-1].w_rank = waifu_likes[idx-1].w_rank, waifu_likes[idx].w_rank
+        waifu_likes[idx], waifu_likes[idx-1] = waifu_likes[idx-1], waifu_likes[idx]
     elif direction == 'down' and idx < len(waifu_likes) - 1:
-        waifu_likes[idx].w_rank, waifu_likes[idx+1].w_rank = waifu_likes[idx+1].w_rank, waifu_likes[idx].w_rank
+        waifu_likes[idx], waifu_likes[idx+1] = waifu_likes[idx+1], waifu_likes[idx]
+
+    # Reassign ranks to ensure they are sequential
+    for new_rank, wl in enumerate(waifu_likes):
+        wl.w_rank = new_rank
+
+    print([(wl.w_char_id, wl.w_rank) for wl in waifu_likes])  # <-- Add this line
 
     db.session.commit()
     return redirect(url_for('waifus'))
@@ -451,15 +458,15 @@ def move_waifu(w_char_id, direction):
 @app.route("/husbandos")
 @login_required
 def husbandos():
-    liked_husbandos = [like.husbando for like in HusbandoLike.query.filter_by(user_id=current_user.user_id).all()]
+    husbando_likes = HusbandoLike.query.filter_by(user_id=current_user.user_id).order_by(HusbandoLike.h_rank).all()
     pie_data = {
-        "hair_colour": dict(Counter([c.hair_colour for c in liked_husbandos])),
-        "height": dict(Counter([c.height for c in liked_husbandos])),
-        "personality": dict(Counter([c.personality for c in liked_husbandos])),
-        "profession": dict(Counter([c.profession for c in liked_husbandos])),
-        "body_type": dict(Counter([c.body_type for c in liked_husbandos]))
+        "hair_colour": dict(Counter([hl.husbando.hair_colour for hl in husbando_likes])),
+        "height": dict(Counter([hl.husbando.height for hl in husbando_likes])),
+        "personality": dict(Counter([hl.husbando.personality for hl in husbando_likes])),
+        "profession": dict(Counter([hl.husbando.profession for hl in husbando_likes])),
+        "body_type": dict(Counter([hl.husbando.body_type for hl in husbando_likes]))
     }
-    return render_template("husbandos.html", husbandos=liked_husbandos, pie_data=pie_data)
+    return render_template("husbandos.html", husbando_likes=husbando_likes, pie_data=pie_data)
 
 @app.route("/like/husbando/<int:h_char_id>", methods=["POST"])
 @login_required
@@ -473,15 +480,15 @@ def like_husbando(h_char_id):
 @app.route("/others")
 @login_required
 def others():
-    liked_others = [like.other for like in OtherLike.query.filter_by(user_id=current_user.user_id).all()]
+    other_likes = OtherLike.query.filter_by(user_id=current_user.user_id).order_by(OtherLike.o_rank).all()
     pie_data = {
-        "hair_colour": dict(Counter([c.hair_colour for c in liked_others])),
-        "height": dict(Counter([c.height for c in liked_others])),
-        "personality": dict(Counter([c.personality for c in liked_others])),
-        "profession": dict(Counter([c.profession for c in liked_others])),
-        "body_type": dict(Counter([c.body_type for c in liked_others]))
+        "hair_colour": dict(Counter([ol.other.hair_colour for ol in other_likes])),
+        "height": dict(Counter([ol.other.height for ol in other_likes])),
+        "personality": dict(Counter([ol.other.personality for ol in other_likes])),
+        "profession": dict(Counter([ol.other.profession for ol in other_likes])),
+        "body_type": dict(Counter([ol.other.body_type for ol in other_likes]))
     }
-    return render_template("others.html", others=liked_others, pie_data=pie_data)
+    return render_template("others.html", other_likes=other_likes, pie_data=pie_data)
 
 @app.route("/like/other/<int:o_char_id>", methods=["POST"])
 @login_required
@@ -686,3 +693,45 @@ def update_user_password(user, new_password):
     hashed_password = generate_password_hash(new_password)
     user.password = hashed_password
     db.session.commit()
+
+@app.route('/move_husbando/<int:h_char_id>/<direction>', methods=['POST'])
+@login_required
+def move_husbando(h_char_id, direction):
+    husbando_likes = HusbandoLike.query.filter_by(user_id=current_user.user_id).order_by(HusbandoLike.h_rank).all()
+    idx = next((i for i, hl in enumerate(husbando_likes) if hl.h_char_id == h_char_id), None)
+    if idx is None:
+        flash("Husbando not found in your list.", "warning")
+        return redirect(url_for('husbandos'))
+
+    if direction == 'up' and idx > 0:
+        husbando_likes[idx], husbando_likes[idx-1] = husbando_likes[idx-1], husbando_likes[idx]
+    elif direction == 'down' and idx < len(husbando_likes) - 1:
+        husbando_likes[idx], husbando_likes[idx+1] = husbando_likes[idx+1], husbando_likes[idx]
+
+    # Reassign ranks to ensure they are sequential
+    for new_rank, hl in enumerate(husbando_likes):
+        hl.h_rank = new_rank
+
+    db.session.commit()
+    return redirect(url_for('husbandos'))
+
+@app.route('/move_other/<int:o_char_id>/<direction>', methods=['POST'])
+@login_required
+def move_other(o_char_id, direction):
+    other_likes = OtherLike.query.filter_by(user_id=current_user.user_id).order_by(OtherLike.o_rank).all()
+    idx = next((i for i, ol in enumerate(other_likes) if ol.o_char_id == o_char_id), None)
+    if idx is None:
+        flash("Character not found in your list.", "warning")
+        return redirect(url_for('others'))
+
+    if direction == 'up' and idx > 0:
+        other_likes[idx], other_likes[idx-1] = other_likes[idx-1], other_likes[idx]
+    elif direction == 'down' and idx < len(other_likes) - 1:
+        other_likes[idx], other_likes[idx+1] = other_likes[idx+1], other_likes[idx]
+
+    # Reassign ranks to ensure they are sequential
+    for new_rank, ol in enumerate(other_likes):
+        ol.o_rank = new_rank
+
+    db.session.commit()
+    return redirect(url_for('others'))

@@ -76,28 +76,28 @@
                 </tr>
             </thead>
             <tbody>
-                {% for w in waifus %}
+                {% for wl in waifu_likes %}
                 <tr>
                     <td>{{ loop.index }}</td>
                     <td>
-                        <form action="{{ url_for('move_waifu', w_char_id=w.w_char_id, direction='up') }}" method="POST" style="display:inline;">
+                        <form action="{{ url_for('move_waifu', w_char_id=wl.w_char_id, direction='up') }}" method="POST" style="display:inline;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" {% if loop.first %}disabled{% endif %}>⬆️</button>
                         </form>
-                        <form action="{{ url_for('move_waifu', w_char_id=w.w_char_id, direction='down') }}" method="POST" style="display:inline;">
+                        <form action="{{ url_for('move_waifu', w_char_id=wl.w_char_id, direction='down') }}" method="POST" style="display:inline;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" {% if loop.last %}disabled{% endif %}>⬇️</button>
                         </form>
                     </td>
-                    <td><img src="{{ w.image_url }}" alt="{{ w.first_name }}" class="waifu-avatar"></td>
-                    <td>{{ w.first_name }} {{ w.last_name }}</td>
-                    <td>{{ w.hair_colour }}</td>
-                    <td>{{ w.height }} cm</td>
-                    <td>{{ w.personality }}</td>
-                    <td>{{ w.profession }}</td>
-                    <td>{{ w.body_type }}</td>
+                    <td><img src="{{ wl.waifu.image_url }}" alt="{{ wl.waifu.first_name }}" class="waifu-avatar"></td>
+                    <td>{{ wl.waifu.first_name }} {{ wl.waifu.last_name }}</td>
+                    <td>{{ wl.waifu.hair_colour }}</td>
+                    <td>{{ wl.waifu.height }} cm</td>
+                    <td>{{ wl.waifu.personality }}</td>
+                    <td>{{ wl.waifu.profession }}</td>
+                    <td>{{ wl.waifu.body_type }}</td>
                     <td>
-                        <form action="{{ url_for('remove_waifu', w_char_id=w.w_char_id) }}" method="POST" style="margin:0;">
+                        <form action="{{ url_for('remove_waifu', waifu_id=wl.w_char_id) }}" method="POST" style="margin:0;">
                             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                             <button type="submit" class="remove-btn">Remove</button>
                         </form>
