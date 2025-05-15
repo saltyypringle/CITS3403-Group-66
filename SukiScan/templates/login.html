@@ -31,6 +31,7 @@
     <div class="account-content">
         <h2>Log In</h2>
         <form action="/logging-in" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <label for="login-email-or-username">Email or Username:</label>
             <input type="text" id="login-email-or-username" name="email-username" required>
             <label for="login-password">Password:</label>
@@ -49,3 +50,4 @@
         <p>Don't have an account yet? <a href="{{ url_for('signup') }}">Signup</a></p>
     </div>
 </body>
+</html>

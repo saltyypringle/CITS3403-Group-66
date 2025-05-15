@@ -120,6 +120,7 @@ class WaifuLike(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     w_char_id = db.Column(db.Integer, db.ForeignKey('waifu.w_char_id'), primary_key=True)
+    w_rank = db.Column(db.Integer, nullable=False, default=0)
 
     user = db.relationship('User', backref='waifu_likes')
     waifu = db.relationship('Waifu', backref='liked_by_users')
@@ -129,6 +130,7 @@ class HusbandoLike(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     h_char_id = db.Column(db.Integer, db.ForeignKey('husbando.h_char_id'), primary_key=True)
+    h_rank = db.Column(db.Integer, nullable=False, default=0)
 
     user = db.relationship('User', backref='husbando_likes')
     husbando = db.relationship('Husbando', backref='liked_by_users')
@@ -138,7 +140,8 @@ class OtherLike(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), primary_key=True)
     o_char_id = db.Column(db.Integer, db.ForeignKey('other.o_char_id'), primary_key=True)
-
+    o_rank = db.Column(db.Integer, nullable=False, default=0)
+    
     user = db.relationship('User', backref='other_likes')
     other = db.relationship('Other', backref='liked_by_users')
 
