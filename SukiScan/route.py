@@ -83,7 +83,12 @@ def get_most_popular():
 @app.route("/home")
 def home():
     top_characters = get_most_popular()
-    return render_template("home.html", top_characters=top_characters)
+    recent_post = ForumPost.query.order_by(ForumPost.created_at.desc()).first()
+
+    if recent_post:
+        comments = ForumComment.query.filter_by(post_id=recent_post.id).order_by(ForumComment.created_at.asc()).all() 
+                       
+    return render_template("home.html", top_characters=top_characters, recent_post=recent_post, comments=comments)
 
 @app.route("/login")
 def login():
@@ -157,7 +162,12 @@ def logging_in():
 @login_required
 def myhome():
     top_characters = get_most_popular()
-    return render_template("myhome.html", top_characters=top_characters)
+    recent_post = ForumPost.query.order_by(ForumPost.created_at.desc()).first()
+
+    if recent_post:
+        comments = ForumComment.query.filter_by(post_id=recent_post.id).order_by(ForumComment.created_at.asc()).all() 
+                       
+    return render_template("myhome.html", top_characters=top_characters, recent_post=recent_post, comments=comments)
 
 UPLOAD_FOLDER = 'Sukiscan/static/image_checker'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
