@@ -10,10 +10,10 @@
         <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         <nav>
             <ul>
-                <li><a href="{{ url_for('myhome') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
-                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li><a href="{{ url_for('main.myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('main.social') }}">Social</a></li>
+                <li><a href="{{ url_for('main.mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('main.addcharacter') }}">Add Character</a></li>
                 <li>
                     <form action="{{ url_for('searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
@@ -34,9 +34,9 @@
             <h2>MY ACCOUNT</h2>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
-            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+            <li><a href="{{ url_for('main.profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('main.friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('main.logout') }}" class="sidebar-link">Log Out</a></li>
         </ul>
     </div>
     <main class="user-page">

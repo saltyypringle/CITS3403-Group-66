@@ -12,12 +12,12 @@
         <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         <nav>
             <ul>
-                <li><a href="{{ url_for('myhome') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
-                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li><a href="{{ url_for('main.myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('main.social') }}">Social</a></li>
+                <li><a href="{{ url_for('main.mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('main.addcharacter') }}">Add Character</a></li>
                 <li>
-                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                    <form action="{{ url_for('main.searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
                         <button type="submit">Go</button>
                       </form>  
@@ -37,9 +37,9 @@
             <h2>MY ACCOUNT</h2>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
-            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+            <li><a href="{{ url_for('main.profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('main.friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('main.logout') }}" class="sidebar-link">Log Out</a></li>
         </ul>
     </div>
 
@@ -55,15 +55,15 @@
             <section class="favorites-buttons">
                 <h2>📁 Your Favorite Lists</h2>
                 <div class="buttons-container">
-                    <button onclick="location.href='{{ url_for('waifus') }}'">💗 Waifus</button>
-                    <button onclick="location.href='{{ url_for('husbandos') }}'">💙 Husbandos</button>
-                    <button onclick="location.href='{{ url_for('others') }}'">🌟 Others</button>
+                    <button onclick="location.href='{{ url_for('main.waifus') }}'">💗 Waifus</button>
+                    <button onclick="location.href='{{ url_for('main.husbandos') }}'">💙 Husbandos</button>
+                    <button onclick="location.href='{{ url_for('main.others') }}'">🌟 Others</button>
                 </div>
             </section>
 
             <!-- Preferred Gender Selector -->
             <section class="preferred-gender">
-    <form method="POST" action="{{ url_for('mypage') }}" class="preferred-gender-form">
+    <form method="POST" action="{{ url_for('main.mypage') }}" class="preferred-gender-form">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <label for="preferred_gender" class="preferred-gender-label"><strong>Preferred Character Gender:</strong></label>
         <select name="preferred_gender" id="preferred_gender" class="preferred-gender-select" onchange="this.form.submit()">

@@ -12,12 +12,12 @@
         <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         <nav>
             <ul>
-                <li><a href="{{ url_for('myhome') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
-                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li><a href="{{ url_for('main.myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('main.social') }}">Social</a></li>
+                <li><a href="{{ url_for('main.mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('main.addcharacter') }}">Add Character</a></li>
                 <li>
-                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                    <form action="{{ url_for('main.searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
                         <button type="submit">Go</button>
                     </form>
@@ -37,9 +37,9 @@
             <h2>MY ACCOUNT</h2>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
-            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+            <li><a href="{{ url_for('main.profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('main.friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('main.logout') }}" class="sidebar-link">Log Out</a></li>
         </ul>
     </div>
     
@@ -83,11 +83,11 @@
                     <tr>
                         <td>{{ loop.index }}</td>
                         <td>
-                            <form action="{{ url_for('move_other', o_char_id=ol.o_char_id, direction='up') }}" method="POST" style="display:inline;">
+                            <form action="{{ url_for('main.move_other', o_char_id=ol.o_char_id, direction='up') }}" method="POST" style="display:inline;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="rank-btn rank-up" title="Move Up" {% if loop.first %}disabled{% endif %}>▲</button>
                             </form>
-                            <form action="{{ url_for('move_other', o_char_id=ol.o_char_id, direction='down') }}" method="POST" style="display:inline;">
+                            <form action="{{ url_for('main.move_other', o_char_id=ol.o_char_id, direction='down') }}" method="POST" style="display:inline;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="rank-btn rank-down" title="Move Down" {% if loop.last %}disabled{% endif %}>▼</button>
                             </form>
@@ -100,7 +100,7 @@
                         <td>{{ ol.other.profession }}</td>
                         <td>{{ ol.other.body_type }}</td>
                         <td>
-                            <form action="{{ url_for('remove_other', other_id=ol.o_char_id) }}" method="POST" style="margin:0;">
+                            <form action="{{ url_for('main.remove_other', other_id=ol.o_char_id) }}" method="POST" style="margin:0;">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                                 <button type="submit" class="remove-btn">Remove</button>
                             </form>
