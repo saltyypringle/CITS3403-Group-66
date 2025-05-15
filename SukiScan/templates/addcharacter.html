@@ -45,7 +45,7 @@
     <section class="add-character-section" style="max-width: 600px; margin: 40px auto; padding: 30px; background-color: #fff0f3; border-radius: 12px; border: 2px solid #A4133C; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
         <h1 style="text-align: center; color: #A4133C; font-size: 2em; margin-bottom: 20px;"> Add a New Character</h1>
         <form method="POST" action="{{ url_for('addcharacter') }}" enctype="multipart/form-data" style="display: flex; flex-direction: column; gap: 15px;">
-            
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <div>
                 <label for="first_name">First Name:</label><br>
                 <input type="text" id="first_name" name="first_name" required style="width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #ccc;">

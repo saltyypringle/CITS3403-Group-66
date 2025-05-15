@@ -411,7 +411,8 @@ def view_post(post_id):
 @app.route("/waifus")
 @login_required
 def waifus():
-    liked_waifus = [like.waifu for like in WaifuLike.query.filter_by(user_id=current_user.user_id).all()]
+    waifu_likes = WaifuLike.query.filter_by(user_id=current_user.user_id).order_by(WaifuLike.w_rank).all()
+    liked_waifus = [like.waifu for like in waifu_likes]
     pie_data = {
         "hair_colour": dict(Counter([c.hair_colour for c in liked_waifus])),
         "height": dict(Counter([c.height for c in liked_waifus])),
@@ -429,6 +430,23 @@ def like_waifu(w_char_id):
         db.session.add(WaifuLike(user_id=current_user.user_id, w_char_id=w_char_id))
         db.session.commit()
     return redirect(request.referrer or url_for("waifus"))
+
+@app.route('/move_waifu/<int:w_char_id>/<direction>', methods=['POST'])
+@login_required
+def move_waifu(w_char_id, direction):
+    waifu_likes = WaifuLike.query.filter_by(user_id=current_user.user_id).order_by(WaifuLike.w_rank).all()
+    idx = next((i for i, wl in enumerate(waifu_likes) if wl.w_char_id == w_char_id), None)
+    if idx is None:
+        flash("Waifu not found in your list.", "warning")
+        return redirect(url_for('waifus'))
+
+    if direction == 'up' and idx > 0:
+        waifu_likes[idx].w_rank, waifu_likes[idx-1].w_rank = waifu_likes[idx-1].w_rank, waifu_likes[idx].w_rank
+    elif direction == 'down' and idx < len(waifu_likes) - 1:
+        waifu_likes[idx].w_rank, waifu_likes[idx+1].w_rank = waifu_likes[idx+1].w_rank, waifu_likes[idx].w_rank
+
+    db.session.commit()
+    return redirect(url_for('waifus'))
 
 @app.route("/husbandos")
 @login_required
