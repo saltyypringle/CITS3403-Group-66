@@ -78,20 +78,23 @@ The app is structured into modules (routes, models, forms) and initialised in Su
     ```sh
     export FLASK_APP=SukiScan
     ```
+7. Create the data directory (if it does not exist)
+   ```sh
+   mkdir data
 
-7. Apply Existing Database Migrations
+8. Apply Existing Database Migrations
 
    The database schema is already defined in the repository’s migrations/ folder. To set up the database, simply run:
       ```sh
       flask db upgrade
       ```
 
-8. Run seed.py to seed the database
+9. Run seed.py to seed the database
    ```sh
    python seed.py
     ```
 
-9. Run the application
+10. Run the application
    ```sh
    python sukiscan.py
 
