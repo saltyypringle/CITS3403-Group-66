@@ -1,5 +1,7 @@
-from SukiScan import app, db
+from SukiScan import create_app, db
 from SukiScan.models import Waifu, Husbando, Other
+
+app = create_app()
 
 #helper function to automate image urls
 def build_image_url(first_name, last_name):

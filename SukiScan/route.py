@@ -1,7 +1,7 @@
-from flask import render_template, request, redirect, url_for, flash, jsonify, session
+from flask import render_template, request, redirect, url_for, flash, jsonify, session, current_app
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from SukiScan import app, db
+from SukiScan import db
 from SukiScan.models import User, Shares
 from SukiScan.models import WaifuCheck, HusbandCheck, OtherCheck
 from SukiScan.models import Waifu, Husbando, Other, WaifuLike
@@ -12,14 +12,16 @@ from collections import Counter
 from sqlalchemy import func
 from werkzeug.utils import secure_filename
 import os
+from flask import Blueprint
 
+blueprint = Blueprint("main", __name__)
 
 
 #HTML Routes Pre-Login
-@app.route("/")
+@blueprint.route("/")
 def index():
     if current_user.is_authenticated:
-        return redirect(url_for("mypage"))
+        return redirect(url_for("main.mypage"))
     
     return render_template("index.html")
 
@@ -80,26 +82,27 @@ def get_most_popular():
     
     return top_characters
 
-@app.route("/home")
+@blueprint.route("/home")
 def home():
     top_characters = get_most_popular()
     recent_post = ForumPost.query.order_by(ForumPost.created_at.desc()).first()
-
+    comments = []
+    
     if recent_post:
         comments = ForumComment.query.filter_by(post_id=recent_post.id).order_by(ForumComment.created_at.asc()).all() 
-                       
+                    
     return render_template("home.html", top_characters=top_characters, recent_post=recent_post, comments=comments)
 
-@app.route("/login")
+@blueprint.route("/login")
 def login():
     return render_template("login.html")
 
-@app.route("/signup")
+@blueprint.route("/signup")
 def signup():
     return render_template("signup.html")
 
 #Forms Login-Signup Routes
-@app.route("/add-details", methods=['POST'])
+@blueprint.route("/add-details", methods=['POST'])
 def add_details():
     # Grab entered details from signup
     email = request.form['email']
@@ -131,9 +134,9 @@ def add_details():
     login_user(new_user)
     
     #Redirect to mypage
-    return redirect(url_for('mypage'))
+    return redirect(url_for('main.mypage'))
 
-@app.route("/logging-in", methods=['POST'])
+@blueprint.route("/logging-in", methods=['POST'])
 def logging_in():
     # Grab input from html form
     username_email = request.form['email-username']
@@ -156,30 +159,25 @@ def logging_in():
     login_user(user)
     
     #Redirect to mypage
-    return redirect(url_for('mypage'))
+    return redirect(url_for('main.mypage'))
 
-@app.route("/myhome")
+@blueprint.route("/myhome")
 @login_required
 def myhome():
     top_characters = get_most_popular()
     recent_post = ForumPost.query.order_by(ForumPost.created_at.desc()).first()
-
+    comments = []
+    
     if recent_post:
         comments = ForumComment.query.filter_by(post_id=recent_post.id).order_by(ForumComment.created_at.asc()).all() 
-                       
+                    
     return render_template("myhome.html", top_characters=top_characters, recent_post=recent_post, comments=comments)
 
-UPLOAD_FOLDER = 'Sukiscan/static/image_checker'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
-if not os.path.exists(UPLOAD_FOLDER):
-    os.makedirs(UPLOAD_FOLDER)
-
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    allowed_exts = current_app.config.get('ALLOWED_EXTENSIONS', set())
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_exts
 
-@app.route("/addcharacter", methods=["GET", "POST"])
+@blueprint.route("/addcharacter", methods=["GET", "POST"])
 @login_required
 def addcharacter():
     if request.method == "POST":
@@ -195,13 +193,19 @@ def addcharacter():
         image_file = request.files['image']
         if image_file and allowed_file(image_file.filename):
             filename = secure_filename(image_file.filename)
-            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            upload_folder = current_app.config['UPLOAD_FOLDER']
+            if not os.path.exists(upload_folder):
+                os.makedirs(upload_folder)
+
+            filepath = os.path.join(upload_folder, filename)
+
+                
             image_file.save(filepath)
             image_url = filename 
 
         else:
             flash('Please upload a valid image file.', 'error')
-            return redirect(url_for('addcharacter'))
+            return redirect(url_for('main.addcharacter'))
 
         # Normalise the body type to match the allowed values
         valid_body_types = ['Triangle', 'Inverted Triangle', 'Rectangle', 'Hourglass', 'Oval', 'Diamond']
@@ -209,7 +213,7 @@ def addcharacter():
 
         if body_type not in valid_body_types:
             flash(f"Invalid body type. Please choose from {', '.join(valid_body_types)}.", "error")
-            return redirect(url_for("addcharacter"))
+            return redirect(url_for("main.addcharacter"))
 
         full_name = f"{first_name} {last_name}".lower() if first_name.lower() != last_name.lower() else first_name.lower()
 
@@ -223,7 +227,7 @@ def addcharacter():
 
         if not CheckModel:
             flash("Invalid character type selected.", "error")
-            return redirect(url_for("addcharacter"))
+            return redirect(url_for("main.addcharacter"))
 
         # Check for existing name (case-insensitive)
         existing = CheckModel.query.filter(
@@ -253,16 +257,16 @@ def addcharacter():
             db.session.commit()
             flash(f"{full_name.title()} has been submitted for review as a {character_type}.", "success")
 
-        return redirect(url_for("addcharacter"))
+        return redirect(url_for("main.addcharacter"))
 
     return render_template("addcharacter.html")
 
-@app.route("/searchcharacter")
+@blueprint.route("/searchcharacter")
 @login_required
 def searchcharacter():
     return render_template("searchcharacter.html")
 
-@app.route("/search", methods=['GET'])
+@blueprint.route("/search", methods=['GET'])
 @login_required
 def search():
     #Initialise all the variables to search
@@ -365,8 +369,8 @@ def search():
         } for c in o_query.all()])
     
     return jsonify({'characters': characters})
-         
-@app.route("/addlike", methods=["POST"])
+        
+@blueprint.route("/addlike", methods=["POST"])
 @login_required
 def addlike():
     data = request.get_json()
@@ -398,22 +402,22 @@ def addlike():
     return jsonify(success=True, message="Character Added")
 
 #HTML Route Post Logout
-@app.route("/logout")
+@blueprint.route("/logout")
 @login_required
 def logout():
     logout_user()
     return render_template("index.html")
 
-@app.route("/loginrequired")
+@blueprint.route("/loginrequired")
 def loginrequired():
     return render_template("loginrequired.html")
 
-@app.route("/profile")
+@blueprint.route("/profile")
 @login_required
 def profile():
     return render_template("profile.html", user=current_user)
 
-@app.route("/friends")
+@blueprint.route("/friends")
 @login_required
 def friends():
     shareto = db.session.query(Shares.recipient_id).filter_by(sharer_id=current_user.user_id).all()
@@ -426,7 +430,7 @@ def friends():
     
     return render_template("friends.html", shareto=shareto_users, sharedfrom=sharedfrom_users)
 
-@app.route("/searchfriends")
+@blueprint.route("/searchfriends")
 @login_required
 def searchfriends():
     query = request.args.get("q", "").strip()
@@ -441,7 +445,7 @@ def searchfriends():
         for user in results if user.user_id != current_user.user_id
     ])
 
-@app.route("/addshare/<int:user_id>", methods=["POST"])
+@blueprint.route("/addshare/<int:user_id>", methods=["POST"])
 @login_required
 def addShare(user_id):
     db.session.add(Shares(sharer_id=current_user.user_id, recipient_id=user_id))
@@ -449,7 +453,7 @@ def addShare(user_id):
     
     return jsonify({"success" : True})
 
-@app.route("/removeshare/<int:user_id>", methods=["POST"])
+@blueprint.route("/removeshare/<int:user_id>", methods=["POST"])
 @login_required
 def removeShare(user_id):
     share = Shares.query.filter_by(sharer_id=current_user.user_id, recipient_id=user_id).first()
@@ -458,7 +462,7 @@ def removeShare(user_id):
     return jsonify({"success" : True})
 
 
-@app.route("/social", methods=["GET", "POST"])
+@blueprint.route("/social", methods=["GET", "POST"])
 @login_required
 def social():
     if request.method == "POST":
@@ -473,12 +477,12 @@ def social():
             db.session.add(new_post)
             db.session.commit()
             flash("Post submitted!")
-        return redirect(url_for('social'))
+        return redirect(url_for('main.social'))
 
     posts = ForumPost.query.order_by(ForumPost.created_at.desc()).all()
     return render_template("social.html", posts=posts)
 
-@app.route("/comment/<int:post_id>", methods=["POST"])
+@blueprint.route("/comment/<int:post_id>", methods=["POST"])
 @login_required
 def add_comment(post_id):
     content = request.form.get("comment")
@@ -487,9 +491,9 @@ def add_comment(post_id):
         db.session.add(new_comment)
         db.session.commit()
         flash("Comment added!")
-    return redirect(url_for('social'))
+    return redirect(url_for('main.social'))
 
-@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@blueprint.route("/post/<int:post_id>", methods=["GET", "POST"])
 @login_required
 def view_post(post_id):
     post = ForumPost.query.get_or_404(post_id)
@@ -504,10 +508,10 @@ def view_post(post_id):
         db.session.add(new_comment)
         db.session.commit()
         flash("Comment added!")
-        return redirect(url_for('view_post', post_id=post_id))
+        return redirect(url_for('main.view_post', post_id=post_id))
     return render_template("post_detail.html", post=post, comments=comments, form=form)
 
-@app.route("/waifus")
+@blueprint.route("/waifus")
 @login_required
 def waifus():
     waifu_likes = WaifuLike.query.filter_by(user_id=current_user.user_id).order_by(WaifuLike.w_rank).all()
@@ -521,23 +525,23 @@ def waifus():
     }
     return render_template("waifus.html", waifu_likes=waifu_likes, pie_data=pie_data)
 
-@app.route("/like/waifu/<int:w_char_id>", methods=["POST"])
+@blueprint.route("/like/waifu/<int:w_char_id>", methods=["POST"])
 @login_required
 def like_waifu(w_char_id):
     existing = WaifuLike.query.filter_by(user_id=current_user.user_id, w_char_id=w_char_id).first()
     if not existing:
         db.session.add(WaifuLike(user_id=current_user.user_id, w_char_id=w_char_id))
         db.session.commit()
-    return redirect(request.referrer or url_for("waifus"))
+    return redirect(request.referrer or url_for("main.waifus"))
 
-@app.route('/move_waifu/<int:w_char_id>/<direction>', methods=['POST'])
+@blueprint.route('/move_waifu/<int:w_char_id>/<direction>', methods=['POST'])
 @login_required
 def move_waifu(w_char_id, direction):
     waifu_likes = WaifuLike.query.filter_by(user_id=current_user.user_id).order_by(WaifuLike.w_rank).all()
     idx = next((i for i, wl in enumerate(waifu_likes) if wl.w_char_id == w_char_id), None)
     if idx is None:
         flash("Waifu not found in your list.", "warning")
-        return redirect(url_for('waifus'))
+        return redirect(url_for('main.waifus'))
 
     if direction == 'up' and idx > 0:
         waifu_likes[idx], waifu_likes[idx-1] = waifu_likes[idx-1], waifu_likes[idx]
@@ -551,9 +555,9 @@ def move_waifu(w_char_id, direction):
     print([(wl.w_char_id, wl.w_rank) for wl in waifu_likes])  # <-- Add this line
 
     db.session.commit()
-    return redirect(url_for('waifus'))
+    return redirect(url_for('main.waifus'))
 
-@app.route("/husbandos")
+@blueprint.route("/husbandos")
 @login_required
 def husbandos():
     husbando_likes = HusbandoLike.query.filter_by(user_id=current_user.user_id).order_by(HusbandoLike.h_rank).all()
@@ -566,16 +570,16 @@ def husbandos():
     }
     return render_template("husbandos.html", husbando_likes=husbando_likes, pie_data=pie_data)
 
-@app.route("/like/husbando/<int:h_char_id>", methods=["POST"])
+@blueprint.route("/like/husbando/<int:h_char_id>", methods=["POST"])
 @login_required
 def like_husbando(h_char_id):
     existing = HusbandoLike.query.filter_by(user_id=current_user.user_id, h_char_id=h_char_id).first()
     if not existing:
         db.session.add(HusbandoLike(user_id=current_user.user_id, h_char_id=h_char_id))
         db.session.commit()
-    return redirect(request.referrer or url_for("husbandos"))
+    return redirect(request.referrer or url_for("main.husbandos"))
 
-@app.route("/others")
+@blueprint.route("/others")
 @login_required
 def others():
     other_likes = OtherLike.query.filter_by(user_id=current_user.user_id).order_by(OtherLike.o_rank).all()
@@ -588,16 +592,16 @@ def others():
     }
     return render_template("others.html", other_likes=other_likes, pie_data=pie_data)
 
-@app.route("/like/other/<int:o_char_id>", methods=["POST"])
+@blueprint.route("/like/other/<int:o_char_id>", methods=["POST"])
 @login_required
 def like_other(o_char_id):
     existing = OtherLike.query.filter_by(user_id=current_user.user_id, o_char_id=o_char_id).first()
     if not existing:
         db.session.add(OtherLike(user_id=current_user.user_id, o_char_id=o_char_id))
         db.session.commit()
-    return redirect(request.referrer or url_for("others"))
+    return redirect(request.referrer or url_for("main.others"))
 
-@app.route('/remove_waifu/<int:waifu_id>', methods=['POST'])
+@blueprint.route('/remove_waifu/<int:waifu_id>', methods=['POST'])
 @login_required
 def remove_waifu(waifu_id):
     waifu_like = WaifuLike.query.filter_by(user_id=current_user.user_id, w_char_id=waifu_id).first()
@@ -607,9 +611,9 @@ def remove_waifu(waifu_id):
         flash('Waifu removed from your list.', 'success')
     else:
         flash('Waifu not found in your list.', 'warning')
-    return redirect(url_for('waifus'))
+    return redirect(url_for('main.waifus'))
 
-@app.route('/remove_husbando/<int:husbando_id>', methods=['POST'])
+@blueprint.route('/remove_husbando/<int:husbando_id>', methods=['POST'])
 @login_required
 def remove_husbando(husbando_id):
     husbando_like = HusbandoLike.query.filter_by(user_id=current_user.user_id, h_char_id=husbando_id).first()
@@ -619,9 +623,9 @@ def remove_husbando(husbando_id):
         flash('Husbando removed from your list.', 'success')
     else:
         flash('Husbando not found in your list.', 'warning')
-    return redirect(url_for('husbandos'))
+    return redirect(url_for('main.husbandos'))
 
-@app.route('/remove_other/<int:other_id>', methods=['POST'])
+@blueprint.route('/remove_other/<int:other_id>', methods=['POST'])
 @login_required
 def remove_other(other_id):
     other_like = OtherLike.query.filter_by(user_id=current_user.user_id, o_char_id=other_id).first()
@@ -631,9 +635,9 @@ def remove_other(other_id):
         flash('Other character removed from your list.', 'success')
     else:
         flash('Character not found in your list.', 'warning')
-    return redirect(url_for('others'))
+    return redirect(url_for('main.others'))
 
-@app.route("/share/<int:user_id>")
+@blueprint.route("/share/<int:user_id>")
 @login_required
 def share(user_id):
     # Only allow if the user is a friend
@@ -643,7 +647,7 @@ def share(user_id):
     ).first()
     if not is_friend and user_id != current_user.user_id:
         flash("You are not friends with this user.", "warning")
-        return redirect(url_for("mypage"))
+        return redirect(url_for("main.mypage"))
 
     user = User.query.get_or_404(user_id)
     waifu_likes = WaifuLike.query.filter_by(user_id=user_id).order_by(WaifuLike.w_rank).all()
@@ -727,7 +731,7 @@ def share(user_id):
         preferred_gender=preferred_gender
     )
 
-@app.route("/mypage", methods=["GET", "POST"])
+@blueprint.route("/mypage", methods=["GET", "POST"])
 @login_required
 def mypage():
     # Handle preferred gender selection
@@ -782,7 +786,7 @@ def mypage():
         preferred_gender=preferred_gender
     )
 
-@app.route('/update-username', methods=['POST'])
+@blueprint.route('/update-username', methods=['POST'])
 @login_required
 def update_username():
     current_password = request.form['current_password']
@@ -794,7 +798,7 @@ def update_username():
     else:
         flash('Invalid password or username already taken!', 'error')
     
-    return redirect(url_for('profile'))
+    return redirect(url_for('main.profile'))
 
 def check_current_password(user, password):
     return check_password_hash(user.password, password)
@@ -807,7 +811,7 @@ def update_user_username(user, new_username):
     user.username = new_username
     db.session.commit()
 
-@app.route('/update-password', methods=['POST'])
+@blueprint.route('/update-password', methods=['POST'])
 @login_required
 def update_password():
     current_password = request.form['current_password']
@@ -819,21 +823,21 @@ def update_password():
     else:
         flash('Current password is incorrect!', 'error')
 
-    return redirect(url_for('profile'))
+    return redirect(url_for('main.profile'))
 
 def update_user_password(user, new_password):
     hashed_password = generate_password_hash(new_password)
     user.password = hashed_password
     db.session.commit()
 
-@app.route('/move_husbando/<int:h_char_id>/<direction>', methods=['POST'])
+@blueprint.route('/move_husbando/<int:h_char_id>/<direction>', methods=['POST'])
 @login_required
 def move_husbando(h_char_id, direction):
     husbando_likes = HusbandoLike.query.filter_by(user_id=current_user.user_id).order_by(HusbandoLike.h_rank).all()
     idx = next((i for i, hl in enumerate(husbando_likes) if hl.h_char_id == h_char_id), None)
     if idx is None:
         flash("Husbando not found in your list.", "warning")
-        return redirect(url_for('husbandos'))
+        return redirect(url_for('main.husbandos'))
 
     if direction == 'up' and idx > 0:
         husbando_likes[idx], husbando_likes[idx-1] = husbando_likes[idx-1], husbando_likes[idx]
@@ -845,16 +849,16 @@ def move_husbando(h_char_id, direction):
         hl.h_rank = new_rank
 
     db.session.commit()
-    return redirect(url_for('husbandos'))
+    return redirect(url_for('main.husbandos'))
 
-@app.route('/move_other/<int:o_char_id>/<direction>', methods=['POST'])
+@blueprint.route('/move_other/<int:o_char_id>/<direction>', methods=['POST'])
 @login_required
 def move_other(o_char_id, direction):
     other_likes = OtherLike.query.filter_by(user_id=current_user.user_id).order_by(OtherLike.o_rank).all()
     idx = next((i for i, ol in enumerate(other_likes) if ol.o_char_id == o_char_id), None)
     if idx is None:
         flash("Character not found in your list.", "warning")
-        return redirect(url_for('others'))
+        return redirect(url_for('main.others'))
 
     if direction == 'up' and idx > 0:
         other_likes[idx], other_likes[idx-1] = other_likes[idx-1], other_likes[idx]
@@ -866,4 +870,4 @@ def move_other(o_char_id, direction):
         ol.o_rank = new_rank
 
     db.session.commit()
-    return redirect(url_for('others'))
+    return redirect(url_for('main.others'))

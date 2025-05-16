@@ -9,17 +9,17 @@
 </head>
 <body>
     <header>
-        <a href="{{ url_for('index') }}">
+        <a href="{{ url_for('main.index') }}">
             <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         </a>
         <nav>
             <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="{{ url_for('login') }}">Login</a></li>
-                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li><a href="{{ url_for('main.home') }}">Home</a></li>
+                <li><a href="{{ url_for('main.social') }}">Social</a></li>
+                <li><a href="{{ url_for('main.login') }}">Login</a></li>
+                <li><a href="{{ url_for('main.addcharacter') }}">Add Character</a></li>
                 <li>
-                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                    <form action="{{ url_for('main.searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
                         <button type="submit">Go</button>
                       </form> 
@@ -39,7 +39,7 @@
         <div class="sidebar-content">
             <h3>Login Required</h3>
             <p>You need to log in to access this section.</p>
-            <a href="{{ url_for('login') }}" class="login-link">Login</a>
+            <a href="{{ url_for('main.login') }}" class="login-link">Login</a>
         </div>
     </div> 
     
@@ -54,8 +54,8 @@
     <section class="cta-section">
         <h2>Interested? Get scanning!</h2>
         <div class="cta-buttons">
-            <button class="login-btn" onclick="window.location.href='{{ url_for('login') }}'">Log In</button>
-            <button class="signup-btn" onclick="window.location.href='{{ url_for('signup') }}'">Sign Up</button>
+            <button class="login-btn" onclick="window.location.href='{{ url_for('main.login') }}'">Log In</button>
+            <button class="signup-btn" onclick="window.location.href='{{ url_for('main.signup') }}'">Sign Up</button>
         </div>
     </section>
     <script>

@@ -12,12 +12,12 @@
         <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
         <nav>
             <ul>
-                <li><a href="{{ url_for('myhome') }}">Home</a></li>
-                <li><a href="{{ url_for('social') }}">Social</a></li>
-                <li><a href="{{ url_for('mypage') }}">My Page</a></li>
-                <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+                <li><a href="{{ url_for('main.myhome') }}">Home</a></li>
+                <li><a href="{{ url_for('main.social') }}">Social</a></li>
+                <li><a href="{{ url_for('main.mypage') }}">My Page</a></li>
+                <li><a href="{{ url_for('main.addcharacter') }}">Add Character</a></li>
                 <li>
-                    <form action="{{ url_for('searchcharacter') }}" method="GET">
+                    <form action="{{ url_for('main.searchcharacter') }}" method="GET">
                         <input type="text" name="query" placeholder="Search characters...">
                         <button type="submit">Go</button>
                     </form>  
@@ -37,9 +37,9 @@
             <h2>MY ACCOUNT</h2>
         </div>
         <ul class="sidebar-menu">
-            <li><a href="{{ url_for('profile') }}" class="sidebar-link">Profile</a></li>
-            <li><a href="{{ url_for('friends') }}" class="sidebar-link">Friends</a></li>
-            <li><a href="{{ url_for('logout') }}" class="sidebar-link">Log Out</a></li>
+            <li><a href="{{ url_for('main.profile') }}" class="sidebar-link">Profile</a></li>
+            <li><a href="{{ url_for('main.friends') }}" class="sidebar-link">Friends</a></li>
+            <li><a href="{{ url_for('main.logout') }}" class="sidebar-link">Log Out</a></li>
         </ul>
     </div>
 
@@ -67,7 +67,7 @@
         </div>
         
         <div id="username-form" class="edit-form hidden">
-            <form id="username-update-form" method="POST" action="{{ url_for('update_username') }}">
+            <form id="username-update-form" method="POST" action="{{ url_for('main.update_username') }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <label for="current-password">Current Password:</label>
                 <input type="password" id="current-password" name="current_password" required>
@@ -81,7 +81,7 @@
         </div>
         
         <div id="password-form" class="edit-form hidden">
-            <form id="password-update-form" method="POST" action="{{ url_for('update_password') }}">
+            <form id="password-update-form" method="POST" action="{{ url_for('main.update_password') }}">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                 <label for="current-password">Current Password:</label>
                 <input type="password" id="current-password" name="current_password" required>
@@ -96,7 +96,7 @@
         
         
         <div class="info-row">
-            <a href="{{ url_for('logout') }}" class="logout-btn">Log Out</a>
+            <a href="{{ url_for('main.logout') }}" class="logout-btn">Log Out</a>
         </div>    </section>
 
     {% with messages = get_flashed_messages(with_categories=true) %}

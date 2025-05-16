@@ -10,10 +10,10 @@
     <img src="{{ url_for('static', filename='images/sukiscan-logo.png') }}" alt="Logo" id="logo">
     <nav>
       <ul>
-        <li><a href="{{ url_for('myhome') }}">Home</a></li>
-        <li><a href="{{ url_for('social') }}">Social</a></li>
-        <li><a href="{{ url_for('mypage') }}">My Page</a></li>
-        <li><a href="{{ url_for('addcharacter') }}">Add Character</a></li>
+        <li><a href="{{ url_for('main.myhome') }}">Home</a></li>
+        <li><a href="{{ url_for('main.social') }}">Social</a></li>
+        <li><a href="{{ url_for('main.mypage') }}">My Page</a></li>
+        <li><a href="{{ url_for('main.addcharacter') }}">Add Character</a></li>
         <li>
           <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Avatar" id="avatar" onclick="toggleSidebar()">
         </li>
@@ -24,9 +24,9 @@
   <div id="sidebar" class="sidebar">
     <div class="sidebar-header"><h2>MY ACCOUNT</h2></div>
     <ul class="sidebar-menu">
-      <li><a href="{{ url_for('profile') }}">Profile</a></li>
-      <li><a href="{{ url_for('friends') }}">Friends</a></li>
-      <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+      <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
+      <li><a href="{{ url_for('main.friends') }}">Friends</a></li>
+      <li><a href="{{ url_for('main.logout') }}">Log Out</a></li>
     </ul>
   </div>
 
@@ -34,7 +34,7 @@
     <section class="forum-box">
       <section class="new-post">
         <h2>Create New Post</h2>
-        <form method="POST" action="{{ url_for('social') }}">
+        <form method="POST" action="{{ url_for('main.social') }}">
           <input type="text" name="title" placeholder="Post title" required>
           <textarea name="content" placeholder="Write your message..." required></textarea>
           <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
@@ -57,7 +57,7 @@
           <ul>
             {% for post in posts %}
               <li>
-                <a href="{{ url_for('view_post', post_id=post.id) }}">
+                <a href="{{ url_for('main.view_post', post_id=post.id) }}">
                   {{ post.title }}
                 </a>
                 <br>
