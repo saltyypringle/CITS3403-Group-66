@@ -48,12 +48,24 @@
         </div>
         <h1>Recent Discussions</h1>
         {% if recent_post %}
-        <p>Title: {{recent_post.title }}</p>
-        <p>"{{ recent_post.content }}"</p>
-        <h1>Replies</h1>
-            {% for r in comments %}
-                <p>"{{ r.content }}"</p> 
-            {% endfor%}
+        <div class="recent-discussion">
+            <div class="discussion-post">
+                <strong>{{ recent_post.title }}</strong>
+                <p>{{ recent_post.content }}</p>
+            </div>
+            <div class="discussion-replies">
+                <h2>Replies</h2>
+                {% if comments %}
+                    <ul>
+                    {% for r in comments %}
+                        <li>{{ r.content }}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="no-replies">No replies yet.</p>
+                {% endif %}
+            </div>
+        </div>
         {% endif %}
     </section>
 </body>
