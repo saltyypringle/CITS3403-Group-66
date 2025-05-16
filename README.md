@@ -59,14 +59,33 @@ The app is structured into modules (routes, models, forms) and initialised in Su
    pip install flask flask_sqlalchemy flask_migrate flask_login flask_wtf
    ```
 
-6. migrations part 
+6. Set Environment Variable
 
-7. Run seed.py to seed the database
+    **For Windows(Command Prompt)**
+
+    ```sh
+    set FLASK_APP=SukiScan
+    ```
+    
+   **For Windows(Powershell)**
+
+    ```sh
+    $env:FLASK_APP = "SukiScan"
+    ```
+
+    **For Mac/Linux**
+
+    ```sh
+    export FLASK_APP=SukiScan
+    ```
+
+7. Migrationpart
+8. Run seed.py to seed the database
    ```sh
    python seed.py
     ```
 
-8. Run the application
+9. Run the application
    ```sh
    python sukiscan.py
 
