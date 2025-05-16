@@ -63,7 +63,7 @@ The app is structured into modules (routes, models, forms) and initialised in Su
     ```
 5. Install Dependencies
    ```sh
-   pip install flask flask_sqlalchemy flask_migrate flask_login flask_wtf
+   pip install -r requirements.txt
    ```
 
 6. Set Environment Variable
@@ -117,3 +117,7 @@ The app is structured into modules (routes, models, forms) and initialised in Su
 
 
 ### Markers Guide
+```sh
+Note: This is just a friendly recommendation of the most efficient way to navigate our website, by all means explore however you wish to :)
+```
+
