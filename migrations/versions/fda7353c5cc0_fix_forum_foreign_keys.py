@@ -140,7 +140,14 @@ def upgrade():
         sa.Column('o_char_id', sa.Integer(), nullable=False)
     )
 
+    # --- SHARES TABLE ---
+    op.create_table('shares',
+        sa.Column('sharer_id', sa.Integer(), sa.ForeignKey('user.user_id'), primary_key=True),
+        sa.Column('recipient_id', sa.Integer(), sa.ForeignKey('user.user_id'), primary_key=True)
+    )
+
 def downgrade():
+    op.drop_table('shares')
     op.drop_table('other_like')
     op.drop_table('husbando_like')
     op.drop_table('waifu_like')
