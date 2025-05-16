@@ -23,11 +23,18 @@ The app is structured into modules (routes, models, forms) and initialised in Su
 ### Launching Application
 
 
-1. Clone the repository
+1. Set Up
+   **Cloning Git Repo**
    
    ```sh
    https://github.com/saltyypringle/CITS3403-Group-66.git
    ```
+
+   **Unzip File**
+   ```sh
+   Unzip the project file
+   ```
+
 2. Open and run in terminal
    ```sh
     cd CITS3403-Group-66
@@ -101,3 +108,12 @@ The app is structured into modules (routes, models, forms) and initialised in Su
    ```
 
 ### Run test 
+1. Run the tests.py file
+   **Run in terminal**
+
+   ```sh
+   python -m unittest tests/unittests.py
+   ```
+
+
+### Markers Guide
