@@ -85,59 +85,62 @@ def upgrade():
 
     # --- WAIFU_CHECK TABLE ---
     op.create_table('waifu_check',
-        sa.Column('id', sa.Integer(), primary_key=True),
-        sa.Column('first_name', sa.String(length=64), nullable=False),
-        sa.Column('last_name', sa.String(length=64)),
-        sa.Column('hair_colour', sa.String(length=32)),
+        sa.Column('wc_id', sa.Integer(), primary_key=True),
+        sa.Column('first_name', sa.String(length=50)),
+        sa.Column('last_name', sa.String(length=50), nullable=True),
+        sa.Column('hair_colour', sa.String(length=50)),
         sa.Column('height', sa.Integer()),
-        sa.Column('personality', sa.String(length=32)),
-        sa.Column('profession', sa.String(length=64)),
-        sa.Column('body_type', sa.String(length=32))
+        sa.Column('personality', sa.String(length=10)),
+        sa.Column('profession', sa.String(length=100)),
+        sa.Column('body_type', sa.String(length=50)),
+        sa.Column('submitted_by', sa.Integer(), sa.ForeignKey('user.user_id'), nullable=True)
     )
 
     # --- HUSBANDO_CHECK TABLE ---
     op.create_table('husbando_check',
-        sa.Column('id', sa.Integer(), primary_key=True),
-        sa.Column('first_name', sa.String(length=64), nullable=False),
-        sa.Column('last_name', sa.String(length=64)),
-        sa.Column('hair_colour', sa.String(length=32)),
+        sa.Column('hc_id', sa.Integer(), primary_key=True),
+        sa.Column('first_name', sa.String(length=50)),
+        sa.Column('last_name', sa.String(length=50), nullable=True),
+        sa.Column('hair_colour', sa.String(length=50)),
         sa.Column('height', sa.Integer()),
-        sa.Column('personality', sa.String(length=32)),
-        sa.Column('profession', sa.String(length=64)),
-        sa.Column('body_type', sa.String(length=32))
+        sa.Column('personality', sa.String(length=10)),
+        sa.Column('profession', sa.String(length=100)),
+        sa.Column('body_type', sa.String(length=50)),
+        sa.Column('submitted_by', sa.Integer(), sa.ForeignKey('user.user_id'), nullable=True)
     )
 
     # --- OTHER_CHECK TABLE ---
     op.create_table('other_check',
-        sa.Column('id', sa.Integer(), primary_key=True),
-        sa.Column('first_name', sa.String(length=64), nullable=False),
-        sa.Column('last_name', sa.String(length=64)),
-        sa.Column('hair_colour', sa.String(length=32)),
+        sa.Column('oc_id', sa.Integer(), primary_key=True),
+        sa.Column('first_name', sa.String(length=50)),
+        sa.Column('last_name', sa.String(length=50), nullable=True),
+        sa.Column('hair_colour', sa.String(length=50)),
         sa.Column('height', sa.Integer()),
-        sa.Column('personality', sa.String(length=32)),
-        sa.Column('profession', sa.String(length=64)),
-        sa.Column('body_type', sa.String(length=32))
+        sa.Column('personality', sa.String(length=10)),
+        sa.Column('profession', sa.String(length=100)),
+        sa.Column('body_type', sa.String(length=50)),
+        sa.Column('submitted_by', sa.Integer(), sa.ForeignKey('user.user_id'), nullable=True)
     )
 
     # --- WAIFU_LIKE TABLE ---
     op.create_table('waifu_like',
-        sa.Column('id', sa.Integer(), primary_key=True),
-        sa.Column('user_id', sa.Integer(), nullable=False),
-        sa.Column('w_char_id', sa.Integer(), nullable=False)
+        sa.Column('user_id', sa.Integer(), sa.ForeignKey('user.user_id'), nullable=False),
+        sa.Column('w_char_id', sa.Integer(), sa.ForeignKey('waifu.w_char_id'), nullable=False),
+        sa.PrimaryKeyConstraint('user_id', 'w_char_id')
     )
 
     # --- HUSBANDO_LIKE TABLE ---
     op.create_table('husbando_like',
-        sa.Column('id', sa.Integer(), primary_key=True),
-        sa.Column('user_id', sa.Integer(), nullable=False),
-        sa.Column('h_char_id', sa.Integer(), nullable=False)
+        sa.Column('user_id', sa.Integer(), sa.ForeignKey('user.user_id'), nullable=False),
+        sa.Column('h_char_id', sa.Integer(), sa.ForeignKey('husbando.h_char_id'), nullable=False),
+        sa.PrimaryKeyConstraint('user_id', 'h_char_id')
     )
 
     # --- OTHER_LIKE TABLE ---
     op.create_table('other_like',
-        sa.Column('id', sa.Integer(), primary_key=True),
-        sa.Column('user_id', sa.Integer(), nullable=False),
-        sa.Column('o_char_id', sa.Integer(), nullable=False)
+        sa.Column('user_id', sa.Integer(), sa.ForeignKey('user.user_id'), nullable=False),
+        sa.Column('o_char_id', sa.Integer(), sa.ForeignKey('other.o_char_id'), nullable=False),
+        sa.PrimaryKeyConstraint('user_id', 'o_char_id')
     )
 
     # --- SHARES TABLE ---
