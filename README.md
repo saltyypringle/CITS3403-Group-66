@@ -192,7 +192,8 @@ Note: This is just a friendly recommendation of the most efficient way to naviga
 
 18. Credentials Changed
    Login with old credentials to check.
-   Login with new credentials to check it all works
+   Check for wrong password as well.
+   Login with new credentials to check it all works.
 
 19. Removed friend
    Check that you can no longer view friends account

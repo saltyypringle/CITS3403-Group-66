@@ -16,15 +16,25 @@ class BasicTests(unittest.TestCase):
         db.drop_all()
         self.app_context.pop()
 
-    def test_home_page(self):
+    def test_index_page(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"SukiScan", response.data)  
+    
+    def test_home_page(self):
+        response = self.client.get('/home')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Welcome to SukiScans!", response.data) 
 
     def test_login_page(self):
         response = self.client.get('/login')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Login", response.data)  
+    
+    def test_signup_page(self):
+        response = self.client.get('/signup')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Sign Up", response.data)
 
     def test_create_user(self):
         user = User(email="test@example.com", username="testuser", password="testpass")
