@@ -182,7 +182,7 @@ Note: This is just a friendly recommendation of the most efficient way to naviga
 
 16. Change Credentials
    Press icon top right.
-   Navigate to details.
+   Navigate to Profile.
    Change your details.
    Check that it's been changed on other pages.
 
